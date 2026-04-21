@@ -1,0 +1,19 @@
+package com.example.taskwardenhabittodo.data.database.dao
+
+import androidx.room.Dao
+import androidx.room.Delete
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import com.example.taskwardenhabittodo.data.database.entity.TaskEntity
+import com.example.taskwardenhabittodo.data.database.entity.UserEntity
+import kotlinx.coroutines.flow.Flow
+
+@Dao
+interface UserDao {
+    @Query("SELECT * FROM user WHERE id = 0")
+    fun getStats(): Flow<UserEntity?>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun updateStats(stats: UserEntity)
+}
