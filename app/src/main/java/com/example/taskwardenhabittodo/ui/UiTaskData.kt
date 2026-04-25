@@ -1,9 +1,6 @@
-package com.example.taskwardenhabittodo.data
+package com.example.taskwardenhabittodo.ui
 
-import androidx.room.ColumnInfo
-import androidx.room.PrimaryKey
-
-data class TaskData (
+data class UiTaskData (
     val id : Int = 0,
     val title: String,
     val description: String,

@@ -16,7 +16,9 @@ fun TaskEntity.toDomain(): TaskData {
         isHabit = this.isHabit,
         targetCount = this.targetCount,
         currentCount = this.currentCount,
-        createdAt = this.createdAt
+        category = this.category,
+        colorHex = this.colorHex,
+        isPinned = this.isPinned
     )
 }
 
@@ -31,23 +33,32 @@ fun TaskData.toEntity(): TaskEntity {
         isHabit = this.isHabit,
         targetCount = this.targetCount,
         currentCount = this.currentCount,
-        createdAt = this.createdAt
+        category = this.category,
+        colorHex = this.colorHex,
+        isPinned = this.isPinned
     )
 }
 
 
-fun UserEntity.toDomain(): UserData {
+fun UserEntity.toDomain(tasks: List<TaskEntity>): UserData {
     return UserData(
         id = this.id,
-        petMood = this.petMood,
-        petHunger = this.petHunger
+        petPoints = this.petPoints,
+        dailyPoints = this.dailyPoints,
+        fireStreak = this.fireStreak,
+        masteredCount = this.masteredCount,
+        totalTasks = tasks.size,
+        completedTasks = tasks.count { it.isCompleted },
+        targetMastery = 5
     )
 }
 
-fun UserData.toEntity(): UserEntity{
+fun UserData.toEntity(): UserEntity {
     return UserEntity(
         id = this.id,
-        petMood = this.petMood,
-        petHunger = this.petHunger
+        petPoints = this.petPoints,
+        dailyPoints = this.dailyPoints,
+        fireStreak = this.fireStreak,
+        masteredCount = this.masteredCount
     )
 }

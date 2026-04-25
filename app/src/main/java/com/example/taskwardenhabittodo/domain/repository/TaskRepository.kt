@@ -12,4 +12,8 @@ interface TaskRepository {
     suspend fun deleteTasks(task: TaskData)
 
     suspend fun updateCompletion(id: Int, isCompleted: Boolean)
+
+    suspend fun updateHabitProgress(id: Int, count: Int)
+
+    suspend fun resetDailyPoints()
 }

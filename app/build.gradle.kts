@@ -8,6 +8,7 @@ plugins {
 }
 
 android {
+
     namespace = "com.example.taskwardenhabittodo"
     compileSdk = 35
 
@@ -30,10 +31,16 @@ android {
             )
         }
     }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+
+    kotlin {
+        jvmToolchain(21)
     }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
+    }
+
     buildFeatures {
         compose = true
     }
@@ -44,6 +51,7 @@ dependencies {
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
+    debugImplementation(libs.androidx.ui.tooling)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.navigation.compose)

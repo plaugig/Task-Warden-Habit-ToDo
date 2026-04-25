@@ -1,3 +1,21 @@
 <resources>
     <string name="app_name">Task Warden Habit &amp; ToDo</string>
+    <string name="tasks_done">Tasks Done</string>
+    <string name="complete">% complete</string>
+    <string name="done">% done</string>
+    <string name="Mastered">Mastered</string>
+    <string name="fire_streak">Fire Streak</string>
+    <string name="days">days</string>
+    <string name="pet_points">PET POINTS</string>
+    <string name="today">today</string>
+    <string name="pet_points_format">%1$,d pts</string>
+    <string name="tasks_complete_template">%1$d%% complete</string>
+    <string name="mastered_done_template">%1$d%% done</string>
+    <string name="today_points_template">+%1$d today</string>
+    <string name="focus_percentage_template">%1$d%%</string>
+    <string name="streak_days_template">%1$dd</string>
+    <string name="habit_done">Done</string>
+    <string name="habit_progress_template">%1$d / %2$d</string>
+    <string name="habit_streak_template">%1$d</string>
+
 </resources>

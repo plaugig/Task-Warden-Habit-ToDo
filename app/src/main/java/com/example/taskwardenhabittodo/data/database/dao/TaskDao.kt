@@ -22,4 +22,10 @@ interface TaskDao {
 
     @Query("UPDATE tasks SET isCompleted = :completed WHERE id = :id")
     suspend fun updateTaskStatus(id: Int, completed: Boolean)
+
+    @Query("UPDATE tasks SET currentCount = :count WHERE id = :id")
+    suspend fun updateHabitProgress(id: Int, count: Int)
+
+    @Query("UPDATE user SET dailyPoints = 0 WHERE id = 0")
+    suspend fun resetDailyPoints()
 }

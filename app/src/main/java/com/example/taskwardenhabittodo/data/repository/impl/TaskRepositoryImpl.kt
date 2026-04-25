@@ -10,8 +10,8 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class TaskRepositoryImpl @Inject constructor(
-    private val local : LocalDataSource
-): TaskRepository {
+    private val local: LocalDataSource
+) : TaskRepository {
     override fun getAllTasks(): Flow<List<TaskData>> {
         return local.getAllTask().map { list ->
             list.map { it.toDomain() }
@@ -27,6 +27,14 @@ class TaskRepositoryImpl @Inject constructor(
     }
 
     override suspend fun updateCompletion(id: Int, isCompleted: Boolean) {
-        local.updateTaskStatus(id, isCompleted )
+        local.updateTaskStatus(id, isCompleted)
+    }
+
+    override suspend fun updateHabitProgress(id: Int, count: Int) {
+        local.updateHabitProgress(id, count)
+    }
+
+    override suspend fun resetDailyPoints() {
+        local.resetDailyPoints()
     }
 }

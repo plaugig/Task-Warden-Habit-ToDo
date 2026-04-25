@@ -32,4 +32,12 @@ class LocalDataSource @Inject constructor(
     suspend fun updateTaskStatus(id: Int, completed: Boolean){
         appDatabase.taskDao().updateTaskStatus(id,completed)
     }
+
+     suspend fun updateHabitProgress(id: Int, count: Int) {
+        appDatabase.taskDao().updateHabitProgress(id, count)
+    }
+
+     suspend fun resetDailyPoints() {
+        appDatabase.taskDao().resetDailyPoints()
+    }
 }

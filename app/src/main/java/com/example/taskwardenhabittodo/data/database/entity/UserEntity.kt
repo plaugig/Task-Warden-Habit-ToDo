@@ -9,8 +9,12 @@ import androidx.room.PrimaryKey
 data class UserEntity (
     @PrimaryKey val
     id: Int = 0,
-    @ColumnInfo(name = "petHunger")
-    val petHunger: Float = 1.0f,
-    @ColumnInfo(name = "petMood")
-    val petMood: Float = 1.0f
+    @ColumnInfo(name = "petPoints")
+    val petPoints: Int = 0,
+    @ColumnInfo(name = "dailyPoints")
+    val dailyPoints: Int = 0,
+    @ColumnInfo(name = "fireStreak")
+    val fireStreak: Int = 0,
+    @ColumnInfo(name = "masteredCount")
+    val masteredCount: Int = 0
 )

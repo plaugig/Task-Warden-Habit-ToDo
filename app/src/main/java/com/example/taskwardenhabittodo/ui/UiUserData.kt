@@ -1,8 +1,6 @@
-package com.example.taskwardenhabittodo.data
+package com.example.taskwardenhabittodo.ui
 
-import androidx.room.ColumnInfo
-
-data class UserData(
+data class UiUserData (
     val id: Int,
     val petPoints: Int,
     val dailyPoints: Int,

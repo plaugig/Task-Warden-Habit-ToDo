@@ -6,9 +6,9 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "tasks")
-data class TaskEntity (
+data class TaskEntity(
     @PrimaryKey(autoGenerate = true)
-    val id : Int = 0,
+    val id: Int = 0,
     @ColumnInfo(name = "title")
     val title: String,
     @ColumnInfo(name = "description")
@@ -18,7 +18,7 @@ data class TaskEntity (
     @ColumnInfo(name = "time")
     val time: String,
     @ColumnInfo(name = "isCompleted")
-    val isCompleted : Boolean = false,
+    val isCompleted: Boolean = false,
     @ColumnInfo(name = "isHabit")
     val isHabit: Boolean = false,
     @ColumnInfo(name = "targetCount")
@@ -26,5 +26,11 @@ data class TaskEntity (
     @ColumnInfo(name = "currentCount")
     val currentCount: Int = 0,
     @ColumnInfo(name = "createdAt")
-    val createdAt: Long = System.currentTimeMillis()
+    val createdAt: Long = System.currentTimeMillis(),
+    @ColumnInfo(name = "category")
+    val category: String = "General",
+    @ColumnInfo(name = "colorHex")
+    val colorHex: Long = 0xFF34EAB9,
+    @ColumnInfo(name = "isPinned")
+    val isPinned: Boolean = false,
 )
