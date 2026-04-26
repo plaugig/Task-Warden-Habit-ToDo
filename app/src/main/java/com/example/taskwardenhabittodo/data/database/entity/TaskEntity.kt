@@ -28,9 +28,13 @@ data class TaskEntity(
     @ColumnInfo(name = "createdAt")
     val createdAt: Long = System.currentTimeMillis(),
     @ColumnInfo(name = "category")
-    val category: String = "General",
+    val category: String,
     @ColumnInfo(name = "colorHex")
     val colorHex: Long = 0xFF34EAB9,
     @ColumnInfo(name = "isPinned")
     val isPinned: Boolean = false,
+    @ColumnInfo(name = "dayPart")
+    val dayPart: String,
+    @ColumnInfo(name = "period")
+    val period: String,
 )

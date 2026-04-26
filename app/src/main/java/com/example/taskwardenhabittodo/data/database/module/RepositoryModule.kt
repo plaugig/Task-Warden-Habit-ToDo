@@ -1,7 +1,9 @@
 package com.example.taskwardenhabittodo.data.database.module
 
+import com.example.taskwardenhabittodo.data.repository.impl.HabitRepositoryImpl
 import com.example.taskwardenhabittodo.data.repository.impl.TaskRepositoryImpl
 import com.example.taskwardenhabittodo.data.repository.impl.UserRepositoryImpl
+import com.example.taskwardenhabittodo.domain.repository.HabitRepository
 import com.example.taskwardenhabittodo.domain.repository.TaskRepository
 import com.example.taskwardenhabittodo.domain.repository.UserRepository
 import dagger.Binds
@@ -26,4 +28,10 @@ abstract class RepositoryModule {
     abstract fun bindUserRepository(
         userRepositoryImpl: UserRepositoryImpl
     ): UserRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindHabitRepository(
+        impl: HabitRepositoryImpl
+    ): HabitRepository
 }

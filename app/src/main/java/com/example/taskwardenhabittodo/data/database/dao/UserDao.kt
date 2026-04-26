@@ -16,4 +16,7 @@ interface UserDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun updateStats(stats: UserEntity)
+
+    @Query("UPDATE user SET dailyPoints = 0 WHERE id = 0")
+    suspend fun resetDailyPoints()
 }

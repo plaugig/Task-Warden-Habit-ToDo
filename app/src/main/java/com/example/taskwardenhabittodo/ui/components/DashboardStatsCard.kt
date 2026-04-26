@@ -1,11 +1,25 @@
 package com.example.taskwardenhabittodo.ui.components
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -17,8 +31,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.taskwardenhabittodo.R
+import com.example.taskwardenhabittodo.ui.DayProgress
 import com.example.taskwardenhabittodo.ui.UiUserData
 import com.example.taskwardenhabittodo.ui.theme.TaskWardenHabitToDoTheme
 import com.example.taskwardenhabittodo.ui.theme.extendedColors
@@ -27,17 +41,13 @@ import com.example.taskwardenhabittodo.ui.theme.spacing
 @Composable
 fun DashboardStatsCard(
     user: UiUserData,
+    progress: DayProgress,
     modifier: Modifier = Modifier
 ) {
     val spacing = MaterialTheme.spacing
     val colorScheme = MaterialTheme.colorScheme
 
-    val tasksProgress = if (user.totalTasks > 0) user.completedTasks.toFloat() /
-            user.totalTasks
-    else 0f
-    val masteredProgress = if (user.targetMastery > 0) user.masteredCount.toFloat() /
-            user.targetMastery
-    else 0f
+    val habitsProgress = progress.habitsProgress
 
     Surface(
         modifier = modifier
@@ -45,9 +55,7 @@ fun DashboardStatsCard(
             .wrapContentHeight(),
         shape = RoundedCornerShape(spacing.extraLarge),
         color = colorScheme.surface,
-        border = androidx.compose.foundation.BorderStroke(
-            1.dp, colorScheme.outline
-        )
+        border = BorderStroke(1.dp, colorScheme.outline)
     ) {
         Column(
             modifier = Modifier
@@ -55,37 +63,33 @@ fun DashboardStatsCard(
                 .fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(spacing.medium)
         ) {
-            // статистик на кольцах
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
+                // кольцо 1
                 StatRing(
-                    label = stringResource(R.string.tasks_done),
-                    subLabel = stringResource(
-                        R.string.tasks_complete_template,
-                        (tasksProgress * 100).toInt()
-                    ),
-                    value = "${user.completedTasks}",
-                    target = "/${user.totalTasks}",
-                    color = colorScheme.tertiary,
-                    progress = tasksProgress
+                    label = stringResource(R.string.habit),
+                    subLabel = "${(habitsProgress * 100).toInt()} ${stringResource(R.string.done)}",
+                    value = "${progress.completedHabits}",
+                    target = "/${progress.totalHabits}",
+                    color = colorScheme.primary,
+                    progress = habitsProgress
                 )
 
+                // кольцо 2
                 StatRing(
                     label = stringResource(R.string.Mastered),
-                    subLabel = stringResource(
-                        R.string.mastered_done_template,
-                        (masteredProgress * 100).toInt()
-                    ),
-                    value = "${user.masteredCount}",
-                    target = "/${user.targetMastery}",
-                    color = colorScheme.primary,
-                    progress = masteredProgress
+                    subLabel = stringResource(R.string.days),
+                    value = "${user.masteryStreak}",
+                    target = "",
+                    color = colorScheme.tertiary,
+                    progress = 1f
                 )
 
+                // кольцо 3
                 StatRing(
-                    label = stringResource(R.string.fire_streak),
+                    label = stringResource(R.string.streak),
                     subLabel = stringResource(R.string.days),
                     value = "${user.fireStreak}",
                     target = "",
@@ -95,32 +99,30 @@ fun DashboardStatsCard(
                 )
             }
 
-            // разделитель
             HorizontalDivider(
                 modifier = Modifier.fillMaxWidth(),
                 thickness = 1.dp,
                 color = colorScheme.outlineVariant.copy(alpha = 0.5f)
             )
 
-            // нижний блок
+            // всего поинтов
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                // общ колво поинтов
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Box(
                         modifier = Modifier
-                            .size(48.dp)
-                            .background(colorScheme.outline, CircleShape),
+                            .size(40.dp)
+                            .background(colorScheme.outline.copy(alpha = 0.2f), CircleShape),
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
                             painter = painterResource(id = R.drawable.coins),
                             contentDescription = null,
-                            tint = colorScheme.primary,
-                            modifier = Modifier.size(spacing.large)
+                            tint = Color(0xFFFFD700),
+                            modifier = Modifier.size(20.dp)
                         )
                     }
                     Spacer(modifier = Modifier.width(spacing.small))
@@ -128,12 +130,11 @@ fun DashboardStatsCard(
                         Text(
                             text = stringResource(R.string.pet_points),
                             style = MaterialTheme.typography.labelSmall,
-                            color = colorScheme.onSurfaceVariant,
-                            letterSpacing = 1.sp
+                            color = colorScheme.onSurfaceVariant
                         )
                         Text(
-                            text = stringResource(R.string.pet_points_format, user.petPoints),
-                            style = MaterialTheme.typography.titleLarge.copy(
+                            text = "${user.petPoints}",
+                            style = MaterialTheme.typography.titleMedium.copy(
                                 fontWeight = FontWeight.ExtraBold
                             ),
                             color = colorScheme.onSurface
@@ -141,31 +142,26 @@ fun DashboardStatsCard(
                     }
                 }
 
-                // правая часть
+                // поинты ежед
                 Surface(
-                    color = colorScheme.secondary.copy(alpha = 0.2f),
+                    color = colorScheme.primary.copy(alpha = 0.1f),
                     shape = RoundedCornerShape(spacing.medium)
                 ) {
                     Row(
-                        modifier = Modifier.padding(horizontal = spacing.small, vertical = spacing.extraSmall),
+                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Icon(
                             painter = painterResource(id = R.drawable.trending_up),
                             contentDescription = null,
-                            tint = colorScheme.tertiary,
-                            modifier = Modifier.size(spacing.medium)
+                            tint = colorScheme.primary,
+                            modifier = Modifier.size(14.dp)
                         )
                         Spacer(modifier = Modifier.width(4.dp))
                         Text(
-                            text = stringResource(
-                                R.string.today_points_template,
-                                user.dailyPoints
-                            ),
-                            style = MaterialTheme.typography.labelMedium.copy(
-                                fontWeight = FontWeight.Bold
-                            ),
-                            color = colorScheme.tertiary
+                            text = "+${user.dailyPoints}",
+                            style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
+                            color = colorScheme.primary
                         )
                     }
                 }
@@ -194,7 +190,7 @@ private fun StatRing(
         Box(contentAlignment = Alignment.Center, modifier = Modifier.size(65.dp)) {
             Canvas(modifier = Modifier.size(65.dp)) {
                 drawArc(
-                    color = colorScheme.outline,
+                    color = colorScheme.outline.copy(alpha = 0.3f),
                     startAngle = -90f,
                     sweepAngle = 360f,
                     useCenter = false,
@@ -212,19 +208,15 @@ private fun StatRing(
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 if (isFire) {
                     Icon(
-                        painter = painterResource(
-                            id = R.drawable.local_fire
-                        ),
+                        painter = painterResource(id = R.drawable.local_fire),
                         contentDescription = null,
                         tint = color,
-                        modifier = Modifier.size(spacing.medium)
+                        modifier = Modifier.size(16.dp)
                     )
                 }
                 Text(
                     text = value,
-                    style = MaterialTheme.typography.titleMedium.copy(
-                        fontWeight = FontWeight.ExtraBold
-                    ),
+                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold),
                     color = colorScheme.onSurface
                 )
                 if (target.isNotEmpty()) {
@@ -237,22 +229,11 @@ private fun StatRing(
             }
         }
 
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(
-                text = label,
-                style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold),
-                color = colorScheme.onSurface
-            )
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Box(modifier = Modifier.size(6.dp).background(color, CircleShape))
-                Spacer(modifier = Modifier.width(4.dp))
-                Text(
-                    text = subLabel,
-                    style = MaterialTheme.typography.labelSmall,
-                    color = colorScheme.onSurfaceVariant
-                )
-            }
-        }
+        Text(
+            text = label,
+            style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold),
+            color = colorScheme.onSurface
+        )
     }
 }
 
@@ -263,17 +244,18 @@ fun DashboardPreview() {
         Box(modifier = Modifier.padding(16.dp)) {
             DashboardStatsCard(
                 user = UiUserData(
-                    id = 0,
-                    petPoints = 1250050,
+                    petPoints = 12500,
                     dailyPoints = 150,
                     fireStreak = 12,
-                    masteredCount = 3,
-                    totalTasks = 8,
-                    completedTasks = 5,
-                    targetMastery = 5
+                    masteryStreak = 5
+                ),
+                progress = DayProgress(
+                    totalTasks = 10,
+                    completedTasks = 7,
+                    totalHabits = 5,
+                    completedHabits = 3
                 )
             )
         }
     }
 }
-

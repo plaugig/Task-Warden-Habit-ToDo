@@ -1,8 +1,8 @@
 package com.example.taskwardenhabittodo.data.repository.impl
 
 import com.example.taskwardenhabittodo.data.TaskData
-import com.example.taskwardenhabittodo.data.database.maper.toDomain
-import com.example.taskwardenhabittodo.data.database.maper.toEntity
+import com.example.taskwardenhabittodo.data.maper.toDomain
+import com.example.taskwardenhabittodo.data.maper.toEntity
 import com.example.taskwardenhabittodo.data.database.source.LocalDataSource
 import com.example.taskwardenhabittodo.domain.repository.TaskRepository
 import kotlinx.coroutines.flow.Flow

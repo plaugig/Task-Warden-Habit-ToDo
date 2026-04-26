@@ -7,13 +7,11 @@ interface TaskRepository {
 
     fun getAllTasks(): Flow<List<TaskData>>
 
-    suspend fun addTasks(task: TaskData)
+    suspend fun addTask(task: TaskData)
 
-    suspend fun deleteTasks(task: TaskData)
+    suspend fun deleteTaskById(id: Int)
 
     suspend fun updateCompletion(id: Int, isCompleted: Boolean)
 
-    suspend fun updateHabitProgress(id: Int, count: Int)
-
-    suspend fun resetDailyPoints()
+    fun getTodayTaskStats(startOfDay: Long): Flow<Pair<Int, Int>>
 }

@@ -9,35 +9,71 @@ import javax.inject.Inject
 class LocalDataSource @Inject constructor(
     private val appDatabase: AppDatabase
 ) {
-    fun getStats(): Flow<UserEntity?> {
-      return  appDatabase.userDao().getStats()
+    suspend fun updateHabitProgress(id: Int, count: Int){
+        appDatabase.habitDao().updateHabitProgress(id,count)
     }
 
-    suspend fun updateStats(stats: UserEntity){
-        appDatabase.userDao().updateStats(stats)
+    fun getAllHabits(): Flow<List<TaskEntity>>{
+      return  appDatabase.habitDao().getAllHabits()
     }
 
-    fun getAllTask(): Flow<List<TaskEntity>>{
-       return appDatabase.taskDao().getAllTasks()
+    fun getTotalHabitsCount(startOfDay: Long): Flow<Int>{
+      return  appDatabase.habitDao().getTotalHabitsCount(startOfDay)
+    }
+
+    fun getCompletedHabitsCount(startOfDay: Long): Flow<Int>{
+        return  appDatabase.habitDao().getCompletedHabits(startOfDay)
+    }
+
+    fun getUnfinishedHabitsYesterday(startOfDay: Long, endOfDay: Long): Flow<Int>{
+        return appDatabase.habitDao().getUnfinishHabits(startOfDay,endOfDay)
+    }
+
+    suspend fun insertHabit(habit: TaskEntity){
+        appDatabase.habitDao().insertHabit(habit)
+    }
+
+    suspend fun deleteHabitById(id: Int){
+        appDatabase.habitDao().deleteHabitById(id)
+    }
+
+    fun getAllTasks(): Flow<List<TaskEntity>>{
+        return appDatabase.taskDao().getAllTasks()
     }
 
     suspend fun insertTask(task: TaskEntity){
         appDatabase.taskDao().insertTask(task)
     }
 
-    suspend fun deleteTask(task: TaskEntity){
-        appDatabase.taskDao().deleteTask(task)
+    suspend fun deleteTaskById(id: Int){
+        appDatabase.taskDao().deleteTaskById(id)
     }
 
     suspend fun updateTaskStatus(id: Int, completed: Boolean){
-        appDatabase.taskDao().updateTaskStatus(id,completed)
+        appDatabase.taskDao().updateTaskStatus(id, completed)
     }
 
-     suspend fun updateHabitProgress(id: Int, count: Int) {
-        appDatabase.taskDao().updateHabitProgress(id, count)
+    fun getTotalTodayTasks(startOfDay: Long): Flow<Int>{
+        return appDatabase.taskDao().getTotalTodayTasks(startOfDay)
     }
 
-     suspend fun resetDailyPoints() {
-        appDatabase.taskDao().resetDailyPoints()
+    fun getCompletedTasks(startOfDay: Long): Flow<Int>{
+        return appDatabase.taskDao().getCompletedTasks(startOfDay)
+    }
+
+    fun getTasksByDayPart(dayPart: String, startOfDay: Long): Flow<List<TaskEntity>>{
+        return appDatabase.taskDao().getTasksByDayPart(dayPart,startOfDay)
+    }
+
+    fun getStats(): Flow<UserEntity?>{
+        return appDatabase.userDao().getStats()
+    }
+
+    suspend fun updateStats(stats: UserEntity){
+        appDatabase.userDao().updateStats(stats)
+    }
+
+    suspend fun resetDailyPoints(){
+        appDatabase.userDao().resetDailyPoints()
     }
 }

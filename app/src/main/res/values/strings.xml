@@ -3,10 +3,10 @@
     <string name="tasks_done">Tasks Done</string>
     <string name="complete">% complete</string>
     <string name="done">% done</string>
-    <string name="Mastered">Mastered</string>
+    <string name="Mastered">Mastery</string>
     <string name="fire_streak">Fire Streak</string>
-    <string name="days">days</string>
-    <string name="pet_points">PET POINTS</string>
+    <string name="days">Days</string>
+    <string name="pet_points">Pet Points</string>
     <string name="today">today</string>
     <string name="pet_points_format">%1$,d pts</string>
     <string name="tasks_complete_template">%1$d%% complete</string>
@@ -14,8 +14,12 @@
     <string name="today_points_template">+%1$d today</string>
     <string name="focus_percentage_template">%1$d%%</string>
     <string name="streak_days_template">%1$dd</string>
-    <string name="habit_done">Done</string>
+    <string name="habit">Habit</string>
     <string name="habit_progress_template">%1$d / %2$d</string>
     <string name="habit_streak_template">%1$d</string>
+    <string name="task_time_template">%1$s</string>
+    <string name="task_period_template">%1$s</string>
+    <string name="task_duration_template">%1$d min - %2$s</string>
+    <string name="streak">Streak</string>
 
 </resources>

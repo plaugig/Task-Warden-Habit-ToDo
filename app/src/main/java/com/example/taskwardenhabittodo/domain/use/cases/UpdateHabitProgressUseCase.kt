@@ -3,10 +3,10 @@ package com.example.taskwardenhabittodo.domain.use.cases
 import com.example.taskwardenhabittodo.domain.repository.TaskRepository
 import javax.inject.Inject
 
-class ResetDailyPoints @Inject constructor(
+class UpdateHabitProgressUseCase @Inject constructor(
     private val repository: TaskRepository
 ) {
-    suspend fun resetDailyPoints(){
-        repository.resetDailyPoints()
+    suspend fun updateHabitProgress(id: Int, count: Int) {
+        repository.updateHabitProgress(id, count)
     }
 }

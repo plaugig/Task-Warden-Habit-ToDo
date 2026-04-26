@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.Flow
 interface UserRepository {
 
     fun getUserStats(): Flow<UserData?>
+    suspend fun updateStats(stats: UserData)
 
-    suspend fun saveStats(stats: UserData)
+    suspend fun resetDailyPoints()
 }

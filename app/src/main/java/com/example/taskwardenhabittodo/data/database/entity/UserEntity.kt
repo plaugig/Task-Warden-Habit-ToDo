@@ -7,14 +7,12 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "user")
 data class UserEntity (
-    @PrimaryKey val
-    id: Int = 0,
-    @ColumnInfo(name = "petPoints")
+    @PrimaryKey val id: Int = 0,
     val petPoints: Int = 0,
     @ColumnInfo(name = "dailyPoints")
     val dailyPoints: Int = 0,
     @ColumnInfo(name = "fireStreak")
     val fireStreak: Int = 0,
-    @ColumnInfo(name = "masteredCount")
-    val masteredCount: Int = 0
+    @ColumnInfo(name = "masteryStreak")
+    val masteryStreak: Int = 0
 )

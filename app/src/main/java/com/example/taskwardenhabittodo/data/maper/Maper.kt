@@ -1,24 +1,30 @@
-package com.example.taskwardenhabittodo.data.database.maper
+package com.example.taskwardenhabittodo.data.maper
 
 import com.example.taskwardenhabittodo.data.TaskData
 import com.example.taskwardenhabittodo.data.UserData
 import com.example.taskwardenhabittodo.data.database.entity.TaskEntity
 import com.example.taskwardenhabittodo.data.database.entity.UserEntity
+import com.example.taskwardenhabittodo.domain.CategoryType
+import com.example.taskwardenhabittodo.domain.DayPart
+import com.example.taskwardenhabittodo.domain.Priority
 
 fun TaskEntity.toDomain(): TaskData {
+    val dayPart = ""
     return TaskData(
         id = this.id,
         title = this.title,
         description = this.description,
-        priority = this.priority,
+        priority = Priority.valueOf(this.priority),
         time = this.time,
-        isCompleted = this.isCompleted,
         isHabit = this.isHabit,
         targetCount = this.targetCount,
         currentCount = this.currentCount,
-        category = this.category,
+        category = CategoryType.valueOf(this.category),
         colorHex = this.colorHex,
-        isPinned = this.isPinned
+        isPinned = this.isPinned,
+        dayPart = DayPart.valueOf(this.dayPart),
+        period = period,
+        createdAt = createdAt
     )
 }
 
@@ -27,15 +33,18 @@ fun TaskData.toEntity(): TaskEntity {
         id = this.id,
         title = this.title,
         description = this.description,
-        priority = this.priority,
+        priority = this.priority.name,
         time = this.time,
         isCompleted = this.isCompleted,
         isHabit = this.isHabit,
         targetCount = this.targetCount,
         currentCount = this.currentCount,
-        category = this.category,
+        category = this.priority.name,
         colorHex = this.colorHex,
-        isPinned = this.isPinned
+        isPinned = this.isPinned,
+        dayPart = this.priority.name,
+        period = period,
+        createdAt = createdAt
     )
 }
 
@@ -46,10 +55,7 @@ fun UserEntity.toDomain(tasks: List<TaskEntity>): UserData {
         petPoints = this.petPoints,
         dailyPoints = this.dailyPoints,
         fireStreak = this.fireStreak,
-        masteredCount = this.masteredCount,
-        totalTasks = tasks.size,
-        completedTasks = tasks.count { it.isCompleted },
-        targetMastery = 5
+        masteryStreak = this.masteryStreak
     )
 }
 
@@ -59,6 +65,6 @@ fun UserData.toEntity(): UserEntity {
         petPoints = this.petPoints,
         dailyPoints = this.dailyPoints,
         fireStreak = this.fireStreak,
-        masteredCount = this.masteredCount
+        masteryStreak = this.masteryStreak
     )
 }
