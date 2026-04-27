@@ -21,11 +21,11 @@ class LocalDataSource @Inject constructor(
       return  appDatabase.habitDao().getTotalHabitsCount(startOfDay)
     }
 
-    fun getCompletedHabitsCount(startOfDay: Long): Flow<Int>{
+    fun getCompletedHabits(startOfDay: Long): Flow<Int>{
         return  appDatabase.habitDao().getCompletedHabits(startOfDay)
     }
 
-    fun getUnfinishedHabitsYesterday(startOfDay: Long, endOfDay: Long): Flow<Int>{
+    fun getUnfinishedHabits(startOfDay: Long, endOfDay: Long): Flow<Int>{
         return appDatabase.habitDao().getUnfinishHabits(startOfDay,endOfDay)
     }
 
@@ -75,5 +75,9 @@ class LocalDataSource @Inject constructor(
 
     suspend fun resetDailyPoints(){
         appDatabase.userDao().resetDailyPoints()
+    }
+
+    fun getUnfinishedTasksByDate(startOfDay: Long, endOfDay: Long): Flow<Int> {
+        return appDatabase.taskDao().getUnfinishedTasks(startOfDay,endOfDay)
     }
 }

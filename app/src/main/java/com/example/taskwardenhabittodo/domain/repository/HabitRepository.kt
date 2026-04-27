@@ -15,6 +15,6 @@ interface HabitRepository {
 
     fun getTodayHabitStats(startOfDay: Long): Flow<Pair<Int, Int>>
 
-    fun getUnfinishHabits(startOfYesterday: Long, endOfYesterday: Long): Flow<Int>
+    fun getUnfinishHabits(startOfDay: Long, endOfDay: Long): Flow<Int>
 
 }

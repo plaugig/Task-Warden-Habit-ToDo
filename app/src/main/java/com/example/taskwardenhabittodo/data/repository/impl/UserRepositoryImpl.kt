@@ -6,23 +6,35 @@ import com.example.taskwardenhabittodo.data.maper.toDomain
 import com.example.taskwardenhabittodo.data.maper.toEntity
 import com.example.taskwardenhabittodo.data.database.source.LocalDataSource
 import com.example.taskwardenhabittodo.domain.repository.UserRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class UserRepositoryImpl @Inject constructor(
     private val local : LocalDataSource
 ): UserRepository {
     override fun getUserStats(): Flow<UserData?> {
-        return local.getStats().combine(local.getAllTask()) { stats, tasks ->
-            stats?.let {
-                it.toDomain(tasks)
-            }
-        }
+        return local.getStats().map { entity ->
+            entity?.toDomain() ?: UserData(
+                id = 0,
+                dailyPoints = 0,
+                masteryStreak = 0,
+                fireStreak = 0,
+                petPoints = 0
+            )
+        }.flowOn(Dispatchers.IO)
     }
 
-    override suspend fun saveStats(user: UserData) {
-       local.updateStats(user.toEntity())
+    override suspend fun updateStats(stats: UserData) {
+        local.updateStats(stats.copy(id = 0).toEntity())
     }
+
+    override suspend fun resetDailyPoints() {
+        local.resetDailyPoints()
+    }
+
 
 }

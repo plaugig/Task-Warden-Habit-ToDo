@@ -49,7 +49,7 @@ fun TaskData.toEntity(): TaskEntity {
 }
 
 
-fun UserEntity.toDomain(tasks: List<TaskEntity>): UserData {
+fun UserEntity.toDomain(): UserData {
     return UserData(
         id = this.id,
         petPoints = this.petPoints,

@@ -31,5 +31,12 @@ interface TaskDao {
     @Query("SELECT * FROM tasks WHERE dayPart = :dayPart AND createdAt >= :startOfDay ORDER BY time ASC")
     fun getTasksByDayPart(dayPart: String, startOfDay: Long): Flow<List<TaskEntity>>
 
+    @Query("""
+    SELECT COUNT(*) FROM tasks 
+    WHERE isHabit = 0 AND isCompleted = 0 
+    AND createdAt >= :startOfDay AND createdAt <= :endOfDay
+""")
+    fun getUnfinishedTasks(startOfDay: Long, endOfDay: Long): Flow<Int>
+
 
 }
