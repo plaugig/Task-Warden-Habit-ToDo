@@ -7,8 +7,10 @@
     import com.example.taskwardenhabittodo.domain.interactor.TaskInteractor
     import com.example.taskwardenhabittodo.domain.interactor.UserInteractor
     import com.example.taskwardenhabittodo.ui.DayProgress
+    import com.example.taskwardenhabittodo.ui.UiTaskData
     import com.example.taskwardenhabittodo.ui.UiUserData
-    import com.example.taskwardenhabittodo.ui.presentation.maper.toUi
+    import com.example.taskwardenhabittodo.ui.maper.toDomain
+    import com.example.taskwardenhabittodo.ui.maper.toUi
     import dagger.hilt.android.lifecycle.HiltViewModel
     import kotlinx.coroutines.flow.SharingStarted
     import kotlinx.coroutines.flow.StateFlow
@@ -72,6 +74,12 @@
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = MainScreenState()
         )
+
+        fun addHabit(uiHabit: UiTaskData){
+            viewModelScope.launch {
+                habitInteractor.addHabit(uiHabit.toDomain())
+            }
+        }
 
         fun updateHabitProgress(habitId: Int, newCount: Int){
             viewModelScope.launch {

@@ -24,11 +24,13 @@ fun HabitsFlowGrid(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(spacing.medium),
         verticalArrangement = Arrangement.spacedBy(spacing.medium),
+        maxItemsInEachRow = 2
     ) {
         habits.forEach { habit ->
             HabitCard(
                 habit = habit,
-                modifier = Modifier.weight(1f),
+                modifier = Modifier
+                    .fillMaxWidth(0.47f),
                 onIncrement = {
                     onIncrement(habit.id, habit.currentCount)
                 },

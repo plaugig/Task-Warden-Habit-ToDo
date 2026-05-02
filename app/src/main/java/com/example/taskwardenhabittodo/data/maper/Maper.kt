@@ -40,10 +40,10 @@ fun TaskData.toEntity(): TaskEntity {
         isHabit = this.isHabit,
         targetCount = this.targetCount,
         currentCount = this.currentCount,
-        category = this.priority.name,
+        category = this.category.name,
         colorHex = this.colorHex,
         isPinned = this.isPinned,
-        dayPart = this.priority.name,
+        dayPart = this.dayPart.name,
         period = period,
         createdAt = createdAt,
         iconResId = this.iconResId

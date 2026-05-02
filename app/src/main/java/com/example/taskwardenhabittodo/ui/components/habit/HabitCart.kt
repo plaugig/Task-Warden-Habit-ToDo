@@ -3,7 +3,6 @@ package com.example.taskwardenhabittodo.ui.components.habit
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -15,7 +14,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
@@ -33,8 +31,10 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.taskwardenhabittodo.R
 import com.example.taskwardenhabittodo.domain.CategoryType
 import com.example.taskwardenhabittodo.domain.DayPart
@@ -72,11 +72,11 @@ fun HabitCard(
                 onClick = onIncrement,
                 onLongClick = onLongClick
             )
-            .width(160.dp)
-            .wrapContentHeight(),
-        shape = RoundedCornerShape(28.dp),
+            .width(170.dp)
+            .height(170.dp),
+        shape = RoundedCornerShape(24.dp),
         color = colorScheme.surface,
-        border = BorderStroke(1.dp, colorScheme.outline.copy(alpha = 0.5f))
+        border = BorderStroke(1.5.dp, colorScheme.outline.copy(alpha = 0.5f))
     ) {
         Column(
             modifier = Modifier.padding(spacing.medium),
@@ -89,7 +89,7 @@ fun HabitCard(
             ) {
                 Box(
                     modifier = Modifier
-                        .size(36.dp)
+                        .size(40.dp)
                         .background(accentColor.copy(alpha = 0.1f), CircleShape),
                     contentAlignment = Alignment.Center
                 ) {
@@ -103,10 +103,12 @@ fun HabitCard(
 
                 Surface(
                     color = accentColor.copy(alpha = 0.15f),
-                    shape = RoundedCornerShape(12.dp)
+                    shape = RoundedCornerShape(10.dp)
                 ) {
                     Row(
-                        modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
+                        modifier = Modifier.padding(
+                            horizontal = 6.dp, vertical = 2.dp
+                        ),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Icon(
@@ -115,44 +117,57 @@ fun HabitCard(
                             tint = accentColor,
                             modifier = Modifier.size(12.dp)
                         )
+
                         Spacer(modifier = Modifier.width(2.dp))
+
                         Text(
-                            text = stringResource(R.string.habit_streak_template, 7),
-                            style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold),
+                            text = stringResource(
+                                R.string.habit_streak_template,
+                                habit.currentCount
+                            ),
+                            style = MaterialTheme.typography.labelSmall.copy(
+                                fontWeight = FontWeight.Bold
+                            ),
                             color = accentColor
                         )
                     }
                 }
             }
 
-            Spacer(modifier = Modifier.height(spacing.small))
-
             Text(
                 text = habit.title,
+                fontSize = 18.sp,
                 style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
                 color = colorScheme.onSurface,
                 maxLines = 2,
-                minLines = 2
+                minLines = 2,
+                overflow = TextOverflow.Ellipsis,
+                lineHeight = 22.sp
             )
 
-            Spacer(modifier = Modifier.height(spacing.small))
-
-            LinearProgressIndicator(
-                progress = { if (habit.isCompleted) 1f else progress },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(6.dp)
-                    .clip(CircleShape),
-                color = accentColor,
-                trackColor = colorScheme.outline.copy(alpha = 0.2f),
-                strokeCap = StrokeCap.Round
-            )
+           Column(
+               verticalArrangement = Arrangement.spacedBy(4.dp)
+           ) {
+               LinearProgressIndicator(
+                   progress = { if (habit.isCompleted) 1f else progress },
+                   modifier = Modifier
+                       .fillMaxWidth()
+                       .height(8.dp)
+                       .clip(CircleShape),
+                   color = accentColor,
+                   trackColor = colorScheme.outline.copy(alpha = 0.2f),
+                   strokeCap = StrokeCap.Round
+               )
+           }
 
             if (habit.isCompleted) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(
                         text = stringResource(R.string.done),
-                        style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold),
+                        fontSize = 14.sp,
+                        style = MaterialTheme.typography.labelSmall.copy(
+                            fontWeight = FontWeight.Bold
+                        ),
                         color = accentColor
                     )
                     Spacer(modifier = Modifier.width(4.dp))
@@ -170,6 +185,7 @@ fun HabitCard(
                         habit.currentCount,
                         habit.targetCount
                     ),
+                    fontSize = 14.sp,
                     style = MaterialTheme.typography.labelSmall,
                     color = colorScheme.onSurfaceVariant
                 )

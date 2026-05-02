@@ -27,13 +27,15 @@ private val PremiumDarkColorScheme = darkColorScheme(
 @Immutable
 data class ExtendedColors(
     val fireStreak: Color,
-    val masterStar: Color
+    val masterStar: Color,
+    val containerColor: Color
 )
 
 val LocalExtendedColors = staticCompositionLocalOf {
     ExtendedColors(
         fireStreak = Color.Unspecified,
-        masterStar = Color.Unspecified
+        masterStar = Color.Unspecified,
+        containerColor = Color.Unspecified
     )
 }
 
@@ -49,7 +51,8 @@ fun TaskWardenHabitToDoTheme(
 
     val extendedColors = ExtendedColors(
         fireStreak = AmberGold,
-        masterStar = SoftPurple
+        masterStar = SoftPurple,
+        containerColor = ContainerColor
     )
 
     CompositionLocalProvider(

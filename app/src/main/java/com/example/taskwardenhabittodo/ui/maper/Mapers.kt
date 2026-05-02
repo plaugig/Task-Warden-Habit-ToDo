@@ -1,4 +1,4 @@
-package com.example.taskwardenhabittodo.ui.presentation.maper
+package com.example.taskwardenhabittodo.ui.maper
 
 import com.example.taskwardenhabittodo.data.TaskData
 import com.example.taskwardenhabittodo.data.UserData
@@ -26,8 +26,8 @@ fun TaskData.toUi(): UiTaskData {
     )
 }
 
-fun UiTaskData.toDomain(): UiTaskData{
-    return UiTaskData(
+fun UiTaskData.toDomain(): TaskData{
+    return TaskData(
         id = this.id,
         title = this.title,
         description = this.description,

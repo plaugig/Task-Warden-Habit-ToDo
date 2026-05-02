@@ -22,3 +22,7 @@ val WarningRed = Color(0xFFFF5A5A)
 val TextHighEmphasis = Color(0xFFF4F4F4)
 val TextMedEmphasis = Color(0xFF808191)
 val TextOnAccent = Color(0xFFFFFFFF)
+
+        // боттом щит
+
+val ContainerColor = Color(0xFF1A1A1A)

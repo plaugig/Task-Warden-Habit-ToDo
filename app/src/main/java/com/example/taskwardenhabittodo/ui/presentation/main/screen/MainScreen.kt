@@ -1,33 +1,43 @@
 package com.example.taskwardenhabittodo.ui.presentation.main.screen
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.taskwardenhabittodo.R
+import com.example.taskwardenhabittodo.domain.ActionType
 import com.example.taskwardenhabittodo.domain.CategoryType
 import com.example.taskwardenhabittodo.domain.DayPart
 import com.example.taskwardenhabittodo.domain.Priority
 import com.example.taskwardenhabittodo.ui.DayProgress
 import com.example.taskwardenhabittodo.ui.UiTaskData
 import com.example.taskwardenhabittodo.ui.UiUserData
+import com.example.taskwardenhabittodo.ui.components.ActionIconButton
+import com.example.taskwardenhabittodo.ui.components.BottomSheetScreen
 import com.example.taskwardenhabittodo.ui.components.DashboardStatsCard
+import com.example.taskwardenhabittodo.ui.components.DeleteHabitDialog
 import com.example.taskwardenhabittodo.ui.components.FocusTaskCard
 import com.example.taskwardenhabittodo.ui.components.MainScreenDashboard
 import com.example.taskwardenhabittodo.ui.components.habit.HabitsFlowGrid
-import com.example.taskwardenhabittodo.ui.components.habit.HabitsSectionHeader
 import com.example.taskwardenhabittodo.ui.theme.TaskWardenHabitToDoTheme
 import com.example.taskwardenhabittodo.ui.theme.spacing
 
@@ -38,6 +48,11 @@ fun MainScreen(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val spacing = MaterialTheme.spacing
     val colorScheme = MaterialTheme.colorScheme
+
+    var showBottomSheet by remember { mutableStateOf(false) }
+
+    var showDeleteDialog by remember { mutableStateOf(false) }
+    var habitIdToDelete by remember { mutableStateOf<Int?>(null) }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -73,7 +88,25 @@ fun MainScreen(
             }
 
             item {
-                HabitsSectionHeader()
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = stringResource(R.string.todays_habits),
+                        color = MaterialTheme.colorScheme.onBackground,
+                        style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
+                    )
+
+                    ActionIconButton(
+                        iconRes = R.drawable.add,
+                        onClick = { showBottomSheet = true },
+                        isSelected = true
+                    )
+
+
+                }
             }
 
             item {
@@ -83,10 +116,54 @@ fun MainScreen(
                         viewModel.updateHabitProgress(habitId, currentCount + 1)
                     },
                     onDelete = { id ->
-                        viewModel.deleteHabitById(id)
+                        habitIdToDelete = id
+                        showDeleteDialog = true
                     }
                 )
             }
+        }
+
+        if (showDeleteDialog) {
+            DeleteHabitDialog(
+                onConfirm = {
+                    habitIdToDelete?.let { viewModel.deleteHabitById(it) }
+                    showDeleteDialog = false
+                    habitIdToDelete = null
+                },
+                onDismiss = {
+                    showDeleteDialog = false
+                    habitIdToDelete = null
+                }
+            )
+        }
+
+        if (showBottomSheet) {
+            BottomSheetScreen(
+                type = ActionType.HABIT,
+                onDismiss = {
+                    showBottomSheet = false
+                },
+                onCreateClick = { title, time, count ->
+                    val newHabitUi = UiTaskData(
+                        title = title,
+                        time = time,
+                        targetCount = count,
+                        currentCount = 0,
+                        description = "",
+                        priority = Priority.MEDIUM,
+                        category = CategoryType.HEALTH,
+                        iconResId = R.drawable.meditate,
+                        period = "Daily",
+                        dayPart = DayPart.MORNING,
+                        isCompleted = false,
+                        isHabit = true,
+                        colorHex = 0xFF2196F3,
+                        isPinned = false
+                    )
+                    viewModel.addHabit(newHabitUi)
+                    showBottomSheet = false
+                }
+            )
         }
     }
 }
@@ -176,12 +253,6 @@ fun MainScreenPreview() {
                         progress = mockProgress.tasksProgress,
                         isFullMode = true
                     )
-                }
-
-
-
-                item {
-                    HabitsSectionHeader()
                 }
 
                 item {
