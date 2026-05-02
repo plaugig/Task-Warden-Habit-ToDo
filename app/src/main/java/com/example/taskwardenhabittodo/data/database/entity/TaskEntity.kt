@@ -37,4 +37,6 @@ data class TaskEntity(
     val dayPart: String,
     @ColumnInfo(name = "period")
     val period: String,
+    @ColumnInfo(name = "iconResId")
+    val iconResId: Int
 )

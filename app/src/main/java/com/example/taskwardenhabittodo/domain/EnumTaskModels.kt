@@ -5,7 +5,7 @@ enum class Priority {
 }
 
 enum class CategoryType {
-    WORK, PERSONAL, HEALTH, STUDY, FINANCE, GENERAL
+    WORK, PERSONAL, HEALTH, STUDY, FINANCE, GENERAL, SPORT
 }
 enum class DayPart {
     MORNING, AFTERNOON, EVENING

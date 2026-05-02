@@ -24,7 +24,8 @@ fun TaskEntity.toDomain(): TaskData {
         isPinned = this.isPinned,
         dayPart = DayPart.valueOf(this.dayPart),
         period = period,
-        createdAt = createdAt
+        createdAt = createdAt,
+        iconResId = this.iconResId
     )
 }
 
@@ -44,7 +45,8 @@ fun TaskData.toEntity(): TaskEntity {
         isPinned = this.isPinned,
         dayPart = this.priority.name,
         period = period,
-        createdAt = createdAt
+        createdAt = createdAt,
+        iconResId = this.iconResId
     )
 }
 

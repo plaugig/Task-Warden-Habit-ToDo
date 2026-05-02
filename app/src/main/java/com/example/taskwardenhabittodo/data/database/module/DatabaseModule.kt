@@ -3,6 +3,7 @@ package com.example.taskwardenhabittodo.data.database.module
 import android.content.Context
 import androidx.room.Room
 import com.example.taskwardenhabittodo.data.database.AppDatabase
+import com.example.taskwardenhabittodo.data.database.dao.HabitDao
 import com.example.taskwardenhabittodo.data.database.dao.TaskDao
 import com.example.taskwardenhabittodo.data.database.dao.UserDao
 import dagger.Module
@@ -32,5 +33,8 @@ object DatabaseModule {
 
     @Provides
     fun provideUserDao(db: AppDatabase): UserDao = db.userDao()
+
+    @Provides
+    fun  provideHabitDao(db: AppDatabase): HabitDao = db.habitDao()
 
 }

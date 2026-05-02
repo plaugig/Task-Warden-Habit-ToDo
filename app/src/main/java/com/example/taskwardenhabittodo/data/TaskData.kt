@@ -21,5 +21,6 @@ data class TaskData (
     val currentCount: Int = 0,
     val colorHex: Long,
     val isPinned: Boolean,
+    val iconResId: Int,
     val createdAt: Long = System.currentTimeMillis()
 )

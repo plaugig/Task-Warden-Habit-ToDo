@@ -19,4 +19,6 @@ data class UiTaskData (
     val currentCount: Int = 0,
     val colorHex: Long,
     val isPinned: Boolean,
+    val iconResId: Int,
+
 )

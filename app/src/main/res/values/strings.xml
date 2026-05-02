@@ -21,5 +21,9 @@
     <string name="task_period_template">%1$s</string>
     <string name="task_duration_template">%1$d min - %2$s</string>
     <string name="streak">Streak</string>
+    <string name="dashboard_title">Dashboard</string>
+    <string name="todays_focus">Today\'s Focus</string>
+    <string name="todays_habits">Today\'s Habits</string>
+    <string name="see_all">see all</string>
 
 </resources>
