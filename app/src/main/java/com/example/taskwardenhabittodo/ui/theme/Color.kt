@@ -17,6 +17,7 @@ val NeonEmerald = Color(0xFF34EAB9)
 val SuccessGreen = Color(0xFF45B39D)
 val AmberGold = Color(0xFFFFB74D)
 val WarningRed = Color(0xFFFF5A5A)
+val Green = Color(0xFF4CAF50)
 
 // текст
 val TextHighEmphasis = Color(0xFFF4F4F4)

@@ -32,7 +32,7 @@ import com.example.taskwardenhabittodo.ui.DayProgress
 import com.example.taskwardenhabittodo.ui.UiTaskData
 import com.example.taskwardenhabittodo.ui.UiUserData
 import com.example.taskwardenhabittodo.ui.components.ActionIconButton
-import com.example.taskwardenhabittodo.ui.components.BottomSheetScreen
+import com.example.taskwardenhabittodo.ui.components.bottom.sheet.BottomSheetScreen
 import com.example.taskwardenhabittodo.ui.components.DashboardStatsCard
 import com.example.taskwardenhabittodo.ui.components.DeleteHabitDialog
 import com.example.taskwardenhabittodo.ui.components.FocusTaskCard
@@ -113,7 +113,7 @@ fun MainScreen(
                 HabitsFlowGrid(
                     habits = uiState.todayHabits,
                     onIncrement = { habitId, currentCount ->
-                        viewModel.updateHabitProgress(habitId, currentCount + 1)
+                        viewModel.updateHabitProgress(habitId, currentCount)
                     },
                     onDelete = { id ->
                         habitIdToDelete = id
@@ -143,7 +143,7 @@ fun MainScreen(
                 onDismiss = {
                     showBottomSheet = false
                 },
-                onCreateClick = { title, time, count ->
+                onCreateClick = { title, time, count , category ->
                     val newHabitUi = UiTaskData(
                         title = title,
                         time = time,
@@ -151,8 +151,8 @@ fun MainScreen(
                         currentCount = 0,
                         description = "",
                         priority = Priority.MEDIUM,
-                        category = CategoryType.HEALTH,
-                        iconResId = R.drawable.meditate,
+                        category = category ,
+                        iconResId = category.iconResId,
                         period = "Daily",
                         dayPart = DayPart.MORNING,
                         isCompleted = false,

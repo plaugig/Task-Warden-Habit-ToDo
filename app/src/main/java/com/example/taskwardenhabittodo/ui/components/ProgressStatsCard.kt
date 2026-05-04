@@ -70,9 +70,9 @@ fun DashboardStatsCard(
                 // кольцо 1
                 StatRing(
                     label = stringResource(R.string.habit),
-                    subLabel = "${(habitsProgress * 100).toInt()} ${stringResource(R.string.done)}",
-                    value = "${progress.completedHabits}",
-                    target = "/${progress.totalHabits}",
+                    subLabel = "",
+                    value = "/${progress.totalHabits}",
+                    target = "${progress.completedHabits}",
                     color = colorScheme.primary,
                     progress = habitsProgress
                 )
@@ -196,6 +196,7 @@ private fun StatRing(
                     useCenter = false,
                     style = Stroke(width = 6.dp.toPx(), cap = StrokeCap.Round)
                 )
+
                 drawArc(
                     color = color,
                     startAngle = -90f,
@@ -215,18 +216,20 @@ private fun StatRing(
                     )
                 }
                 Text(
-                    text = value,
+                    text = target,
                     style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold),
                     color = colorScheme.onSurface
                 )
-                if (target.isNotEmpty()) {
+                if (value.isNotEmpty()) {
                     Text(
-                        text = target,
-                        style = MaterialTheme.typography.labelSmall,
+                        text = value,
+                        style = MaterialTheme.typography.titleSmall,
                         color = colorScheme.onSurfaceVariant
                     )
                 }
+
             }
+
         }
 
         Text(

@@ -9,7 +9,6 @@ import com.example.taskwardenhabittodo.domain.DayPart
 import com.example.taskwardenhabittodo.domain.Priority
 
 fun TaskEntity.toDomain(): TaskData {
-    val dayPart = ""
     return TaskData(
         id = this.id,
         title = this.title,
@@ -25,7 +24,8 @@ fun TaskEntity.toDomain(): TaskData {
         dayPart = DayPart.valueOf(this.dayPart),
         period = period,
         createdAt = createdAt,
-        iconResId = this.iconResId
+        iconResId = this.iconResId,
+        isCompleted = this.isCompleted,
     )
 }
 
@@ -46,7 +46,7 @@ fun TaskData.toEntity(): TaskEntity {
         dayPart = this.dayPart.name,
         period = period,
         createdAt = createdAt,
-        iconResId = this.iconResId
+        iconResId = this.iconResId,
     )
 }
 

@@ -1,4 +1,4 @@
-package com.example.taskwardenhabittodo.ui.components
+package com.example.taskwardenhabittodo.ui.components.bottom.sheet
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -39,7 +39,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.taskwardenhabittodo.R
 import com.example.taskwardenhabittodo.domain.ActionType
+import com.example.taskwardenhabittodo.domain.CategoryType
 import com.example.taskwardenhabittodo.domain.Priority
+import com.example.taskwardenhabittodo.ui.components.PriorityButton
+import com.example.taskwardenhabittodo.ui.components.TaskPropertyCard
 import com.example.taskwardenhabittodo.ui.theme.AmberGold
 import com.example.taskwardenhabittodo.ui.theme.SuccessGreen
 import com.example.taskwardenhabittodo.ui.theme.TaskWardenHabitToDoTheme
@@ -52,7 +55,7 @@ import com.example.taskwardenhabittodo.ui.theme.spacing
 fun BottomSheetScreen(
     type: ActionType,
     onDismiss: () -> Unit,
-    onCreateClick: (String, String, Int) -> Unit
+    onCreateClick: (String, String, Int, CategoryType) -> Unit
 ) {
     val extendedColors = MaterialTheme.extendedColors
     val colorScheme = MaterialTheme.colorScheme
@@ -65,16 +68,18 @@ fun BottomSheetScreen(
         BottomSheetContent(
             type = type,
             onDismiss = onDismiss,
-            onCreateClick = onCreateClick
+            onCreateClick = onCreateClick,
+
         )
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BottomSheetContent(
     type: ActionType,
     onDismiss: () -> Unit,
-    onCreateClick: (String, String, Int) -> Unit
+    onCreateClick: (String, String, Int, CategoryType ) -> Unit
 ){
     val spacing = MaterialTheme.spacing
     val colorScheme = MaterialTheme.colorScheme
@@ -84,6 +89,8 @@ fun BottomSheetContent(
     var selectedTime by remember { mutableStateOf("12:00 PM") }
     var repeatCount by remember { mutableIntStateOf(1) }
     var selectedPriority by remember { mutableStateOf(Priority.MEDIUM) }
+    var selectedCategory by remember { mutableStateOf(CategoryType.HEALTH) }
+    var showIconPicer by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
@@ -166,10 +173,10 @@ fun BottomSheetContent(
             if (type == ActionType.HABIT) {
                 Spacer(modifier = Modifier.width(spacing.small))
                 TaskPropertyCard(
-                    iconRes = R.drawable.animal,
+                    iconRes = selectedCategory.iconResId,
                     label = stringResource(R.string.label_category),
-                    value = "Health",
-                    onClick = { },
+                    value = selectedCategory.name,
+                    onClick = { showIconPicer = true },
                     modifier = Modifier.weight(1f)
                 )
             }
@@ -258,7 +265,8 @@ fun BottomSheetContent(
                 onCreateClick(
                     title,
                     selectedTime,
-                    repeatCount
+                    repeatCount,
+                    selectedCategory,
                 )
             },
             modifier = Modifier
@@ -270,7 +278,8 @@ fun BottomSheetContent(
                 contentColor = colorScheme.onPrimary
             ),
             enabled = title.isNotBlank()
-        ) {
+        )
+        {
             Icon(painterResource(R.drawable.check), null)
             Spacer(modifier = Modifier.width(spacing.small))
             Text(
@@ -282,6 +291,23 @@ fun BottomSheetContent(
             )
         }
         Spacer(modifier = Modifier.height(spacing.medium))
+
+        if (showIconPicer){
+            ModalBottomSheet(
+                onDismissRequest = {
+                    showIconPicer = false
+                },
+                contentColor = extendedColors.containerColor
+            ) {
+                IconPickerContent(
+                    onCategorySelected = { category ->
+                        selectedCategory = category
+                        showIconPicer = false
+                    }
+                )
+            }
+        }
+
     }
 }
 
@@ -294,7 +320,7 @@ fun PreviewHabitBottomSheet() {
             BottomSheetContent(
                 type = ActionType.HABIT,
                 onDismiss = {},
-                onCreateClick = { _, _, _ -> }
+                onCreateClick = { _, _, _ , _-> }
             )
         }
     }
@@ -308,7 +334,7 @@ fun PreviewTaskBottomSheet() {
             BottomSheetContent(
                 type = ActionType.TASK,
                 onDismiss = {},
-                onCreateClick = { _, _, _ -> }
+                onCreateClick = { _, _, _ , _-> }
             )
         }
     }

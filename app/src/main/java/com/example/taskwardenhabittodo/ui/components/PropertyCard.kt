@@ -74,6 +74,7 @@ package com.example.taskwardenhabittodo.ui.components
                         color = colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
                     )
                 }
+
             }
         }
     }

@@ -18,7 +18,7 @@ data class TaskEntity(
     @ColumnInfo(name = "time")
     val time: String,
     @ColumnInfo(name = "isCompleted")
-    val isCompleted: Boolean = false,
+    var isCompleted: Boolean = false,
     @ColumnInfo(name = "isHabit")
     val isHabit: Boolean = false,
     @ColumnInfo(name = "targetCount")
