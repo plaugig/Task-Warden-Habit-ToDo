@@ -1,4 +1,4 @@
-package com.example.taskwardenhabittodo.ui.presentation.main.screen.item
+package com.example.taskwardenhabittodo.presentation.habit.item
 
 import java.util.Calendar
 

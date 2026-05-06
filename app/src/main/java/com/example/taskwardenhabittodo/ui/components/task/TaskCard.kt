@@ -1,4 +1,4 @@
-package com.example.taskwardenhabittodo.ui.components
+package com.example.taskwardenhabittodo.ui.components.task
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -30,7 +30,9 @@ fun TaskCard(
     priorityColor: Color,
     isCompleted: Boolean = false,
     onCheckedChange: (Boolean) -> Unit = {},
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit
+
 ) {
     val spacing = MaterialTheme.spacing
     val colorScheme = MaterialTheme.colorScheme
@@ -172,7 +174,8 @@ fun TaskCardPreview() {
                 duration = 15,
                 category = "Work",
                 priorityColor = Color.Red,
-                isCompleted = false
+                isCompleted = true,
+                onClick = {}
             )
 
             //вып
@@ -183,7 +186,8 @@ fun TaskCardPreview() {
                 duration = 10,
                 category = "Reflection",
                 priorityColor = Color.Green,
-                isCompleted = true
+                isCompleted = false,
+                onClick = {}
             )
         }
     }

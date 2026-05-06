@@ -16,7 +16,7 @@ enum class CategoryType (val iconResId: Int) {
     SPORT(R.drawable.workout)
 }
 enum class DayPart {
-    MORNING, AFTERNOON, EVENING
+    MORNING, AFTERNOON, EVENING, ALL_DAY
 }
 
 enum class ActionType {

@@ -36,7 +36,7 @@ fun DeleteHabitDialog(
                 Text(
                     text = stringResource(R.string.confirm),
                     color = MaterialTheme.colorScheme.error,
-                    fontWeight = FontWeight.ExtraBold // Делаем акцент на удалении
+                    fontWeight = FontWeight.ExtraBold
                 )
             }
         },

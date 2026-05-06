@@ -1,5 +1,6 @@
-package com.example.taskwardenhabittodo.ui.presentation.main.screen
+package com.example.taskwardenhabittodo.presentation.habit
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -42,8 +43,9 @@ import com.example.taskwardenhabittodo.ui.theme.TaskWardenHabitToDoTheme
 import com.example.taskwardenhabittodo.ui.theme.spacing
 
 @Composable
-fun MainScreen(
-    viewModel: MainScreenViewModel = hiltViewModel()
+fun HabitScreen(
+    viewModel: habitScreenViewModel = hiltViewModel(),
+    onNavigateToTasks: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val spacing = MaterialTheme.spacing
@@ -83,7 +85,9 @@ fun MainScreen(
                     totalCount = uiState.progress.totalTasks,
                     progress = uiState.progress.tasksProgress,
                     isFullMode = true,
-                    modifier = Modifier.padding(vertical = spacing.small)
+                    modifier = Modifier
+                        .padding(vertical = spacing.small)
+                        .clickable { onNavigateToTasks() }
                 )
             }
 
@@ -151,7 +155,7 @@ fun MainScreen(
                         currentCount = 0,
                         description = "",
                         priority = Priority.MEDIUM,
-                        category = category ,
+                        category = category,
                         iconResId = category.iconResId,
                         period = "Daily",
                         dayPart = DayPart.MORNING,

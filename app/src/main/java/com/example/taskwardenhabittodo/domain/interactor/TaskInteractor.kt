@@ -48,7 +48,7 @@ class TaskInteractor @Inject constructor(
         return getUnfinishedTasksUseCase.getUnfinishedTasks(startOfDay, endOfDay)
     }
 
-    fun getTasksByDayPart(
+    fun getTasksByDayPartw(
         dayPart: String,
         startOfDay: Long
     ): Flow<List<TaskData>> {
@@ -56,3 +56,4 @@ class TaskInteractor @Inject constructor(
     }
 
 }
+

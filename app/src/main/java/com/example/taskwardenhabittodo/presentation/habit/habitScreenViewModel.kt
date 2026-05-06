@@ -1,4 +1,4 @@
-package com.example.taskwardenhabittodo.ui.presentation.main.screen
+package com.example.taskwardenhabittodo.presentation.habit
 
 
 import androidx.lifecycle.ViewModel
@@ -6,12 +6,12 @@ import androidx.lifecycle.viewModelScope
 import com.example.taskwardenhabittodo.domain.interactor.HabitInteractor
 import com.example.taskwardenhabittodo.domain.interactor.TaskInteractor
 import com.example.taskwardenhabittodo.domain.interactor.UserInteractor
+import com.example.taskwardenhabittodo.presentation.habit.item.DateUtils
 import com.example.taskwardenhabittodo.ui.DayProgress
 import com.example.taskwardenhabittodo.ui.UiTaskData
 import com.example.taskwardenhabittodo.ui.UiUserData
 import com.example.taskwardenhabittodo.ui.maper.toDomain
 import com.example.taskwardenhabittodo.ui.maper.toUi
-import com.example.taskwardenhabittodo.ui.presentation.main.screen.item.DateUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -24,7 +24,7 @@ import javax.inject.Inject
 
 
 @HiltViewModel
-class MainScreenViewModel @Inject constructor(
+class habitScreenViewModel @Inject constructor(
     private val taskInteractor: TaskInteractor,
     private val habitInteractor: HabitInteractor,
     private val userInteractor: UserInteractor
@@ -32,7 +32,7 @@ class MainScreenViewModel @Inject constructor(
 
     private val startOfDAyFlow = MutableStateFlow(DateUtils.getStartOfDay())
 
-    val uiState: StateFlow<MainScreenState> = startOfDAyFlow.flatMapLatest { startDay ->
+    val uiState: StateFlow<HabitScreenState> = startOfDAyFlow.flatMapLatest { startDay ->
         combine(
             userInteractor.getUserStats(),
             taskInteractor.getTodayTaskStats(startDay),
@@ -48,7 +48,7 @@ class MainScreenViewModel @Inject constructor(
                 completedHabits = habitStats.second
             )
 
-            MainScreenState(
+            HabitScreenState(
                 isLoading = false,
                 user = user?.toUi() ?: UiUserData(
                     petPoints = 0,
@@ -58,12 +58,12 @@ class MainScreenViewModel @Inject constructor(
                 ),
                 progress = dayProgress,
                 todayHabits = allHabit
-                    .filter { it.isHabit }
+                    .filter { it.classification }
                     .map { it.toUi() }
                     .sortedBy { it.isCompleted },
 
                 focusTask = allTask.firstOrNull() {
-                    !it.isHabit && !it.isCompleted
+                    !it.classification && !it.isCompleted
                 }?.toUi()
             )
         }
@@ -71,7 +71,7 @@ class MainScreenViewModel @Inject constructor(
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
-            initialValue = MainScreenState()
+            initialValue = HabitScreenState()
         )
 
     fun addHabit(uiHabit: UiTaskData) {

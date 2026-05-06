@@ -41,5 +41,7 @@
     <string name="delete_habit_message">Are you sure you want to delete this habit? This action cannot be undone.</string>
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
+    <string name="tasks_title">хуй</string>
+    <string name="daily_progress">Daily Progress</string>
 
 </resources>
