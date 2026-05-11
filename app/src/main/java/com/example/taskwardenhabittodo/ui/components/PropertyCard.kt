@@ -52,7 +52,7 @@ package com.example.taskwardenhabittodo.ui.components
                     Icon(
                         painter = painterResource(id = iconRes),
                         contentDescription = null,
-                        tint = colorScheme.primary, // Твой фиолетовый
+                        tint = colorScheme.primary,
                         modifier = Modifier.size(20.dp)
                     )
                 }

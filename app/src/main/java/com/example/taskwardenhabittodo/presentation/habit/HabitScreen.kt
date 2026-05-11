@@ -44,7 +44,7 @@ import com.example.taskwardenhabittodo.ui.theme.spacing
 
 @Composable
 fun HabitScreen(
-    viewModel: habitScreenViewModel = hiltViewModel(),
+    viewModel: HabitScreenViewModel = hiltViewModel(),
     onNavigateToTasks: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -147,14 +147,14 @@ fun HabitScreen(
                 onDismiss = {
                     showBottomSheet = false
                 },
-                onCreateClick = { title, time, count , category ->
+                onCreateClick = { title, time, count , category , priority->
                     val newHabitUi = UiTaskData(
                         title = title,
                         time = time,
                         targetCount = count,
                         currentCount = 0,
                         description = "",
-                        priority = Priority.MEDIUM,
+                        priority = priority ,
                         category = category,
                         iconResId = category.iconResId,
                         period = "Daily",

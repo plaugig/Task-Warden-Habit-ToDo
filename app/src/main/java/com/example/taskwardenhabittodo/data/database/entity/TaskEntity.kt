@@ -16,7 +16,7 @@ data class TaskEntity(
     @ColumnInfo(name = "priority")
     val priority: String,
     @ColumnInfo(name = "time")
-    val time: String,
+    val time: String?,
     @ColumnInfo(name = "isCompleted")
     var isCompleted: Boolean = false,
     @ColumnInfo(name = "isHabit")
@@ -30,7 +30,7 @@ data class TaskEntity(
     @ColumnInfo(name = "category")
     val category: String,
     @ColumnInfo(name = "colorHex")
-    val colorHex: Long = 0xFF34EAB9,
+    val colorHex: Long,
     @ColumnInfo(name = "isPinned")
     val isPinned: Boolean = false,
     @ColumnInfo(name = "dayPart")
@@ -38,5 +38,7 @@ data class TaskEntity(
     @ColumnInfo(name = "period")
     val period: String,
     @ColumnInfo(name = "iconResId")
-    val iconResId: Int
+    val iconResId: Int,
+    @ColumnInfo(name = "lastUpdated")
+    val lastUpdated: Long
 )

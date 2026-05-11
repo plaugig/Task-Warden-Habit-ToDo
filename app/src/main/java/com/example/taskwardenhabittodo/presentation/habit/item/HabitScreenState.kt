@@ -1,4 +1,4 @@
-package com.example.taskwardenhabittodo.presentation.habit
+package com.example.taskwardenhabittodo.presentation.habit.item
 
 import com.example.taskwardenhabittodo.ui.DayProgress
 import com.example.taskwardenhabittodo.ui.UiTaskData

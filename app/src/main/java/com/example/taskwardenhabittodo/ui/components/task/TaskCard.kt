@@ -22,12 +22,12 @@ import com.example.taskwardenhabittodo.ui.theme.spacing
 
 @Composable
 fun TaskCard(
-    time: String,
+    time: String?,
     period: String,
     title: String,
     duration: Int,
     category: String,
-    priorityColor: Color,
+    priorityColor: Color? = null,
     isCompleted: Boolean = false,
     onCheckedChange: (Boolean) -> Unit = {},
     modifier: Modifier = Modifier,
@@ -65,7 +65,7 @@ fun TaskCard(
                 modifier = Modifier.width(50.dp)
             ) {
                 Text(
-                    text = time,
+                    text = time ?: "",
                     style = MaterialTheme.typography.titleMedium.copy(
                         fontWeight = FontWeight.Bold,
                         fontSize = 14.sp
@@ -111,14 +111,16 @@ fun TaskCard(
                     )
                     Spacer(modifier = Modifier.width(spacing.small))
 
-                    Box(
-                        modifier = Modifier
-                            .size(8.dp)
-                            .background(priorityColor, CircleShape)
-                    )
+                    if (priorityColor != null){
+                        Box(
+                            modifier = Modifier
+                                .size(8.dp)
+                                .background(priorityColor, CircleShape)
+                        )
+                    }
                 }
                 Text(
-                    text = "$duration min - $category",
+                    text = "",
                     style = MaterialTheme.typography.labelMedium,
                     color = colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
                 )

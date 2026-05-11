@@ -6,10 +6,16 @@ import com.example.taskwardenhabittodo.R
 import com.example.taskwardenhabittodo.domain.DayPart
 import com.example.taskwardenhabittodo.domain.interactor.TaskInteractor
 import com.example.taskwardenhabittodo.domain.interactor.UserInteractor
-import com.example.taskwardenhabittodo.presentation.habit.item.DateUtils
+import com.example.taskwardenhabittodo.presentation.habit.item.HabitDateUtils
+import com.example.taskwardenhabittodo.presentation.task.item.TaskDateUtils
+import com.example.taskwardenhabittodo.presentation.task.item.TaskProgress
+import com.example.taskwardenhabittodo.presentation.task.item.TaskScreenState
+import com.example.taskwardenhabittodo.presentation.task.item.TaskSection
 import com.example.taskwardenhabittodo.ui.UiTaskData
+import com.example.taskwardenhabittodo.ui.maper.toDomain
 import com.example.taskwardenhabittodo.ui.maper.toUi
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -26,24 +32,29 @@ class TaskScreenViewModel @Inject constructor(
     private val userInteractor: UserInteractor
 ) : ViewModel() {
 
-    private val startOfDayFlow = MutableStateFlow(DateUtils.getStartOfDay())
+    private val startOfDayFlow = MutableStateFlow(HabitDateUtils.getStartOfDay())
 
+    private val _isBottomSheetVisible = MutableStateFlow(false)
+
+    @OptIn(ExperimentalCoroutinesApi::class)
     val uiState: StateFlow<TaskScreenState> = startOfDayFlow.flatMapLatest { startDay ->
         combine(
             taskInteractor.getAllTasks(),
-            userInteractor.getUserStats()
-        ) { allTask, userStats ->
+            userInteractor.getUserStats(),
+            _isBottomSheetVisible
+        ) { allTask, userStats, isVisible ->
 
             val todayTasks = allTask
-                .filter { it.classification }
+                .filter { !it.classification }
                 .map { it.toUi() }
 
             TaskScreenState(
                 isLoading = false,
-                displayDate = "data",
+                displayDate = TaskDateUtils.formatDisplayDate(startDay),
                 fireStreak = userStats?.fireStreak ?: 0,
                 progress = calculateProgress(todayTasks),
-                sections = prepareSections(todayTasks)
+                sections = prepareSections(todayTasks),
+                isBottomSheetVisible = isVisible
 
             )
         }
@@ -73,7 +84,7 @@ class TaskScreenViewModel @Inject constructor(
             TaskSection(
                 title = "Other",
                 iconRes = R.drawable.animal,
-                tasks = tasks.filter { it.dayPart == DayPart.ALL_DAY || it.dayPart == null }
+                tasks = tasks.filter { it.dayPart == DayPart.ALL_DAY }
             )
         ).filter { it.tasks.isNotEmpty() }
     }
@@ -93,5 +104,37 @@ class TaskScreenViewModel @Inject constructor(
         viewModelScope.launch {
             taskInteractor.updateCompletion(task.id , !task.isCompleted)
         }
+    }
+
+    fun addTask(uiTask: UiTaskData){
+        viewModelScope.launch {
+
+            val rawTime = uiTask.time
+
+            val correctedTask = if (!rawTime.isNullOrBlank()) {
+                val hourInt = rawTime.split(":").firstOrNull()?.toIntOrNull() ?: 12
+
+                uiTask.copy(
+                    period = if (hourInt < 12) "AM" else "PM",
+                    dayPart = TaskDateUtils.determineDayPart(rawTime)
+                )
+            } else {
+                uiTask.copy(
+                    time = "",
+                    period = "",
+                    dayPart = DayPart.ALL_DAY
+                )
+            }
+            taskInteractor.addTask(correctedTask.toDomain())
+            hideBottomSheet()
+        }
+    }
+
+    fun showBottomSheet(){
+        _isBottomSheetVisible.value = true
+    }
+
+    fun hideBottomSheet(){
+        _isBottomSheetVisible.value = false
     }
 }

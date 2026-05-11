@@ -17,4 +17,6 @@ interface HabitRepository {
 
     fun getUnfinishHabits(startOfDay: Long, endOfDay: Long): Flow<Int>
 
+    suspend fun resetOldHabits (startOfDay: Long)
+
 }

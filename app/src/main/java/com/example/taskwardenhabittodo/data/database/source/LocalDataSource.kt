@@ -9,16 +9,16 @@ import javax.inject.Inject
 class LocalDataSource @Inject constructor(
     private val appDatabase: AppDatabase
 ) {
-    suspend fun updateHabitProgress(id: Int, count: Int){
-        appDatabase.habitDao().updateHabitProgress(id,count)
+    suspend fun updateHabitProgress(id: Int, count: Int, timestamp: Long){
+        appDatabase.habitDao().updateHabitProgress(id,count, timestamp)
     }
 
     fun getAllHabits(): Flow<List<TaskEntity>>{
       return  appDatabase.habitDao().getAllHabits()
     }
 
-    fun getTotalHabitsCount(startOfDay: Long): Flow<Int>{
-      return  appDatabase.habitDao().getTotalHabitsCount(startOfDay)
+    fun getTotalHabitsCount(): Flow<Int>{
+      return  appDatabase.habitDao().getTotalHabitsCount()
     }
 
     fun getCompletedHabits(startOfDay: Long): Flow<Int>{
@@ -36,6 +36,12 @@ class LocalDataSource @Inject constructor(
     suspend fun deleteHabitById(id: Int){
         appDatabase.habitDao().deleteHabitById(id)
     }
+
+    suspend fun resetOldHabits (startOfDay: Long){
+        appDatabase.habitDao().resetOldHabits(startOfDay)
+    }
+
+    //
 
     fun getAllTasks(): Flow<List<TaskEntity>>{
         return appDatabase.taskDao().getAllTasks()
@@ -65,6 +71,8 @@ class LocalDataSource @Inject constructor(
         return appDatabase.taskDao().getTasksByDayPart(dayPart,startOfDay)
     }
 
+    //
+
     fun getStats(): Flow<UserEntity?>{
         return appDatabase.userDao().getStats()
     }
@@ -80,4 +88,6 @@ class LocalDataSource @Inject constructor(
     fun getUnfinishedTasksByDate(startOfDay: Long, endOfDay: Long): Flow<Int> {
         return appDatabase.taskDao().getUnfinishedTasks(startOfDay,endOfDay)
     }
+
+
 }

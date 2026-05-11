@@ -10,7 +10,7 @@ data class UiTaskData (
     val description: String,
     val priority: Priority,
     val category: CategoryType,
-    val time: String,
+    val time: String?,
     val period: String,
     val dayPart: DayPart,
     val isCompleted: Boolean = false,

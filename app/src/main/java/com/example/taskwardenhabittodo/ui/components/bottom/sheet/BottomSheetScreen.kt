@@ -23,6 +23,9 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TimePicker
+import androidx.compose.material3.TimePickerDefaults
+import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -55,7 +58,7 @@ import com.example.taskwardenhabittodo.ui.theme.spacing
 fun BottomSheetScreen(
     type: ActionType,
     onDismiss: () -> Unit,
-    onCreateClick: (String, String, Int, CategoryType) -> Unit
+    onCreateClick: (String, String?, Int, CategoryType, Priority) -> Unit
 ) {
     val extendedColors = MaterialTheme.extendedColors
     val colorScheme = MaterialTheme.colorScheme
@@ -70,7 +73,7 @@ fun BottomSheetScreen(
             onDismiss = onDismiss,
             onCreateClick = onCreateClick,
 
-        )
+            )
     }
 }
 
@@ -79,18 +82,26 @@ fun BottomSheetScreen(
 fun BottomSheetContent(
     type: ActionType,
     onDismiss: () -> Unit,
-    onCreateClick: (String, String, Int, CategoryType ) -> Unit
-){
+    onCreateClick: (String, String?, Int, CategoryType, Priority) -> Unit
+) {
     val spacing = MaterialTheme.spacing
     val colorScheme = MaterialTheme.colorScheme
     val extendedColors = MaterialTheme.extendedColors
 
     var title by remember { mutableStateOf("") }
-    var selectedTime by remember { mutableStateOf("12:00 PM") }
+    var selectedTime by remember { mutableStateOf<String?>(null) }
     var repeatCount by remember { mutableIntStateOf(1) }
     var selectedPriority by remember { mutableStateOf(Priority.MEDIUM) }
     var selectedCategory by remember { mutableStateOf(CategoryType.HEALTH) }
     var showIconPicer by remember { mutableStateOf(false) }
+
+    var showTimePicker by remember { mutableStateOf(false) }
+
+    val timePickerState = rememberTimePickerState(
+        initialHour = 12,
+        initialMinute = 0,
+        is24Hour = true
+    )
 
     Column(
         modifier = Modifier
@@ -106,9 +117,9 @@ fun BottomSheetContent(
         ) {
             Text(
                 text = if (type == ActionType.HABIT)
-                    stringResource(R.string.new_habit)
+                    stringResource(R.string.habit_new_title)
                 else
-                    stringResource(R.string.new_task),
+                    stringResource(R.string.task_new_title),
                 style = MaterialTheme.typography.headlineSmall.copy(
                     fontWeight = FontWeight.Bold
                 ),
@@ -127,9 +138,9 @@ fun BottomSheetContent(
 
         Text(
             text = if (type == ActionType.HABIT)
-                stringResource(R.string.habit_name_label)
+                stringResource(R.string.habit_label_name)
             else
-                stringResource(R.string.task_name_label),
+                stringResource(R.string.task_label_name),
             style = MaterialTheme.typography.labelMedium,
             color = colorScheme.onSurfaceVariant
         )
@@ -141,7 +152,7 @@ fun BottomSheetContent(
                 .padding(vertical = 8.dp),
             placeholder = {
                 Text(
-                    stringResource(R.string.placeholder_name),
+                    stringResource(R.string.habit_placeholder),
                     color = colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
                 )
             },
@@ -161,12 +172,13 @@ fun BottomSheetContent(
 
         Spacer(modifier = Modifier.height(spacing.small))
 
+
         Row(modifier = Modifier.fillMaxWidth()) {
             TaskPropertyCard(
                 iconRes = R.drawable.nest_clock,
-                label = stringResource(R.string.label_time),
-                value = selectedTime,
-                onClick = {},
+                label = stringResource(R.string.prop_label_time),
+                value = selectedTime ?: stringResource(R.string.prop_select_time),
+                onClick = { showTimePicker = true },
                 modifier = Modifier.weight(1f)
             )
 
@@ -174,7 +186,7 @@ fun BottomSheetContent(
                 Spacer(modifier = Modifier.width(spacing.small))
                 TaskPropertyCard(
                     iconRes = selectedCategory.iconResId,
-                    label = stringResource(R.string.label_category),
+                    label = stringResource(R.string.prop_label_category),
                     value = selectedCategory.name,
                     onClick = { showIconPicer = true },
                     modifier = Modifier.weight(1f)
@@ -185,7 +197,7 @@ fun BottomSheetContent(
         if (type == ActionType.TASK) {
             Spacer(modifier = Modifier.height(spacing.medium))
             Text(
-                text = stringResource(R.string.label_priority).uppercase(),
+                text = stringResource(R.string.prop_label_priority).uppercase(),
                 style = MaterialTheme.typography.labelMedium,
                 color = colorScheme.onSurfaceVariant
             )
@@ -195,34 +207,33 @@ fun BottomSheetContent(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(spacing.small)
             ) {
-                PriorityButton(
-                    label = "High",
-                    priorityColor = WarningRed,
-                    isSelected = selectedPriority == Priority.HIGH,
-                    onClick = { selectedPriority = Priority.HIGH },
-                    modifier = Modifier.weight(1f)
-                )
-                PriorityButton(
-                    label = "Medium",
-                    priorityColor = AmberGold,
-                    isSelected = selectedPriority == Priority.MEDIUM,
-                    onClick = { selectedPriority = Priority.MEDIUM },
-                    modifier = Modifier.weight(1f)
-                )
-                PriorityButton(
-                    label = "Low",
-                    priorityColor = SuccessGreen,
-                    isSelected = selectedPriority == Priority.LOW,
-                    onClick = { selectedPriority = Priority.LOW },
-                    modifier = Modifier.weight(1f)
-                )
+
+                Priority.entries.filter { it != Priority.NONE }.forEach { priority ->
+                    PriorityButton(
+                        label = priority.name.lowercase().replaceFirstChar { it.uppercase() },
+                        priorityColor = when (priority) {
+                            Priority.HIGH -> WarningRed
+                            Priority.MEDIUM -> AmberGold
+                            Priority.LOW -> SuccessGreen
+                            else -> colorScheme.outline
+
+                        },
+                        isSelected = selectedPriority == priority,
+                        onClick = {
+                            selectedPriority = if (selectedPriority == priority) Priority.NONE
+                            else priority
+                        },
+                        modifier = Modifier.weight(1f)
+                    )
+
+                }
             }
         }
 
         if (type == ActionType.HABIT) {
             Spacer(modifier = Modifier.height(spacing.medium))
             Text(
-                text = stringResource(R.string.repeat_count_label),
+                text = stringResource(R.string.habit_repeat_label),
                 style = MaterialTheme.typography.labelMedium,
                 color = colorScheme.onSurfaceVariant
             )
@@ -244,7 +255,7 @@ fun BottomSheetContent(
                     )
                 }
                 Text(
-                    text = "$repeatCount " + stringResource(R.string.times),
+                    text = "$repeatCount " + stringResource(R.string.common_times),
                     style = MaterialTheme.typography.titleMedium,
                     color = colorScheme.onSurface
                 )
@@ -267,6 +278,7 @@ fun BottomSheetContent(
                     selectedTime,
                     repeatCount,
                     selectedCategory,
+                    selectedPriority
                 )
             },
             modifier = Modifier
@@ -284,15 +296,15 @@ fun BottomSheetContent(
             Spacer(modifier = Modifier.width(spacing.small))
             Text(
                 text = if (type == ActionType.HABIT)
-                    stringResource(R.string.btn_create_habit)
+                    stringResource(R.string.habit_btn_create)
                 else
-                    stringResource(R.string.btn_create_task),
+                    stringResource(R.string.task_btn_create),
                 style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
             )
         }
         Spacer(modifier = Modifier.height(spacing.medium))
 
-        if (showIconPicer){
+        if (showIconPicer) {
             ModalBottomSheet(
                 onDismissRequest = {
                     showIconPicer = false
@@ -304,6 +316,27 @@ fun BottomSheetContent(
                         selectedCategory = category
                         showIconPicer = false
                     }
+                )
+            }
+        }
+
+        if (showTimePicker) {
+            AnimatedTimePickerDialog(
+                onDismiss = { showTimePicker = false },
+                onConfirm = {
+                    val hour = timePickerState.hour
+                    val minute = timePickerState.minute
+                    selectedTime = String.format("%02d:%02d", hour, minute)
+                    showTimePicker = false
+                }
+            ) {
+                TimePicker(
+                    state = timePickerState,
+                    colors = TimePickerDefaults.colors(
+                        clockDialColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+                        selectorColor = MaterialTheme.colorScheme.primary,
+                        periodSelectorSelectedContainerColor = MaterialTheme.colorScheme.primaryContainer
+                    )
                 )
             }
         }
@@ -320,7 +353,7 @@ fun PreviewHabitBottomSheet() {
             BottomSheetContent(
                 type = ActionType.HABIT,
                 onDismiss = {},
-                onCreateClick = { _, _, _ , _-> }
+                onCreateClick = { _, _, _, _, _ -> }
             )
         }
     }
@@ -334,8 +367,31 @@ fun PreviewTaskBottomSheet() {
             BottomSheetContent(
                 type = ActionType.TASK,
                 onDismiss = {},
-                onCreateClick = { _, _, _ , _-> }
+                onCreateClick = { _, _, _, _, _ -> }
             )
         }
     }
 }
+
+
+/*PriorityButton(
+label = "High",
+priorityColor = WarningRed,
+isSelected = selectedPriority == Priority.HIGH,
+onClick = { selectedPriority = Priority.HIGH },
+modifier = Modifier.weight(1f)
+)
+PriorityButton(
+label = "Medium",
+priorityColor = AmberGold,
+isSelected = selectedPriority == Priority.MEDIUM,
+onClick = { selectedPriority = Priority.MEDIUM },
+modifier = Modifier.weight(1f)
+)
+PriorityButton(
+label = "Low",
+priorityColor = SuccessGreen,
+isSelected = selectedPriority == Priority.LOW,
+onClick = { selectedPriority = Priority.LOW },
+modifier = Modifier.weight(1f)
+)*/

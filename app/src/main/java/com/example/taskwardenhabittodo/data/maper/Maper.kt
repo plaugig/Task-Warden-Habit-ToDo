@@ -26,6 +26,7 @@ fun TaskEntity.toDomain(): TaskData {
         createdAt = createdAt,
         iconResId = this.iconResId,
         isCompleted = this.isCompleted,
+        lastUpdated = this.lastUpdated
     )
 }
 
@@ -47,6 +48,7 @@ fun TaskData.toEntity(): TaskEntity {
         period = period,
         createdAt = createdAt,
         iconResId = this.iconResId,
+        lastUpdated = this.lastUpdated
     )
 }
 

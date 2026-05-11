@@ -6,13 +6,15 @@ import androidx.lifecycle.viewModelScope
 import com.example.taskwardenhabittodo.domain.interactor.HabitInteractor
 import com.example.taskwardenhabittodo.domain.interactor.TaskInteractor
 import com.example.taskwardenhabittodo.domain.interactor.UserInteractor
-import com.example.taskwardenhabittodo.presentation.habit.item.DateUtils
+import com.example.taskwardenhabittodo.presentation.habit.item.HabitDateUtils
+import com.example.taskwardenhabittodo.presentation.habit.item.HabitScreenState
 import com.example.taskwardenhabittodo.ui.DayProgress
 import com.example.taskwardenhabittodo.ui.UiTaskData
 import com.example.taskwardenhabittodo.ui.UiUserData
 import com.example.taskwardenhabittodo.ui.maper.toDomain
 import com.example.taskwardenhabittodo.ui.maper.toUi
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -24,13 +26,19 @@ import javax.inject.Inject
 
 
 @HiltViewModel
-class habitScreenViewModel @Inject constructor(
+class HabitScreenViewModel @Inject constructor(
     private val taskInteractor: TaskInteractor,
     private val habitInteractor: HabitInteractor,
     private val userInteractor: UserInteractor
 ) : ViewModel() {
 
-    private val startOfDAyFlow = MutableStateFlow(DateUtils.getStartOfDay())
+    init {
+        checkAndResetHabits()
+    }
+
+
+
+    private val startOfDAyFlow = MutableStateFlow(HabitDateUtils.getStartOfDay())
 
     val uiState: StateFlow<HabitScreenState> = startOfDAyFlow.flatMapLatest { startDay ->
         combine(
@@ -75,13 +83,13 @@ class habitScreenViewModel @Inject constructor(
         )
 
     fun addHabit(uiHabit: UiTaskData) {
-        viewModelScope.launch {
+        viewModelScope.launch (Dispatchers.IO) {
             habitInteractor.addHabit(uiHabit.toDomain())
         }
     }
 
     fun updateHabitProgress(habitId: Int, currentCount: Int) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val habit = uiState.value.todayHabits.find {
                 it.id == habitId
             }
@@ -95,8 +103,15 @@ class habitScreenViewModel @Inject constructor(
     }
 
     fun deleteHabitById(id: Int) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             habitInteractor.deleteHabitById(id)
+        }
+    }
+
+    private fun checkAndResetHabits(){
+        viewModelScope.launch(Dispatchers.IO){
+            val startOfDay = HabitDateUtils.getStartOfDay()
+            habitInteractor.resetOldHabits(startOfDay)
         }
     }
 }

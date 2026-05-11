@@ -6,6 +6,7 @@ import com.example.taskwardenhabittodo.domain.use.cases.habits.DeleteHabitByIdUs
 import com.example.taskwardenhabittodo.domain.use.cases.habits.GetAllHabitsUseCase
 import com.example.taskwardenhabittodo.domain.use.cases.habits.GetTodayHabitStatsUseCase
 import com.example.taskwardenhabittodo.domain.use.cases.habits.GetUnfinishHabitsUseCase
+import com.example.taskwardenhabittodo.domain.use.cases.habits.ResetOldHabitsUseCase
 import com.example.taskwardenhabittodo.domain.use.cases.habits.UpdateHabitProgressUseCase
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -16,7 +17,8 @@ class HabitInteractor @Inject constructor(
     private val getAllHabitsUseCase: GetAllHabitsUseCase,
     private val getTodayHabitStatsUseCase: GetTodayHabitStatsUseCase,
     private val getUnfinishHabitsUseCase: GetUnfinishHabitsUseCase,
-    private val updateHabitProgressUseCase: UpdateHabitProgressUseCase
+    private val updateHabitProgressUseCase: UpdateHabitProgressUseCase,
+    private val resetOldHabitsUseCase: ResetOldHabitsUseCase
 ){
     suspend fun addHabit(habit: TaskData) {
         addHabitUseCase.addHabit(habit)
@@ -43,5 +45,9 @@ class HabitInteractor @Inject constructor(
 
     suspend fun updateHabitProgress(id: Int, count: Int) {
         updateHabitProgressUseCase.updateHabitProgress(id, count)
+    }
+
+    suspend fun resetOldHabits(startOfDay: Long){
+        resetOldHabitsUseCase.resetOldHabits(startOfDay)
     }
 }

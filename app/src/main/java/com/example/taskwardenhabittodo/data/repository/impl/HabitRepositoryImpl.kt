@@ -18,7 +18,7 @@ class HabitRepositoryImpl @Inject constructor(
 ) : HabitRepository {
     override fun getAllHabits(): Flow<List<TaskData>> {
         return local.getAllHabits()
-            .map { list -> list.map { it.toDomain() } }
+            .map { entities -> entities.map { it.toDomain() } }
             .flowOn(Dispatchers.IO)
     }
 
@@ -31,12 +31,14 @@ class HabitRepositoryImpl @Inject constructor(
     }
 
     override suspend fun updateHabitProgress(id: Int, count: Int) {
-        local.updateHabitProgress(id, count)
+        withContext(Dispatchers.IO){
+            local.updateHabitProgress(id, count, System.currentTimeMillis())
+        }
     }
 
     override fun getTodayHabitStats(startOfDay: Long): Flow<Pair<Int, Int>> {
         return combine(
-            local.getTotalHabitsCount(startOfDay),
+            local.getTotalHabitsCount(),
             local.getCompletedHabits(startOfDay)
         ) { total, completed ->
             total to completed
@@ -50,5 +52,10 @@ class HabitRepositoryImpl @Inject constructor(
     ): Flow<Int> {
         return local.getUnfinishedHabits(startOfDay, endOfDay)
     }
+
+    override suspend fun resetOldHabits(startOfDay: Long) {
+        local.resetOldHabits(startOfDay)
+    }
+
 
 }

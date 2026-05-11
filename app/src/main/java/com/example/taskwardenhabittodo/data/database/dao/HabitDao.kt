@@ -13,20 +13,22 @@ package com.example.taskwardenhabittodo.data.database.dao
         @Query("""
         UPDATE tasks 
         SET currentCount = :count, 
-            isCompleted = CASE WHEN :count >= targetCount THEN 1 ELSE 0 END 
+            isCompleted = CASE WHEN :count >= targetCount THEN 1 ELSE 0 END,
+            lastUpdated = :timestamp
         WHERE id = :id
     """)
-        suspend fun updateHabitProgress(id: Int, count: Int)
+        suspend fun updateHabitProgress(id: Int, count: Int, timestamp: Long)
 
         @Query("SELECT * FROM tasks WHERE isHabit = 1")
         fun getAllHabits(): Flow<List<TaskEntity>>
 
-        @Query("SELECT COUNT(*) FROM tasks WHERE isHabit = 1 AND createdAt >= :startOfDay")
-        fun getTotalHabitsCount(startOfDay: Long): Flow<Int>
+        @Query("SELECT COUNT(*) FROM tasks WHERE isHabit = 1")
+        fun getTotalHabitsCount(): Flow<Int>
 
-        @Query(
-            "SELECT COUNT(*) FROM tasks WHERE isHabit = 1 AND isCompleted = 1 AND createdAt >= :startOfDay"
-        )
+        @Query("""
+        SELECT COUNT(*) FROM tasks 
+        WHERE isHabit = 1 AND isCompleted = 1 AND lastUpdated >= :startOfDay
+    """)
         fun getCompletedHabits(startOfDay: Long): Flow<Int>
 
         @Query("""
@@ -41,5 +43,8 @@ package com.example.taskwardenhabittodo.data.database.dao
 
         @Query("DELETE FROM tasks WHERE id = :id AND isHabit = 1")
         suspend fun deleteHabitById(id: Int)
+
+        @Query("UPDATE tasks SET currentCount = 0, isCompleted = 0 WHERE isHabit = 1 AND lastUpdated < :startOfDay")
+        suspend fun resetOldHabits(startOfDay: Long)
 
     }

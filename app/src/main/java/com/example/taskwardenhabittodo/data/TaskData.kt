@@ -10,7 +10,7 @@ data class TaskData (
     val description: String,
     val priority: Priority,
     val category: CategoryType,
-    val time: String,
+    val time: String?,
     val period: String,
     val dayPart: DayPart,
     val isCompleted: Boolean = false,
@@ -20,5 +20,6 @@ data class TaskData (
     val colorHex: Long,
     val isPinned: Boolean,
     val iconResId: Int,
-    val createdAt: Long = System.currentTimeMillis()
+    val createdAt: Long = System.currentTimeMillis(),
+    val lastUpdated: Long
 )

@@ -1,4 +1,4 @@
-package com.example.taskwardenhabittodo.presentation.task
+package com.example.taskwardenhabittodo.presentation.task.item
 
 import com.example.taskwardenhabittodo.ui.UiTaskData
 
@@ -7,7 +7,8 @@ data class TaskScreenState(
     val displayDate: String ="",
     val progress : TaskProgress = TaskProgress(),
     val fireStreak: Int = 0,
-    val sections : List<TaskSection> = emptyList()
+    val sections : List<TaskSection> = emptyList(),
+    val isBottomSheetVisible: Boolean = false
 )
 
 data class TaskProgress(

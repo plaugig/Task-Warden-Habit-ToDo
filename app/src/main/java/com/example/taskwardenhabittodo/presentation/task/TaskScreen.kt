@@ -1,6 +1,5 @@
 package com.example.taskwardenhabittodo.presentation.task
 
-import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,7 +15,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -24,16 +22,23 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.taskwardenhabittodo.R
+import com.example.taskwardenhabittodo.domain.ActionType
+import com.example.taskwardenhabittodo.domain.DayPart
+import com.example.taskwardenhabittodo.domain.Priority
+import com.example.taskwardenhabittodo.presentation.task.item.TaskDateUtils
+import com.example.taskwardenhabittodo.ui.UiTaskData
 import com.example.taskwardenhabittodo.ui.components.ActionIconButton
 import com.example.taskwardenhabittodo.ui.components.FocusTaskCard
+import com.example.taskwardenhabittodo.ui.components.bottom.sheet.BottomSheetScreen
 import com.example.taskwardenhabittodo.ui.components.task.TaskCard
 import com.example.taskwardenhabittodo.ui.components.task.TaskSectionHeader
-import com.example.taskwardenhabittodo.ui.theme.TaskWardenHabitToDoTheme
+import com.example.taskwardenhabittodo.ui.theme.AmberGold
+import com.example.taskwardenhabittodo.ui.theme.SuccessGreen
+import com.example.taskwardenhabittodo.ui.theme.WarningRed
 import com.example.taskwardenhabittodo.ui.theme.extendedColors
 import com.example.taskwardenhabittodo.ui.theme.spacing
 
@@ -41,7 +46,6 @@ import com.example.taskwardenhabittodo.ui.theme.spacing
 @Composable
 fun TasksScreen(
     viewModel: TaskScreenViewModel = hiltViewModel(),
-    onAddTaskClick: () -> Unit = {}
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -74,7 +78,7 @@ fun TasksScreen(
                     )
                     ActionIconButton(
                         iconRes = R.drawable.add,
-                        onClick = onAddTaskClick,
+                        onClick = { viewModel.showBottomSheet() },
                         isSelected = true,
                         actionColor = colorScheme.primary,
                         containerSize = 48.dp
@@ -126,12 +130,16 @@ fun TasksScreen(
                     ) { task ->
                         TaskCard(
                             time = task.time,
-                            period = "AM",
+                            period = task.period,
                             title = task.title,
                             duration = 15,
                             category = task.category.name,
-                            priorityColor = if (task.isCompleted) extendedColors.green
-                            else colorScheme.primary,
+                            priorityColor = when (task.priority){
+                                Priority.HIGH -> WarningRed
+                                Priority.MEDIUM -> AmberGold
+                                Priority.LOW -> SuccessGreen
+                                Priority.NONE -> null
+                            },
                             isCompleted = task.isCompleted,
                             onClick = { viewModel.toggleTaskCompletion(task) }
                         )
@@ -144,25 +152,30 @@ fun TasksScreen(
                 }
             }
         }
-    }
-}
 
-@Preview(showBackground = true, name = "Tasks Screen Day Mode")
-@Preview(
-    showBackground = true,
-    uiMode = Configuration.UI_MODE_NIGHT_YES,
-    name = "Tasks Screen Night Mode"
-)
-@Composable
-fun TasksScreenPreview() {
-    TaskWardenHabitToDoTheme {
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.background
-        ) {
-            TasksScreen(
-                onAddTaskClick = {}
+        if (uiState.isBottomSheetVisible){
+            BottomSheetScreen(
+                type = ActionType.TASK,
+                onDismiss = {viewModel.hideBottomSheet()},
+                onCreateClick = { title, time, repeatCount, category, priority ->
+                    val newTask = UiTaskData(
+                        title = title,
+                        priority = priority,
+                        category = category,
+                        time = time ?: "",
+                        isHabit = false,
+                        targetCount = repeatCount,
+                        description = "",
+                        period = " ",
+                        dayPart = DayPart.MORNING,
+                        colorHex = 0,
+                        isPinned = false,
+                        iconResId = category.iconResId
+                    )
+                    viewModel.addTask(newTask)
+                }
             )
         }
     }
 }
+

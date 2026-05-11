@@ -2,7 +2,7 @@ package com.example.taskwardenhabittodo.presentation.habit.item
 
 import java.util.Calendar
 
-object DateUtils {
+object HabitDateUtils {
     fun getStartOfDay(): Long {
         return Calendar.getInstance().apply {
             set(Calendar.HOUR_OF_DAY, 0)

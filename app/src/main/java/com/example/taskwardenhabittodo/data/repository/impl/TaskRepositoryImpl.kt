@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class TaskRepositoryImpl @Inject constructor(
@@ -24,7 +25,9 @@ class TaskRepositoryImpl @Inject constructor(
     }
 
     override suspend fun addTask(task: TaskData) {
-        local.insertTask(task.toEntity())
+       withContext(Dispatchers.IO){
+           local.insertTask(task.toEntity())
+       }
     }
 
     override suspend fun deleteTaskById(id: Int) {
@@ -32,7 +35,9 @@ class TaskRepositoryImpl @Inject constructor(
     }
 
     override suspend fun updateCompletion(id: Int, isCompleted: Boolean) {
-        local.updateTaskStatus(id, isCompleted)
+        withContext(Dispatchers.IO){
+            local.updateTaskStatus(id, isCompleted)
+        }
     }
 
     override fun getTodayTaskStats(startOfDay: Long): Flow<Pair<Int, Int>> {

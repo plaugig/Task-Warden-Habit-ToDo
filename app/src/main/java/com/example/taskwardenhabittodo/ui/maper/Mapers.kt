@@ -42,7 +42,8 @@ fun UiTaskData.toDomain(): TaskData{
         currentCount = this.currentCount,
         colorHex = this.colorHex,
         isPinned = this.isPinned,
-        iconResId = this.iconResId
+        iconResId = this.iconResId,
+        lastUpdated = System.currentTimeMillis()
     )
 }
 
