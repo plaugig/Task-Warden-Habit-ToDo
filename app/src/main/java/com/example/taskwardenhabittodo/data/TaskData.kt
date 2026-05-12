@@ -1,8 +1,8 @@
 package com.example.taskwardenhabittodo.data
 
-import com.example.taskwardenhabittodo.domain.CategoryType
-import com.example.taskwardenhabittodo.domain.DayPart
-import com.example.taskwardenhabittodo.domain.Priority
+import com.example.taskwardenhabittodo.domain.item.CategoryType
+import com.example.taskwardenhabittodo.domain.item.DayPart
+import com.example.taskwardenhabittodo.domain.item.Priority
 
 data class TaskData (
     val id: Int = 0,

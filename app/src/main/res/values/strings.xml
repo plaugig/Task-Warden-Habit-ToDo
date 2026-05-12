@@ -21,7 +21,7 @@
     <string name="stats_daily_progress">Daily Progress</string>
     <string name="stats_todays_focus">Today\'s Focus</string>
 
-    <string name="fmt_percentage">%1$d%% complete</string>
+    <string name="fmt_percentage">%1$d%%</string>
     <string name="fmt_points">%1$,d pts</string>
     <string name="fmt_points_added">+%1$d today</string>
     <string name="fmt_streak_days">%1$dd</string>

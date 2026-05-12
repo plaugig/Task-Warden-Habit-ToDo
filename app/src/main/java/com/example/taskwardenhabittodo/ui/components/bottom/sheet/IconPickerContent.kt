@@ -17,7 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.example.taskwardenhabittodo.domain.CategoryType
+import com.example.taskwardenhabittodo.domain.item.CategoryType
 import com.example.taskwardenhabittodo.ui.theme.spacing
 import androidx.compose.material3.Icon
 import androidx.compose.foundation.lazy.grid.items

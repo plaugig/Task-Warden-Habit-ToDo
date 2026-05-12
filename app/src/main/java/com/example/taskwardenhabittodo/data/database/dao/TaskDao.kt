@@ -21,12 +21,7 @@ interface TaskDao {
 
     @Query("UPDATE tasks SET isCompleted = :completed WHERE id = :id")
     suspend fun updateTaskStatus(id: Int, completed: Boolean)
-
-    @Query("SELECT COUNT(*) FROM tasks WHERE isHabit = 0 AND createdAt >= :startOfDay")
-    fun getTotalTodayTasks(startOfDay: Long): Flow<Int>
-
-    @Query("SELECT COUNT(*) FROM tasks WHERE isHabit = 0 AND isCompleted = 1 AND createdAt >= :startOfDay")
-    fun getCompletedTasks(startOfDay: Long): Flow<Int>
+    
 
     @Query("SELECT * FROM tasks WHERE dayPart = :dayPart AND createdAt >= :startOfDay ORDER BY time ASC")
     fun getTasksByDayPart(dayPart: String, startOfDay: Long): Flow<List<TaskEntity>>

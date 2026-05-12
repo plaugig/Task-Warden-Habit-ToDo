@@ -1,6 +1,6 @@
 package com.example.taskwardenhabittodo.presentation.task.item
 
-import com.example.taskwardenhabittodo.domain.DayPart
+import com.example.taskwardenhabittodo.domain.item.DayPart
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter

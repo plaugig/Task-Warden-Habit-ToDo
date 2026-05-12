@@ -50,8 +50,8 @@ class HabitScreenViewModel @Inject constructor(
         ) { user, taskStats, habitStats, allHabit, allTask ->
 
             val dayProgress = DayProgress(
-                totalTasks = taskStats.second,
-                completedTasks = taskStats.first,
+                totalTasks = taskStats.totalCount,
+                completedTasks = taskStats.completedCount,
                 totalHabits = habitStats.first,
                 completedHabits = habitStats.second
             )

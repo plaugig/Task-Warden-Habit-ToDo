@@ -56,7 +56,7 @@ fun AnimatedTimePickerDialog(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = stringResource(R.string.selected_time),
+                        text = stringResource(R.string.prop_select_time),
                         style = MaterialTheme.typography.labelMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.align(Alignment.Start).padding(bottom = 20.dp)
@@ -70,8 +70,8 @@ fun AnimatedTimePickerDialog(
                         horizontalArrangement = Arrangement.End
                     ) {
                         TextButton(onClick = onDismiss) {
-                            Text(stringResource(
-                                R.string.cancel),
+                            Text(
+                                text = stringResource(R.string.common_cancel),
                                 fontWeight = FontWeight.SemiBold
                             )
                         }
@@ -81,7 +81,7 @@ fun AnimatedTimePickerDialog(
                             shape = RoundedCornerShape(12.dp)
                         ) {
                             Text(
-                                stringResource(R.string.ok),
+                                text = stringResource(R.string.common_ok),
                                 fontWeight = FontWeight.Bold
                             )
                         }

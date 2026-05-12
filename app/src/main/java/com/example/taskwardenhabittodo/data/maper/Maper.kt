@@ -4,9 +4,9 @@ import com.example.taskwardenhabittodo.data.TaskData
 import com.example.taskwardenhabittodo.data.UserData
 import com.example.taskwardenhabittodo.data.database.entity.TaskEntity
 import com.example.taskwardenhabittodo.data.database.entity.UserEntity
-import com.example.taskwardenhabittodo.domain.CategoryType
-import com.example.taskwardenhabittodo.domain.DayPart
-import com.example.taskwardenhabittodo.domain.Priority
+import com.example.taskwardenhabittodo.domain.item.CategoryType
+import com.example.taskwardenhabittodo.domain.item.DayPart
+import com.example.taskwardenhabittodo.domain.item.Priority
 
 fun TaskEntity.toDomain(): TaskData {
     return TaskData(

@@ -26,10 +26,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.taskwardenhabittodo.R
-import com.example.taskwardenhabittodo.domain.ActionType
-import com.example.taskwardenhabittodo.domain.DayPart
-import com.example.taskwardenhabittodo.domain.Priority
-import com.example.taskwardenhabittodo.presentation.task.item.TaskDateUtils
+import com.example.taskwardenhabittodo.domain.item.ActionType
+import com.example.taskwardenhabittodo.domain.item.DayPart
+import com.example.taskwardenhabittodo.domain.item.Priority
 import com.example.taskwardenhabittodo.ui.UiTaskData
 import com.example.taskwardenhabittodo.ui.components.ActionIconButton
 import com.example.taskwardenhabittodo.ui.components.FocusTaskCard
@@ -71,7 +70,7 @@ fun TasksScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = stringResource(R.string.tasks_title),
+                        text = stringResource(R.string.task_title_header),
                         style = MaterialTheme.typography.headlineLarge.copy(
                             fontWeight = FontWeight.Bold
                         )
@@ -102,7 +101,7 @@ fun TasksScreen(
             ) {
                 item {
                     FocusTaskCard(
-                        title = stringResource(R.string.daily_progress),
+                        title = stringResource(R.string.stats_daily_progress),
                         completedCount = uiState.progress.completedCount,
                         totalCount = uiState.progress.totalCount,
                         progress = uiState.progress.percentage,
@@ -178,4 +177,3 @@ fun TasksScreen(
         }
     }
 }
-

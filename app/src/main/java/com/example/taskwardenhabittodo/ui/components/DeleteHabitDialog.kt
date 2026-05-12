@@ -20,21 +20,21 @@ fun DeleteHabitDialog(
         onDismissRequest = onDismiss,
         title = {
             Text(
-                text = stringResource(R.string.delete_habit_title),
+                text = stringResource(R.string.habit_delete_title),
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold
             )
         },
         text = {
             Text(
-                text = stringResource(R.string.delete_habit_message),
+                text = stringResource(R.string.habit_delete_msg),
                 style = MaterialTheme.typography.bodyMedium
             )
         },
         confirmButton = {
             TextButton(onClick = onConfirm) {
                 Text(
-                    text = stringResource(R.string.confirm),
+                    text = stringResource(R.string.common_confirm),
                     color = MaterialTheme.colorScheme.error,
                     fontWeight = FontWeight.ExtraBold
                 )
@@ -43,7 +43,7 @@ fun DeleteHabitDialog(
         dismissButton = {
             TextButton(onClick = onDismiss) {
                 Text(
-                    text = stringResource(R.string.cancel),
+                    text = stringResource(R.string.common_cancel),
                     fontWeight = FontWeight.Medium
                 )
             }

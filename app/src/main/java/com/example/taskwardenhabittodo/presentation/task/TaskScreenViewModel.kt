@@ -3,9 +3,9 @@ package com.example.taskwardenhabittodo.presentation.task
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.taskwardenhabittodo.R
-import com.example.taskwardenhabittodo.domain.DayPart
 import com.example.taskwardenhabittodo.domain.interactor.TaskInteractor
 import com.example.taskwardenhabittodo.domain.interactor.UserInteractor
+import com.example.taskwardenhabittodo.domain.item.DayPart
 import com.example.taskwardenhabittodo.presentation.habit.item.HabitDateUtils
 import com.example.taskwardenhabittodo.presentation.task.item.TaskDateUtils
 import com.example.taskwardenhabittodo.presentation.task.item.TaskProgress
@@ -40,9 +40,10 @@ class TaskScreenViewModel @Inject constructor(
     val uiState: StateFlow<TaskScreenState> = startOfDayFlow.flatMapLatest { startDay ->
         combine(
             taskInteractor.getAllTasks(),
+            taskInteractor.getTodayTaskStats(startDay),
             userInteractor.getUserStats(),
             _isBottomSheetVisible
-        ) { allTask, userStats, isVisible ->
+        ) { allTask, taskStats, userStats, isVisible ->
 
             val todayTasks = allTask
                 .filter { !it.classification }
@@ -52,7 +53,12 @@ class TaskScreenViewModel @Inject constructor(
                 isLoading = false,
                 displayDate = TaskDateUtils.formatDisplayDate(startDay),
                 fireStreak = userStats?.fireStreak ?: 0,
-                progress = calculateProgress(todayTasks),
+                progress = TaskProgress(
+                    completedCount = taskStats.completedCount,
+                    totalCount = taskStats.totalCount,
+                    percentage = if (taskStats.totalCount > 0)
+                        taskStats.completedCount.toFloat() / taskStats.totalCount else 0f
+                ),
                 sections = prepareSections(todayTasks),
                 isBottomSheetVisible = isVisible
 
@@ -100,13 +106,13 @@ class TaskScreenViewModel @Inject constructor(
         )
     }
 
-     fun toggleTaskCompletion (task: UiTaskData){
+    fun toggleTaskCompletion(task: UiTaskData) {
         viewModelScope.launch {
-            taskInteractor.updateCompletion(task.id , !task.isCompleted)
+            taskInteractor.updateCompletion(task.id, !task.isCompleted)
         }
     }
 
-    fun addTask(uiTask: UiTaskData){
+    fun addTask(uiTask: UiTaskData) {
         viewModelScope.launch {
 
             val rawTime = uiTask.time
@@ -130,11 +136,11 @@ class TaskScreenViewModel @Inject constructor(
         }
     }
 
-    fun showBottomSheet(){
+    fun showBottomSheet() {
         _isBottomSheetVisible.value = true
     }
 
-    fun hideBottomSheet(){
+    fun hideBottomSheet() {
         _isBottomSheetVisible.value = false
     }
 }

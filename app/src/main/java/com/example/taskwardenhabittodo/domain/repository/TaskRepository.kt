@@ -13,8 +13,6 @@ interface TaskRepository {
 
     suspend fun updateCompletion(id: Int, isCompleted: Boolean)
 
-    fun getTodayTaskStats(startOfDay: Long): Flow<Pair<Int, Int>>
-
     fun getUnfinishedTasks(startOfDay: Long, endOfDay: Long): Flow<Int>
 
     fun getTasksByDayPart(dayPart: String, startOfDay: Long): Flow<List<TaskData>>

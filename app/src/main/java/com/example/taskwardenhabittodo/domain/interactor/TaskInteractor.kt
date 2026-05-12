@@ -1,6 +1,7 @@
 package com.example.taskwardenhabittodo.domain.interactor
 
 import com.example.taskwardenhabittodo.data.TaskData
+import com.example.taskwardenhabittodo.domain.item.TaskStats
 import com.example.taskwardenhabittodo.domain.use.cases.tasks.AddTaskUseCase
 import com.example.taskwardenhabittodo.domain.use.cases.tasks.DeleteTaskByIdUseCase
 import com.example.taskwardenhabittodo.domain.use.cases.tasks.GetAllTasksUseCase
@@ -33,7 +34,7 @@ class TaskInteractor @Inject constructor(
         return getAllTasksUseCase.getAllTasks()
     }
 
-    fun getTodayTaskStats(startOfDay: Long): Flow<Pair<Int, Int>> {
+    fun getTodayTaskStats(startOfDay: Long): Flow<TaskStats> {
         return getTodayTaskStatsUseCase.getTodayTaskStats(startOfDay)
     }
 
@@ -48,7 +49,7 @@ class TaskInteractor @Inject constructor(
         return getUnfinishedTasksUseCase.getUnfinishedTasks(startOfDay, endOfDay)
     }
 
-    fun getTasksByDayPartw(
+    fun getTasksByDayPart(
         dayPart: String,
         startOfDay: Long
     ): Flow<List<TaskData>> {

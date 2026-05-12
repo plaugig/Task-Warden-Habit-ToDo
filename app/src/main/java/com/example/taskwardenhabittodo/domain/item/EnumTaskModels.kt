@@ -1,4 +1,4 @@
-package com.example.taskwardenhabittodo.domain
+package com.example.taskwardenhabittodo.domain.item
 
 import com.example.taskwardenhabittodo.R
 

@@ -25,10 +25,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.taskwardenhabittodo.R
-import com.example.taskwardenhabittodo.domain.ActionType
-import com.example.taskwardenhabittodo.domain.CategoryType
-import com.example.taskwardenhabittodo.domain.DayPart
-import com.example.taskwardenhabittodo.domain.Priority
+import com.example.taskwardenhabittodo.domain.item.ActionType
+import com.example.taskwardenhabittodo.domain.item.CategoryType
+import com.example.taskwardenhabittodo.domain.item.DayPart
+import com.example.taskwardenhabittodo.domain.item.Priority
 import com.example.taskwardenhabittodo.ui.DayProgress
 import com.example.taskwardenhabittodo.ui.UiTaskData
 import com.example.taskwardenhabittodo.ui.UiUserData
@@ -80,7 +80,7 @@ fun HabitScreen(
                 Spacer(modifier = Modifier.height(spacing.small))
 
                 FocusTaskCard(
-                    title = stringResource(id = R.string.todays_focus),
+                    title = stringResource(id = R.string.stats_todays_focus),
                     completedCount = uiState.progress.completedTasks,
                     totalCount = uiState.progress.totalTasks,
                     progress = uiState.progress.tasksProgress,
@@ -98,7 +98,7 @@ fun HabitScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = stringResource(R.string.todays_habits),
+                        text = stringResource(R.string.task_title_header),
                         color = MaterialTheme.colorScheme.onBackground,
                         style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
                     )
@@ -251,7 +251,7 @@ fun MainScreenPreview() {
                     Spacer(modifier = Modifier.height(spacing.small))
 
                     FocusTaskCard(
-                        title = stringResource(id = R.string.todays_focus),
+                        title = stringResource(id = R.string.stats_todays_focus),
                         completedCount = mockProgress.completedTasks,
                         totalCount = mockProgress.totalTasks,
                         progress = mockProgress.tasksProgress,

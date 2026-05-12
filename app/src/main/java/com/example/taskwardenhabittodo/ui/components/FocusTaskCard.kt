@@ -77,11 +77,10 @@ fun FocusTaskCard(
                     )
                     Text(
                         text = stringResource(
-                            id = R.string.habit_progress_template,
+                            id = R.string.fmt_habit_progress,
                             completedCount,
                             totalCount
-                        ) + " " + stringResource(id = R.string.done)
-                            .replace("%", ""),
+                        ) + " " + stringResource(id = R.string.common_done),
                         style = MaterialTheme.typography.labelMedium,
                         color = colorScheme.onSurfaceVariant
                     )
@@ -90,7 +89,7 @@ fun FocusTaskCard(
                 if (isFullMode) {
                     Text(
                         text = stringResource(
-                            id = R.string.focus_percentage_template,
+                            id = R.string.fmt_percentage,
                             (progress * 100).toInt()
                         ),
                         style = MaterialTheme.typography.headlineSmall.copy(
@@ -119,7 +118,7 @@ fun FocusTaskCard(
                             Spacer(modifier = Modifier.width(4.dp))
                             Text(
                                 text = stringResource(
-                                    id = R.string.habit_streak_template,
+                                    id = R.string.fmt_streak_days,
                                     streak
                                 ),
                                 color = Color.White,
@@ -179,4 +178,3 @@ fun FocusTaskPreview() {
         }
     }
 }
-

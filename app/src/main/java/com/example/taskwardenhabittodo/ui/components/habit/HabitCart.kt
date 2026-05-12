@@ -24,9 +24,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.taskwardenhabittodo.R
-import com.example.taskwardenhabittodo.domain.CategoryType
-import com.example.taskwardenhabittodo.domain.DayPart
-import com.example.taskwardenhabittodo.domain.Priority
+import com.example.taskwardenhabittodo.domain.item.CategoryType
+import com.example.taskwardenhabittodo.domain.item.DayPart
+import com.example.taskwardenhabittodo.domain.item.Priority
 import com.example.taskwardenhabittodo.ui.UiTaskData
 import com.example.taskwardenhabittodo.ui.theme.TaskWardenHabitToDoTheme
 import com.example.taskwardenhabittodo.ui.theme.spacing
@@ -113,7 +113,7 @@ fun HabitCard(
                         Spacer(modifier = Modifier.width(2.dp))
                         Text(
                             text = stringResource(
-                                R.string.habit_streak_template,
+                                R.string.fmt_streak_days,
                                 habit.currentCount
                             ),
                             style = MaterialTheme.typography.labelSmall.copy(
@@ -152,7 +152,7 @@ fun HabitCard(
             if (isDone) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(
-                        text = stringResource(R.string.done),
+                        text = stringResource(R.string.common_done),
                         fontSize = 14.sp,
                         style = MaterialTheme.typography.labelSmall.copy(
                             fontWeight = FontWeight.Bold
@@ -170,7 +170,7 @@ fun HabitCard(
             } else {
                 Text(
                     text = stringResource(
-                        R.string.habit_progress_template,
+                        R.string.fmt_habit_progress,
                         habit.currentCount,
                         habit.targetCount
                     ),

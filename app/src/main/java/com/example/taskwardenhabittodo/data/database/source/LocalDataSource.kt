@@ -59,14 +59,6 @@ class LocalDataSource @Inject constructor(
         appDatabase.taskDao().updateTaskStatus(id, completed)
     }
 
-    fun getTotalTodayTasks(startOfDay: Long): Flow<Int>{
-        return appDatabase.taskDao().getTotalTodayTasks(startOfDay)
-    }
-
-    fun getCompletedTasks(startOfDay: Long): Flow<Int>{
-        return appDatabase.taskDao().getCompletedTasks(startOfDay)
-    }
-
     fun getTasksByDayPart(dayPart: String, startOfDay: Long): Flow<List<TaskEntity>>{
         return appDatabase.taskDao().getTasksByDayPart(dayPart,startOfDay)
     }

@@ -69,7 +69,7 @@ fun DashboardStatsCard(
             ) {
                 // кольцо 1
                 StatRing(
-                    label = stringResource(R.string.habit),
+                    label = stringResource(R.string.stats_tasks_done),
                     subLabel = "",
                     value = "/${progress.totalHabits}",
                     target = "${progress.completedHabits}",
@@ -79,8 +79,8 @@ fun DashboardStatsCard(
 
                 // кольцо 2
                 StatRing(
-                    label = stringResource(R.string.Mastered),
-                    subLabel = stringResource(R.string.days),
+                    label = stringResource(R.string.stats_mastery),
+                    subLabel = stringResource(R.string.stats_days),
                     value = "${user.masteryStreak}",
                     target = "",
                     color = colorScheme.tertiary,
@@ -89,8 +89,8 @@ fun DashboardStatsCard(
 
                 // кольцо 3
                 StatRing(
-                    label = stringResource(R.string.streak),
-                    subLabel = stringResource(R.string.days),
+                    label = stringResource(R.string.stats_fire_streak),
+                    subLabel = stringResource(R.string.stats_days),
                     value = "${user.fireStreak}",
                     target = "",
                     color = MaterialTheme.extendedColors.fireStreak,
@@ -128,7 +128,7 @@ fun DashboardStatsCard(
                     Spacer(modifier = Modifier.width(spacing.small))
                     Column {
                         Text(
-                            text = stringResource(R.string.pet_points),
+                            text = stringResource(R.string.stats_pet_points),
                             style = MaterialTheme.typography.labelSmall,
                             color = colorScheme.onSurfaceVariant
                         )

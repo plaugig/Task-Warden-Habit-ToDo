@@ -41,9 +41,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.taskwardenhabittodo.R
-import com.example.taskwardenhabittodo.domain.ActionType
-import com.example.taskwardenhabittodo.domain.CategoryType
-import com.example.taskwardenhabittodo.domain.Priority
+import com.example.taskwardenhabittodo.domain.item.ActionType
+import com.example.taskwardenhabittodo.domain.item.CategoryType
+import com.example.taskwardenhabittodo.domain.item.Priority
 import com.example.taskwardenhabittodo.ui.components.PriorityButton
 import com.example.taskwardenhabittodo.ui.components.TaskPropertyCard
 import com.example.taskwardenhabittodo.ui.theme.AmberGold

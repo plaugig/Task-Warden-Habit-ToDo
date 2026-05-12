@@ -1,14 +1,12 @@
 package com.example.taskwardenhabittodo.data.repository.impl
 
 import com.example.taskwardenhabittodo.data.TaskData
-import com.example.taskwardenhabittodo.data.database.entity.TaskEntity
 import com.example.taskwardenhabittodo.data.database.source.LocalDataSource
 import com.example.taskwardenhabittodo.data.maper.toDomain
 import com.example.taskwardenhabittodo.data.maper.toEntity
 import com.example.taskwardenhabittodo.domain.repository.TaskRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
@@ -20,14 +18,13 @@ class TaskRepositoryImpl @Inject constructor(
     override fun getAllTasks(): Flow<List<TaskData>> {
         return local.getAllTasks().map { entities ->
             entities.map { it.toDomain() }
-        }
-            .flowOn(Dispatchers.IO)
+        }.flowOn(Dispatchers.IO)
     }
 
     override suspend fun addTask(task: TaskData) {
-       withContext(Dispatchers.IO){
-           local.insertTask(task.toEntity())
-       }
+        withContext(Dispatchers.IO) {
+            local.insertTask(task.toEntity())
+        }
     }
 
     override suspend fun deleteTaskById(id: Int) {
@@ -35,19 +32,9 @@ class TaskRepositoryImpl @Inject constructor(
     }
 
     override suspend fun updateCompletion(id: Int, isCompleted: Boolean) {
-        withContext(Dispatchers.IO){
+        withContext(Dispatchers.IO) {
             local.updateTaskStatus(id, isCompleted)
         }
-    }
-
-    override fun getTodayTaskStats(startOfDay: Long): Flow<Pair<Int, Int>> {
-        return combine(
-            local.getTotalTodayTasks(startOfDay),
-            local.getCompletedTasks(startOfDay)
-        ) { total, completed ->
-            total to completed
-        }
-            .flowOn(Dispatchers.IO)
     }
 
     override fun getUnfinishedTasks(
