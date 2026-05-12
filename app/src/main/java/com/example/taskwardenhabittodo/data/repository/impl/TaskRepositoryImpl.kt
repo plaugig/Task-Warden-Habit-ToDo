@@ -28,7 +28,9 @@ class TaskRepositoryImpl @Inject constructor(
     }
 
     override suspend fun deleteTaskById(id: Int) {
-        local.deleteTaskById(id)
+        withContext(Dispatchers.IO){
+            local.deleteTaskById(id)
+        }
     }
 
     override suspend fun updateCompletion(id: Int, isCompleted: Boolean) {

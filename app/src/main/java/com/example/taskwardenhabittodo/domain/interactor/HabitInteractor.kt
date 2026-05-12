@@ -1,10 +1,11 @@
 package com.example.taskwardenhabittodo.domain.interactor
 
 import com.example.taskwardenhabittodo.data.TaskData
+import com.example.taskwardenhabittodo.domain.item.ProgressStats
 import com.example.taskwardenhabittodo.domain.use.cases.habits.AddHabitUseCase
 import com.example.taskwardenhabittodo.domain.use.cases.habits.DeleteHabitByIdUseCase
 import com.example.taskwardenhabittodo.domain.use.cases.habits.GetAllHabitsUseCase
-import com.example.taskwardenhabittodo.domain.use.cases.habits.GetTodayHabitStatsUseCase
+import com.example.taskwardenhabittodo.domain.use.cases.habits.GetHabitStatsUseCase
 import com.example.taskwardenhabittodo.domain.use.cases.habits.GetUnfinishHabitsUseCase
 import com.example.taskwardenhabittodo.domain.use.cases.habits.ResetOldHabitsUseCase
 import com.example.taskwardenhabittodo.domain.use.cases.habits.UpdateHabitProgressUseCase
@@ -15,7 +16,7 @@ class HabitInteractor @Inject constructor(
     private val addHabitUseCase: AddHabitUseCase,
     private val deleteHabitByIdUseCase: DeleteHabitByIdUseCase,
     private val getAllHabitsUseCase: GetAllHabitsUseCase,
-    private val getTodayHabitStatsUseCase: GetTodayHabitStatsUseCase,
+    private val getHabitStatsUseCase: GetHabitStatsUseCase,
     private val getUnfinishHabitsUseCase: GetUnfinishHabitsUseCase,
     private val updateHabitProgressUseCase: UpdateHabitProgressUseCase,
     private val resetOldHabitsUseCase: ResetOldHabitsUseCase
@@ -32,8 +33,8 @@ class HabitInteractor @Inject constructor(
         return getAllHabitsUseCase.getAllHabits()
     }
 
-    fun getTodayHabitStats(startOfDay: Long): Flow<Pair<Int, Int>> {
-        return getTodayHabitStatsUseCase.getTodayHabitStats(startOfDay)
+    fun getTodayHabitStats(): Flow<ProgressStats> {
+        return getHabitStatsUseCase.getHabitStats()
     }
 
     fun getUnfinishHabits(

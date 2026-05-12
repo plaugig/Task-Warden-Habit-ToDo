@@ -17,14 +17,6 @@ class LocalDataSource @Inject constructor(
       return  appDatabase.habitDao().getAllHabits()
     }
 
-    fun getTotalHabitsCount(): Flow<Int>{
-      return  appDatabase.habitDao().getTotalHabitsCount()
-    }
-
-    fun getCompletedHabits(startOfDay: Long): Flow<Int>{
-        return  appDatabase.habitDao().getCompletedHabits(startOfDay)
-    }
-
     fun getUnfinishedHabits(startOfDay: Long, endOfDay: Long): Flow<Int>{
         return appDatabase.habitDao().getUnfinishHabits(startOfDay,endOfDay)
     }

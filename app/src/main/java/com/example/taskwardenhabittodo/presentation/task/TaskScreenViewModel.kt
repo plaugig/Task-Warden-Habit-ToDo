@@ -40,7 +40,7 @@ class TaskScreenViewModel @Inject constructor(
     val uiState: StateFlow<TaskScreenState> = startOfDayFlow.flatMapLatest { startDay ->
         combine(
             taskInteractor.getAllTasks(),
-            taskInteractor.getTodayTaskStats(startDay),
+            taskInteractor.getTaskStats(startDay),
             userInteractor.getUserStats(),
             _isBottomSheetVisible
         ) { allTask, taskStats, userStats, isVisible ->
@@ -133,6 +133,12 @@ class TaskScreenViewModel @Inject constructor(
             }
             taskInteractor.addTask(correctedTask.toDomain())
             hideBottomSheet()
+        }
+    }
+
+     fun deleteTaskById (id: Int){
+        viewModelScope.launch {
+            taskInteractor.deleteTaskById(id)
         }
     }
 

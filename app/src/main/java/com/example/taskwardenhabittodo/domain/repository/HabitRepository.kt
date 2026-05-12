@@ -13,8 +13,6 @@ interface HabitRepository {
 
     suspend fun updateHabitProgress(id: Int, count: Int)
 
-    fun getTodayHabitStats(startOfDay: Long): Flow<Pair<Int, Int>>
-
     fun getUnfinishHabits(startOfDay: Long, endOfDay: Long): Flow<Int>
 
     suspend fun resetOldHabits (startOfDay: Long)

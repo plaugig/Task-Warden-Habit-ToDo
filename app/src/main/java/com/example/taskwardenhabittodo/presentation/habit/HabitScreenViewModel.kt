@@ -43,8 +43,8 @@ class HabitScreenViewModel @Inject constructor(
     val uiState: StateFlow<HabitScreenState> = startOfDAyFlow.flatMapLatest { startDay ->
         combine(
             userInteractor.getUserStats(),
-            taskInteractor.getTodayTaskStats(startDay),
-            habitInteractor.getTodayHabitStats(startDay),
+            taskInteractor.getTaskStats(startDay),
+            habitInteractor.getTodayHabitStats(),
             habitInteractor.getAllHabits(),
             taskInteractor.getAllTasks()
         ) { user, taskStats, habitStats, allHabit, allTask ->
@@ -52,8 +52,8 @@ class HabitScreenViewModel @Inject constructor(
             val dayProgress = DayProgress(
                 totalTasks = taskStats.totalCount,
                 completedTasks = taskStats.completedCount,
-                totalHabits = habitStats.first,
-                completedHabits = habitStats.second
+                totalHabits = habitStats.totalCount,
+                completedHabits = habitStats.completedCount
             )
 
             HabitScreenState(

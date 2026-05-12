@@ -1,12 +1,12 @@
 package com.example.taskwardenhabittodo.domain.interactor
 
 import com.example.taskwardenhabittodo.data.TaskData
-import com.example.taskwardenhabittodo.domain.item.TaskStats
+import com.example.taskwardenhabittodo.domain.item.ProgressStats
 import com.example.taskwardenhabittodo.domain.use.cases.tasks.AddTaskUseCase
 import com.example.taskwardenhabittodo.domain.use.cases.tasks.DeleteTaskByIdUseCase
 import com.example.taskwardenhabittodo.domain.use.cases.tasks.GetAllTasksUseCase
 import com.example.taskwardenhabittodo.domain.use.cases.tasks.GetTasksByDayPartUseCase
-import com.example.taskwardenhabittodo.domain.use.cases.tasks.GetTodayTaskStatsUseCase
+import com.example.taskwardenhabittodo.domain.use.cases.tasks.GetTaskStatsUseCase
 import com.example.taskwardenhabittodo.domain.use.cases.tasks.GetUnfinishedTasksUseCase
 import com.example.taskwardenhabittodo.domain.use.cases.tasks.UpdateCompletionUseCase
 import kotlinx.coroutines.flow.Flow
@@ -16,7 +16,7 @@ class TaskInteractor @Inject constructor(
     private val addTaskUseCase: AddTaskUseCase,
     private val deleteTaskByIdUseCase: DeleteTaskByIdUseCase,
     private val getAllTasksUseCase: GetAllTasksUseCase,
-    private val getTodayTaskStatsUseCase: GetTodayTaskStatsUseCase,
+    private val getTaskStatsUseCase: GetTaskStatsUseCase,
     private val updateCompletionUseCase: UpdateCompletionUseCase,
     private val getUnfinishedTasksUseCase: GetUnfinishedTasksUseCase,
     private val getTasksByDayPartUseCase: GetTasksByDayPartUseCase
@@ -34,8 +34,8 @@ class TaskInteractor @Inject constructor(
         return getAllTasksUseCase.getAllTasks()
     }
 
-    fun getTodayTaskStats(startOfDay: Long): Flow<TaskStats> {
-        return getTodayTaskStatsUseCase.getTodayTaskStats(startOfDay)
+    fun getTaskStats(startOfDay: Long): Flow<ProgressStats> {
+        return getTaskStatsUseCase.getTaskStats(startOfDay)
     }
 
     suspend fun updateCompletion(id: Int, isCompleted: Boolean) {

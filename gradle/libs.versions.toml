@@ -20,6 +20,7 @@ okhttp = "4.12.0"
 kotlinxSerialization = "1.7.3"
 retrofitSerializationConverter = "1.0.0"
 exp4j = "0.4.8"
+uiGraphics = "1.11.1"
 
 [libraries]
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
@@ -48,6 +49,7 @@ androidx-lifecycle-runtime-compose = { group = "androidx.lifecycle", name = "lif
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+androidx-compose-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics", version.ref = "uiGraphics" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

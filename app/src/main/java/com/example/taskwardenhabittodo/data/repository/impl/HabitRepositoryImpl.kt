@@ -27,23 +27,15 @@ class HabitRepositoryImpl @Inject constructor(
     }
 
     override suspend fun deleteHabitById(id: Int) {
-        local.deleteHabitById(id)
+        withContext(Dispatchers.IO){
+            local.deleteHabitById(id)
+        }
     }
 
     override suspend fun updateHabitProgress(id: Int, count: Int) {
         withContext(Dispatchers.IO){
             local.updateHabitProgress(id, count, System.currentTimeMillis())
         }
-    }
-
-    override fun getTodayHabitStats(startOfDay: Long): Flow<Pair<Int, Int>> {
-        return combine(
-            local.getTotalHabitsCount(),
-            local.getCompletedHabits(startOfDay)
-        ) { total, completed ->
-            total to completed
-        }
-            .flowOn(Dispatchers.IO)
     }
 
     override fun getUnfinishHabits(

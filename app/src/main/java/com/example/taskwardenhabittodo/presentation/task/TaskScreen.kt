@@ -34,6 +34,7 @@ import com.example.taskwardenhabittodo.ui.components.ActionIconButton
 import com.example.taskwardenhabittodo.ui.components.FocusTaskCard
 import com.example.taskwardenhabittodo.ui.components.bottom.sheet.BottomSheetScreen
 import com.example.taskwardenhabittodo.ui.components.task.TaskCard
+import com.example.taskwardenhabittodo.ui.components.task.TaskDismissibleContainer
 import com.example.taskwardenhabittodo.ui.components.task.TaskSectionHeader
 import com.example.taskwardenhabittodo.ui.theme.AmberGold
 import com.example.taskwardenhabittodo.ui.theme.SuccessGreen
@@ -127,21 +128,27 @@ fun TasksScreen(
                         items = section.tasks,
                         key = { it.id }
                     ) { task ->
-                        TaskCard(
-                            time = task.time,
-                            period = task.period,
-                            title = task.title,
-                            duration = 15,
-                            category = task.category.name,
-                            priorityColor = when (task.priority){
-                                Priority.HIGH -> WarningRed
-                                Priority.MEDIUM -> AmberGold
-                                Priority.LOW -> SuccessGreen
-                                Priority.NONE -> null
-                            },
-                            isCompleted = task.isCompleted,
-                            onClick = { viewModel.toggleTaskCompletion(task) }
-                        )
+                        Box(modifier = Modifier.animateItem()){
+                            TaskDismissibleContainer(
+                                onRemove = { viewModel.deleteTaskById(task.id) }
+                            ) {
+                                TaskCard(
+                                    time = task.time,
+                                    period = task.period,
+                                    title = task.title,
+                                    duration = 15,
+                                    category = task.category.name,
+                                    priorityColor = when (task.priority) {
+                                        Priority.HIGH -> WarningRed
+                                        Priority.MEDIUM -> AmberGold
+                                        Priority.LOW -> SuccessGreen
+                                        Priority.NONE -> null
+                                    },
+                                    isCompleted = task.isCompleted,
+                                    onClick = { viewModel.toggleTaskCompletion(task) }
+                                )
+                            }
+                        }
                         Spacer(modifier = Modifier.height(spacing.small))
                     }
 

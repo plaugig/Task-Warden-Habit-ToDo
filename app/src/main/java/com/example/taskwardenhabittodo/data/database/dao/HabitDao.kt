@@ -22,15 +22,6 @@ package com.example.taskwardenhabittodo.data.database.dao
         @Query("SELECT * FROM tasks WHERE isHabit = 1")
         fun getAllHabits(): Flow<List<TaskEntity>>
 
-        @Query("SELECT COUNT(*) FROM tasks WHERE isHabit = 1")
-        fun getTotalHabitsCount(): Flow<Int>
-
-        @Query("""
-        SELECT COUNT(*) FROM tasks 
-        WHERE isHabit = 1 AND isCompleted = 1 AND lastUpdated >= :startOfDay
-    """)
-        fun getCompletedHabits(startOfDay: Long): Flow<Int>
-
         @Query("""
             SELECT COUNT(*) FROM tasks 
             WHERE isHabit = 1 AND isCompleted = 0 
