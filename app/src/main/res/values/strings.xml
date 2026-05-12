@@ -38,7 +38,7 @@
     <string name="task_label_name">TASK NAME</string>
     <string name="task_new_title">New Task</string>
     <string name="task_btn_create">Create Task</string>
-    <string name="task_title_header">Tasks</string>
+    <string name="task_title_header">Habits</string>
 
     <string name="prop_label_time">Time</string>
     <string name="prop_label_category">Category</string>
