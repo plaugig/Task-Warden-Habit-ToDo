@@ -8,7 +8,8 @@ data class TaskScreenState(
     val progress : TaskProgress = TaskProgress(),
     val fireStreak: Int = 0,
     val sections : List<TaskSection> = emptyList(),
-    val isBottomSheetVisible: Boolean = false
+    val isBottomSheetVisible: Boolean = false,
+    val archiveOffset : Float = 0f
 )
 
 data class TaskProgress(

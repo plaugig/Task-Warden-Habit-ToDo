@@ -26,6 +26,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
+
 @HiltViewModel
 class TaskScreenViewModel @Inject constructor(
     private val taskInteractor: TaskInteractor,
@@ -36,14 +37,17 @@ class TaskScreenViewModel @Inject constructor(
 
     private val _isBottomSheetVisible = MutableStateFlow(false)
 
+    private val _archiveOffset = MutableStateFlow(0f)
+
     @OptIn(ExperimentalCoroutinesApi::class)
     val uiState: StateFlow<TaskScreenState> = startOfDayFlow.flatMapLatest { startDay ->
         combine(
             taskInteractor.getAllTasks(),
             taskInteractor.getTaskStats(startDay),
             userInteractor.getUserStats(),
-            _isBottomSheetVisible
-        ) { allTask, taskStats, userStats, isVisible ->
+            _isBottomSheetVisible,
+            _archiveOffset
+        ) { allTask, taskStats, userStats, isVisible, archiveOffset ->
 
             val todayTasks = allTask
                 .filter { !it.classification }
@@ -60,7 +64,8 @@ class TaskScreenViewModel @Inject constructor(
                         taskStats.completedCount.toFloat() / taskStats.totalCount else 0f
                 ),
                 sections = prepareSections(todayTasks),
-                isBottomSheetVisible = isVisible
+                isBottomSheetVisible = isVisible,
+                archiveOffset = archiveOffset
 
             )
         }
@@ -148,5 +153,24 @@ class TaskScreenViewModel @Inject constructor(
 
     fun hideBottomSheet() {
         _isBottomSheetVisible.value = false
+    }
+
+    fun updateArchiveOffset(delta: Float) {
+        _archiveOffset.value =
+            (_archiveOffset.value + delta).coerceIn(0f, 200f)
+    }
+
+    fun snapArchive (target: Float){
+        viewModelScope.launch {
+            val start = _archiveOffset.value
+            val duration = 200
+            val steps = 20
+            val delta = (target - start) / steps
+            for (i in 1..steps){
+                _archiveOffset.value = (start + delta * i).coerceIn(0f, 200f)
+                kotlinx.coroutines.delay((duration / steps).toLong())
+            }
+            _archiveOffset.value = target
+        }
     }
 }

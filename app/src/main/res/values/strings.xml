@@ -46,4 +46,6 @@
     <string name="prop_set_time">Set time</string>
     <string name="prop_select_time">Select Time</string>
     <string name="prop_select_icon">Select Icon</string>
+
+    <string name="task_history_title">View Task History</string>
 </resources>

@@ -12,17 +12,25 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.taskwardenhabittodo.R
@@ -32,6 +40,7 @@ import com.example.taskwardenhabittodo.domain.item.Priority
 import com.example.taskwardenhabittodo.ui.UiTaskData
 import com.example.taskwardenhabittodo.ui.components.ActionIconButton
 import com.example.taskwardenhabittodo.ui.components.FocusTaskCard
+import com.example.taskwardenhabittodo.ui.components.HistoryArchiveCard
 import com.example.taskwardenhabittodo.ui.components.bottom.sheet.BottomSheetScreen
 import com.example.taskwardenhabittodo.ui.components.task.TaskCard
 import com.example.taskwardenhabittodo.ui.components.task.TaskDismissibleContainer
@@ -53,7 +62,56 @@ fun TasksScreen(
     val colorScheme = MaterialTheme.colorScheme
     val extendedColors = MaterialTheme.extendedColors
 
+    val scrollState = rememberLazyListState()
+
+    val maxOffset = 200f
+    val snapThreshold = 60f
+
+    val nestedScrollConnection = remember {
+        object : NestedScrollConnection {
+            override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
+                if (available.y > 0 &&
+                    scrollState.firstVisibleItemIndex == 0 &&
+                    scrollState.firstVisibleItemScrollOffset == 0 &&
+                    uiState.archiveOffset < maxOffset
+                ) {
+                    viewModel.updateArchiveOffset(available.y * 0.4f)
+                    return Offset(0f, available.y)
+                }
+                if (
+                    available.y < 0 &&
+                    uiState.archiveOffset > 0f &&
+                    scrollState.firstVisibleItemIndex == 0 &&
+                    scrollState.firstVisibleItemScrollOffset == 0
+                ) {
+                    viewModel.updateArchiveOffset(available.y * 0.8f)
+                    return Offset(0f, available.y)
+                }
+                return Offset.Zero
+            }
+
+            override suspend fun onPostFling(consumed: Velocity, available: Velocity): Velocity {
+                if (
+                    uiState.archiveOffset > 0f &&
+                    uiState.archiveOffset < maxOffset
+                ) {
+                    if (uiState.archiveOffset > snapThreshold) {
+                        viewModel.snapArchive(maxOffset)
+                    } else {
+                        viewModel.snapArchive(0f)
+                    }
+                    return Velocity(0f, available.y)
+                }
+                return super.onPostFling(consumed, available)
+            }
+        }
+    }
+
     Scaffold(
+        modifier = Modifier
+            .fillMaxSize()
+            .nestedScroll(nestedScrollConnection),
+
         topBar = {
             Column(
                 modifier = Modifier
@@ -98,10 +156,12 @@ fun TasksScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(paddingValues),
+                state = scrollState,
                 contentPadding = PaddingValues(spacing.medium)
             ) {
                 item {
                     FocusTaskCard(
+                        modifier = Modifier.zIndex(2f),
                         title = stringResource(R.string.stats_daily_progress),
                         completedCount = uiState.progress.completedCount,
                         totalCount = uiState.progress.totalCount,
@@ -110,6 +170,30 @@ fun TasksScreen(
                         streak = uiState.fireStreak
                     )
                     Spacer(modifier = Modifier.height(spacing.medium))
+                }
+
+                item {
+                    val progress = (uiState.archiveOffset / maxOffset).coerceIn(0f, 1f)
+                    val currentCardHeight = (72 * progress).dp
+                    val topSpacing = (16 * progress).dp
+                    val bottomSpacing = (32 - (16 * progress)).dp
+
+                    if (topSpacing > 0.dp) {
+                        Spacer(modifier = Modifier.height(topSpacing))
+                    }
+
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(currentCardHeight)
+                            .zIndex(1f)
+                    ) {
+                        HistoryArchiveCard(
+                            progress = progress
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(bottomSpacing))
                 }
 
                 // oтрисовка секций
@@ -128,7 +212,7 @@ fun TasksScreen(
                         items = section.tasks,
                         key = { it.id }
                     ) { task ->
-                        Box(modifier = Modifier.animateItem()){
+                        Box(modifier = Modifier.animateItem()) {
                             TaskDismissibleContainer(
                                 onRemove = { viewModel.deleteTaskById(task.id) }
                             ) {
@@ -159,10 +243,10 @@ fun TasksScreen(
             }
         }
 
-        if (uiState.isBottomSheetVisible){
+        if (uiState.isBottomSheetVisible) {
             BottomSheetScreen(
                 type = ActionType.TASK,
-                onDismiss = {viewModel.hideBottomSheet()},
+                onDismiss = { viewModel.hideBottomSheet() },
                 onCreateClick = { title, time, repeatCount, category, priority ->
                     val newTask = UiTaskData(
                         title = title,
