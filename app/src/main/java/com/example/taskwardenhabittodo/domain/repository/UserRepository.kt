@@ -1,6 +1,6 @@
 package com.example.taskwardenhabittodo.domain.repository
 
-import com.example.taskwardenhabittodo.data.UserData
+import com.example.taskwardenhabittodo.domain.item.data.UserData
 import kotlinx.coroutines.flow.Flow
 
 interface UserRepository {

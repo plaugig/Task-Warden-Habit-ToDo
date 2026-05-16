@@ -14,11 +14,11 @@ data class UiTaskData (
     val period: String,
     val dayPart: DayPart,
     val isCompleted: Boolean = false,
-    val isHabit: Boolean = false,
+    val classification: Boolean = false,
     val targetCount: Int = 1,
     val currentCount: Int = 0,
     val colorHex: Long,
     val isPinned: Boolean,
     val iconResId: Int,
 
-)
+    )

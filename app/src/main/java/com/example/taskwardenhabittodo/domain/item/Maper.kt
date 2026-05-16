@@ -1,12 +1,11 @@
-package com.example.taskwardenhabittodo.data.maper
+package com.example.taskwardenhabittodo.domain.item
 
-import com.example.taskwardenhabittodo.data.TaskData
-import com.example.taskwardenhabittodo.data.UserData
+import com.example.taskwardenhabittodo.data.database.entity.DayProgressEntity
 import com.example.taskwardenhabittodo.data.database.entity.TaskEntity
 import com.example.taskwardenhabittodo.data.database.entity.UserEntity
-import com.example.taskwardenhabittodo.domain.item.CategoryType
-import com.example.taskwardenhabittodo.domain.item.DayPart
-import com.example.taskwardenhabittodo.domain.item.Priority
+import com.example.taskwardenhabittodo.domain.item.data.DayProgressData
+import com.example.taskwardenhabittodo.domain.item.data.TaskData
+import com.example.taskwardenhabittodo.domain.item.data.UserData
 
 fun TaskEntity.toDomain(): TaskData {
     return TaskData(
@@ -15,7 +14,7 @@ fun TaskEntity.toDomain(): TaskData {
         description = this.description,
         priority = Priority.valueOf(this.priority),
         time = this.time,
-        classification = this.isHabit,
+        classification = this.classification,
         targetCount = this.targetCount,
         currentCount = this.currentCount,
         category = CategoryType.valueOf(this.category),
@@ -38,7 +37,7 @@ fun TaskData.toEntity(): TaskEntity {
         priority = this.priority.name,
         time = this.time,
         isCompleted = this.isCompleted,
-        isHabit = this.classification,
+        classification = this.classification,
         targetCount = this.targetCount,
         currentCount = this.currentCount,
         category = this.category.name,
@@ -70,5 +69,13 @@ fun UserData.toEntity(): UserEntity {
         dailyPoints = this.dailyPoints,
         fireStreak = this.fireStreak,
         masteryStreak = this.masteryStreak
+    )
+}
+
+fun DayProgressEntity.toDomain(): DayProgressData{
+    return DayProgressData(
+        dateTimestamp = this.dateTimestamp,
+        totalCount = this.totalCount,
+        completedCount = this.completedCount
     )
 }

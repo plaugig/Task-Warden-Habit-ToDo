@@ -1,7 +1,7 @@
 package com.example.taskwardenhabittodo.domain.interactor
 
-import com.example.taskwardenhabittodo.data.TaskData
-import com.example.taskwardenhabittodo.domain.item.ProgressStats
+import com.example.taskwardenhabittodo.domain.item.data.TaskData
+import com.example.taskwardenhabittodo.domain.item.data.ProgressStatsData
 import com.example.taskwardenhabittodo.domain.use.cases.habits.AddHabitUseCase
 import com.example.taskwardenhabittodo.domain.use.cases.habits.DeleteHabitByIdUseCase
 import com.example.taskwardenhabittodo.domain.use.cases.habits.GetAllHabitsUseCase
@@ -33,7 +33,7 @@ class HabitInteractor @Inject constructor(
         return getAllHabitsUseCase.getAllHabits()
     }
 
-    fun getTodayHabitStats(): Flow<ProgressStats> {
+    fun getTodayHabitStats(): Flow<ProgressStatsData> {
         return getHabitStatsUseCase.getHabitStats()
     }
 

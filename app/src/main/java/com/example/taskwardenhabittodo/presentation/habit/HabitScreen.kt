@@ -160,7 +160,7 @@ fun HabitScreen(
                         period = "Daily",
                         dayPart = DayPart.MORNING,
                         isCompleted = false,
-                        isHabit = true,
+                        classification = true,
                         colorHex = 0xFF2196F3,
                         isPinned = false
                     )

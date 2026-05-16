@@ -207,7 +207,7 @@ fun HabitsStatusPreview() {
                     time = "10:00",
                     period = "Daily",
                     dayPart = DayPart.MORNING,
-                    isHabit = true,
+                    classification = true,
                     description = "",
                     isPinned = false
                 ),
@@ -230,7 +230,7 @@ fun HabitsStatusPreview() {
                     time = "21:00",
                     period = "Daily",
                     dayPart = DayPart.EVENING,
-                    isHabit = true,
+                    classification = true,
                     description = "",
                     isPinned = false
                 ),

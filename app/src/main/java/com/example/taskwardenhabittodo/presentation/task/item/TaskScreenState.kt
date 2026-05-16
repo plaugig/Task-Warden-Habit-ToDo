@@ -9,7 +9,6 @@ data class TaskScreenState(
     val fireStreak: Int = 0,
     val sections : List<TaskSection> = emptyList(),
     val isBottomSheetVisible: Boolean = false,
-    val archiveOffset : Float = 0f
 )
 
 data class TaskProgress(
@@ -19,7 +18,7 @@ data class TaskProgress(
 )
 
 data class TaskSection(
-    val title: String,
+    val title: Int,
     val iconRes: Int,
     val tasks : List<UiTaskData>
 )

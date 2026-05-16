@@ -22,7 +22,7 @@ import com.example.taskwardenhabittodo.ui.theme.AmberGold
 
 @Composable
 fun TaskSectionHeader(
-    title: String,
+    title: Int,
     iconRes: Int,
     doneCount: Int,
     totalCount: Int
@@ -40,7 +40,7 @@ fun TaskSectionHeader(
         )
         Spacer(modifier = Modifier.width(8.dp))
         Text(
-            text = title,
+            text = title.toString(),
             style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
         )
         Box(

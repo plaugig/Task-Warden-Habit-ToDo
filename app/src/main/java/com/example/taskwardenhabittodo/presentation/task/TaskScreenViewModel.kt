@@ -26,7 +26,6 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
-
 @HiltViewModel
 class TaskScreenViewModel @Inject constructor(
     private val taskInteractor: TaskInteractor,
@@ -37,21 +36,19 @@ class TaskScreenViewModel @Inject constructor(
 
     private val _isBottomSheetVisible = MutableStateFlow(false)
 
-    private val _archiveOffset = MutableStateFlow(0f)
-
     @OptIn(ExperimentalCoroutinesApi::class)
     val uiState: StateFlow<TaskScreenState> = startOfDayFlow.flatMapLatest { startDay ->
+        val endDay = startDay + 86399999L
+
         combine(
-            taskInteractor.getAllTasks(),
+            taskInteractor.getTasksForDay(startDay, endDay),
             taskInteractor.getTaskStats(startDay),
             userInteractor.getUserStats(),
             _isBottomSheetVisible,
-            _archiveOffset
-        ) { allTask, taskStats, userStats, isVisible, archiveOffset ->
 
-            val todayTasks = allTask
-                .filter { !it.classification }
-                .map { it.toUi() }
+        ) { todayTasks, taskStats, userStats, isVisible ->
+
+            val todayTasksUi = todayTasks.map { it.toUi() }
 
             TaskScreenState(
                 isLoading = false,
@@ -63,37 +60,36 @@ class TaskScreenViewModel @Inject constructor(
                     percentage = if (taskStats.totalCount > 0)
                         taskStats.completedCount.toFloat() / taskStats.totalCount else 0f
                 ),
-                sections = prepareSections(todayTasks),
+                sections = prepareSections(todayTasksUi),
                 isBottomSheetVisible = isVisible,
-                archiveOffset = archiveOffset
 
             )
         }
     }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000),
-        initialValue = TaskScreenState()
+        initialValue = TaskScreenState(isLoading = true)
     )
 
     private fun prepareSections(tasks: List<UiTaskData>): List<TaskSection> {
         return listOf(
             TaskSection(
-                title = "Morning",
+                title = R.string.task_section_morning,
                 iconRes = R.drawable.ev_sun,
                 tasks = tasks.filter { it.dayPart == DayPart.MORNING }
             ),
             TaskSection(
-                title = "Afternoon",
+                title = R.string.task_section_afternoon,
                 iconRes = R.drawable.sun,
                 tasks = tasks.filter { it.dayPart == DayPart.AFTERNOON }
             ),
             TaskSection(
-                title = "Evening",
+                title = R.string.task_section_evening,
                 iconRes = R.drawable.moon,
                 tasks = tasks.filter { it.dayPart == DayPart.EVENING }
             ),
             TaskSection(
-                title = "Other",
+                title = R.string.task_section_other,
                 iconRes = R.drawable.animal,
                 tasks = tasks.filter { it.dayPart == DayPart.ALL_DAY }
             )
@@ -153,24 +149,5 @@ class TaskScreenViewModel @Inject constructor(
 
     fun hideBottomSheet() {
         _isBottomSheetVisible.value = false
-    }
-
-    fun updateArchiveOffset(delta: Float) {
-        _archiveOffset.value =
-            (_archiveOffset.value + delta).coerceIn(0f, 200f)
-    }
-
-    fun snapArchive (target: Float){
-        viewModelScope.launch {
-            val start = _archiveOffset.value
-            val duration = 200
-            val steps = 20
-            val delta = (target - start) / steps
-            for (i in 1..steps){
-                _archiveOffset.value = (start + delta * i).coerceIn(0f, 200f)
-                kotlinx.coroutines.delay((duration / steps).toLong())
-            }
-            _archiveOffset.value = target
-        }
     }
 }

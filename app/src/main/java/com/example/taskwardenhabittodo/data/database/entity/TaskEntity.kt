@@ -1,6 +1,5 @@
 package com.example.taskwardenhabittodo.data.database.entity
 
-import androidx.compose.foundation.MutatePriority
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -19,8 +18,8 @@ data class TaskEntity(
     val time: String?,
     @ColumnInfo(name = "isCompleted")
     var isCompleted: Boolean = false,
-    @ColumnInfo(name = "isHabit")
-    val isHabit: Boolean = false,
+    @ColumnInfo(name = "classification")
+    val classification: Boolean = false,
     @ColumnInfo(name = "targetCount")
     val targetCount: Int = 1,
     @ColumnInfo(name = "currentCount")

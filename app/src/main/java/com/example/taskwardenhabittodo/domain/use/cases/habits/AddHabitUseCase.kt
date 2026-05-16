@@ -1,7 +1,6 @@
 package com.example.taskwardenhabittodo.domain.use.cases.habits
 
-import com.example.taskwardenhabittodo.data.TaskData
-import com.example.taskwardenhabittodo.data.repository.impl.HabitRepositoryImpl
+import com.example.taskwardenhabittodo.domain.item.data.TaskData
 import com.example.taskwardenhabittodo.domain.repository.HabitRepository
 import javax.inject.Inject
 

@@ -1,6 +1,4 @@
-package com.example.taskwardenhabittodo.data
-
-import androidx.room.ColumnInfo
+package com.example.taskwardenhabittodo.domain.item.data
 
 data class UserData(
     val id: Int,

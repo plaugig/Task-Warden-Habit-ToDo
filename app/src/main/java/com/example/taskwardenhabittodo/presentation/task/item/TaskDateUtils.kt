@@ -4,6 +4,7 @@ import com.example.taskwardenhabittodo.domain.item.DayPart
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.util.Calendar
 import java.util.Locale
 
 object TaskDateUtils {
@@ -26,5 +27,14 @@ object TaskDateUtils {
         val formatter = DateTimeFormatter.ofPattern("d MMMM", Locale.getDefault())
 
         return date.format(formatter)
+    }
+
+    fun getEndOfDay(): Long {
+        return Calendar.getInstance().apply {
+            set(Calendar.HOUR_OF_DAY, 23)
+            set(Calendar.MINUTE, 59)
+            set(Calendar.SECOND, 59)
+            set(Calendar.MILLISECOND, 999)
+        }.timeInMillis
     }
 }

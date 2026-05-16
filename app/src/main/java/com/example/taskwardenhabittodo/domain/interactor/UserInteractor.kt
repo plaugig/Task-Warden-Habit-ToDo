@@ -1,6 +1,6 @@
 package com.example.taskwardenhabittodo.domain.interactor
 
-import com.example.taskwardenhabittodo.data.UserData
+import com.example.taskwardenhabittodo.domain.item.data.UserData
 import com.example.taskwardenhabittodo.domain.use.cases.tasks.UpdateCompletionUseCase
 import com.example.taskwardenhabittodo.domain.use.cases.user.GetUserStatsUseCase
 import com.example.taskwardenhabittodo.domain.use.cases.user.ResetDailyPointsUseCase

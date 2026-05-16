@@ -1,8 +1,10 @@
 package com.example.taskwardenhabittodo.data.database.source
 
 import com.example.taskwardenhabittodo.data.database.AppDatabase
+import com.example.taskwardenhabittodo.data.database.entity.DayProgressEntity
 import com.example.taskwardenhabittodo.data.database.entity.TaskEntity
 import com.example.taskwardenhabittodo.data.database.entity.UserEntity
+import com.example.taskwardenhabittodo.domain.item.data.ProgressStatsData
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
@@ -35,8 +37,8 @@ class LocalDataSource @Inject constructor(
 
     //
 
-    fun getAllTasks(): Flow<List<TaskEntity>>{
-        return appDatabase.taskDao().getAllTasks()
+    fun getTasksForDay(startOfDay: Long, endOfDay: Long): Flow<List<TaskEntity>>{
+        return appDatabase.taskDao().getTasksForDay(startOfDay, endOfDay)
     }
 
     suspend fun insertTask(task: TaskEntity){
@@ -55,6 +57,13 @@ class LocalDataSource @Inject constructor(
         return appDatabase.taskDao().getTasksByDayPart(dayPart,startOfDay)
     }
 
+    fun getProgressStats(startOfDay: Long): Flow<ProgressStatsData>{
+        return appDatabase.taskDao().getProgressStats(startOfDay)
+    }
+
+    fun getAllDaysProgress () :Flow<List<DayProgressEntity>>{
+        return appDatabase.taskDao().getAllDaysProgress()
+    }
     //
 
     fun getStats(): Flow<UserEntity?>{

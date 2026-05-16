@@ -1,5 +1,9 @@
 package com.example.taskwardenhabittodo.presentation.task
 
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,6 +24,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -50,11 +55,13 @@ import com.example.taskwardenhabittodo.ui.theme.SuccessGreen
 import com.example.taskwardenhabittodo.ui.theme.WarningRed
 import com.example.taskwardenhabittodo.ui.theme.extendedColors
 import com.example.taskwardenhabittodo.ui.theme.spacing
+import kotlinx.coroutines.launch
 
 
 @Composable
 fun TasksScreen(
     viewModel: TaskScreenViewModel = hiltViewModel(),
+    onNavigateToArchive: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -62,44 +69,52 @@ fun TasksScreen(
     val colorScheme = MaterialTheme.colorScheme
     val extendedColors = MaterialTheme.extendedColors
 
-    val scrollState = rememberLazyListState()
-
     val maxOffset = 200f
     val snapThreshold = 60f
+
+    val archiveAnim = remember { Animatable(0f) }
+    val scope = rememberCoroutineScope()
+    val scrollState = rememberLazyListState()
 
     val nestedScrollConnection = remember {
         object : NestedScrollConnection {
             override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
+                val offset = archiveAnim.value
+
                 if (available.y > 0 &&
                     scrollState.firstVisibleItemIndex == 0 &&
                     scrollState.firstVisibleItemScrollOffset == 0 &&
-                    uiState.archiveOffset < maxOffset
+                    offset < maxOffset
                 ) {
-                    viewModel.updateArchiveOffset(available.y * 0.4f)
+                    val newVal = (offset + available.y * 0.4f).coerceIn(0f, maxOffset)
+                    scope.launch { archiveAnim.snapTo(newVal) }
                     return Offset(0f, available.y)
                 }
                 if (
                     available.y < 0 &&
-                    uiState.archiveOffset > 0f &&
+                    offset > 0f &&
                     scrollState.firstVisibleItemIndex == 0 &&
                     scrollState.firstVisibleItemScrollOffset == 0
                 ) {
-                    viewModel.updateArchiveOffset(available.y * 0.8f)
+                    val newVal = (offset + available.y * 0.8f).coerceIn(0f, maxOffset)
+                    scope.launch { archiveAnim.snapTo(newVal) }
                     return Offset(0f, available.y)
                 }
                 return Offset.Zero
             }
 
             override suspend fun onPostFling(consumed: Velocity, available: Velocity): Velocity {
-                if (
-                    uiState.archiveOffset > 0f &&
-                    uiState.archiveOffset < maxOffset
-                ) {
-                    if (uiState.archiveOffset > snapThreshold) {
-                        viewModel.snapArchive(maxOffset)
-                    } else {
-                        viewModel.snapArchive(0f)
-                    }
+                val offset = archiveAnim.value
+
+                if (offset > 0f && offset < maxOffset) {
+                    val target = if (offset > snapThreshold) maxOffset else 0f
+                    archiveAnim.animateTo(
+                        targetValue = target,
+                        animationSpec = spring(
+                            dampingRatio = Spring.DampingRatioMediumBouncy,
+                            stiffness = Spring.StiffnessMedium
+                        )
+                    )
                     return Velocity(0f, available.y)
                 }
                 return super.onPostFling(consumed, available)
@@ -173,10 +188,10 @@ fun TasksScreen(
                 }
 
                 item {
-                    val progress = (uiState.archiveOffset / maxOffset).coerceIn(0f, 1f)
+                    val progress = (archiveAnim.value / maxOffset).coerceIn(0f, 1f)
                     val currentCardHeight = (72 * progress).dp
-                    val topSpacing = (16 * progress).dp
-                    val bottomSpacing = (32 - (16 * progress)).dp
+                    val topSpacing = (spacing.medium * progress)
+                    val bottomSpacing = (spacing.extraLarge - (spacing.medium * progress))
 
                     if (topSpacing > 0.dp) {
                         Spacer(modifier = Modifier.height(topSpacing))
@@ -189,7 +204,8 @@ fun TasksScreen(
                             .zIndex(1f)
                     ) {
                         HistoryArchiveCard(
-                            progress = progress
+                            progress = progress,
+                            modifier = Modifier.clickable{ onNavigateToArchive() }
                         )
                     }
 
@@ -253,7 +269,7 @@ fun TasksScreen(
                         priority = priority,
                         category = category,
                         time = time ?: "",
-                        isHabit = false,
+                        classification = false,
                         targetCount = repeatCount,
                         description = "",
                         period = " ",

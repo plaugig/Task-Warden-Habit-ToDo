@@ -1,6 +1,6 @@
 package com.example.taskwardenhabittodo.domain.use.cases.user
 
-import com.example.taskwardenhabittodo.data.UserData
+import com.example.taskwardenhabittodo.domain.item.data.UserData
 import com.example.taskwardenhabittodo.domain.repository.UserRepository
 import javax.inject.Inject
 

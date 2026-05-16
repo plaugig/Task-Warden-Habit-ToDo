@@ -19,12 +19,12 @@ package com.example.taskwardenhabittodo.data.database.dao
     """)
         suspend fun updateHabitProgress(id: Int, count: Int, timestamp: Long)
 
-        @Query("SELECT * FROM tasks WHERE isHabit = 1")
+        @Query("SELECT * FROM tasks WHERE classification = 1")
         fun getAllHabits(): Flow<List<TaskEntity>>
 
         @Query("""
             SELECT COUNT(*) FROM tasks 
-            WHERE isHabit = 1 AND isCompleted = 0 
+            WHERE classification = 1 AND isCompleted = 0 
             AND createdAt >= :startOfDay AND createdAt <= :endOfDay
         """)
         fun getUnfinishHabits(startOfDay: Long, endOfDay: Long): Flow<Int>
@@ -32,10 +32,10 @@ package com.example.taskwardenhabittodo.data.database.dao
         @Insert(onConflict = OnConflictStrategy.REPLACE)
         suspend fun insertHabit(habit: TaskEntity)
 
-        @Query("DELETE FROM tasks WHERE id = :id AND isHabit = 1")
+        @Query("DELETE FROM tasks WHERE id = :id AND classification = 1")
         suspend fun deleteHabitById(id: Int)
 
-        @Query("UPDATE tasks SET currentCount = 0, isCompleted = 0 WHERE isHabit = 1 AND lastUpdated < :startOfDay")
+        @Query("UPDATE tasks SET currentCount = 0, isCompleted = 0 WHERE classification = 1 AND lastUpdated < :startOfDay")
         suspend fun resetOldHabits(startOfDay: Long)
 
     }

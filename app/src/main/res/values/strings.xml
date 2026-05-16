@@ -48,4 +48,14 @@
     <string name="prop_select_icon">Select Icon</string>
 
     <string name="task_history_title">View Task History</string>
+
+    <string name="task_section_morning">Morning</string>
+    <string name="task_section_afternoon">Afternoon</string>
+    <string name="task_section_evening">Evening</string>
+    <string name="task_section_other">Other</string>
+
+    <string name="yesterday">Yesterday</string>
+    <string name="day_before_yesterday">Day before yesterday</string>
+    <string name="archive_title">Archive</string>
+    <string name="common_back">Common back</string>
 </resources>

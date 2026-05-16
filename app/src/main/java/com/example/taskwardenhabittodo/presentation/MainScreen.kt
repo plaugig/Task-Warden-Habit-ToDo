@@ -9,11 +9,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.taskwardenhabittodo.presentation.archive.ArchiveDayScreen
+import com.example.taskwardenhabittodo.presentation.archive.ArchiveDayViewModel
 import com.example.taskwardenhabittodo.presentation.habit.HabitScreen
 import com.example.taskwardenhabittodo.presentation.task.TasksScreen
 import com.example.taskwardenhabittodo.ui.components.TaskWardenBottomBar
@@ -26,18 +29,20 @@ fun MainScreen() {
 
     Scaffold(
         bottomBar = {
-            TaskWardenBottomBar(
-                currentRoute = currentRoute,
-                onNavigate = { route ->
-                    navController.navigate(route) {
-                        popUpTo(navController.graph.findStartDestination().id) {
-                            saveState = true
+            if (currentRoute == "home" || currentRoute == "tasks" || currentRoute == "lair") {
+                TaskWardenBottomBar(
+                    currentRoute = currentRoute,
+                    onNavigate = { route ->
+                        navController.navigate(route) {
+                            popUpTo(navController.graph.findStartDestination().id) {
+                                saveState = true
+                            }
+                            launchSingleTop = true
+                            restoreState = true
                         }
-                        launchSingleTop = true
-                        restoreState = true
                     }
-                }
-            )
+                )
+            }
         }
     ) { paddingValues ->
         NavHost(
@@ -56,9 +61,30 @@ fun MainScreen() {
                     }
                 )
             }
+
             composable("tasks") {
-                TasksScreen()
+                // Передаем лямбду клика по архиву в TasksScreen
+                TasksScreen(
+                    onNavigateToArchive = {
+                        navController.navigate("archive")
+                    }
+                )
             }
+
+            // Регистрируем экран архива
+            composable("archive") {
+                val archiveViewModel: ArchiveDayViewModel = hiltViewModel()
+                ArchiveDayScreen(
+                    viewModel = archiveViewModel,
+                    onBackClick = {
+                        navController.popBackStack()
+                    },
+                    onDayClick = { timestamp ->
+
+                    }
+                )
+            }
+
             composable("lair") {
                 Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     Text("Lair is coming soon...")

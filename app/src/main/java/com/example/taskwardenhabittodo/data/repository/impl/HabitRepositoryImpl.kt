@@ -1,13 +1,12 @@
 package com.example.taskwardenhabittodo.data.repository.impl
 
-import com.example.taskwardenhabittodo.data.TaskData
+import com.example.taskwardenhabittodo.domain.item.data.TaskData
 import com.example.taskwardenhabittodo.data.database.source.LocalDataSource
-import com.example.taskwardenhabittodo.data.maper.toDomain
-import com.example.taskwardenhabittodo.data.maper.toEntity
+import com.example.taskwardenhabittodo.domain.item.toDomain
+import com.example.taskwardenhabittodo.domain.item.toEntity
 import com.example.taskwardenhabittodo.domain.repository.HabitRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext

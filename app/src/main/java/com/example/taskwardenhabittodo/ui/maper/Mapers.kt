@@ -1,7 +1,10 @@
 package com.example.taskwardenhabittodo.ui.maper
 
-import com.example.taskwardenhabittodo.data.TaskData
-import com.example.taskwardenhabittodo.data.UserData
+import com.example.taskwardenhabittodo.domain.item.data.DayProgressData
+import com.example.taskwardenhabittodo.domain.item.data.TaskData
+import com.example.taskwardenhabittodo.domain.item.data.UserData
+import com.example.taskwardenhabittodo.presentation.archive.item.DayProgressUiData
+import com.example.taskwardenhabittodo.presentation.archive.item.TaskDateUtils
 import com.example.taskwardenhabittodo.ui.UiTaskData
 import com.example.taskwardenhabittodo.ui.UiUserData
 
@@ -16,7 +19,7 @@ fun TaskData.toUi(): UiTaskData {
         period = this.period,
         dayPart = this.dayPart,
         isCompleted = this.isCompleted,
-        isHabit = this.classification,
+        classification = this.classification,
         targetCount = this.targetCount,
         currentCount = this.currentCount,
         colorHex = this.colorHex,
@@ -37,7 +40,7 @@ fun UiTaskData.toDomain(): TaskData{
         period = this.period,
         dayPart = this.dayPart,
         isCompleted = this.isCompleted,
-        classification = this.isHabit,
+        classification = this.classification,
         targetCount = this.targetCount,
         currentCount = this.currentCount,
         colorHex = this.colorHex,
@@ -54,6 +57,23 @@ fun UserData.toUi(): UiUserData {
         fireStreak = this.fireStreak,
         masteryStreak = this.masteryStreak,
 
+    )
+}
+
+
+fun DayProgressData.toUi(): DayProgressUiData{
+    val calculatedProgress = if (this.totalCount > 0) {
+        this.completedCount.toFloat() / this.totalCount.toFloat()
+    } else {
+        0f
+    }
+
+    return DayProgressUiData(
+        dateTimestamp = this.dateTimestamp,
+        totalCount = this.totalCount,
+        completedCount = this.completedCount,
+        displayDate = TaskDateUtils.formatArchiveDate(this.dateTimestamp),
+        progress = calculatedProgress
     )
 }
 

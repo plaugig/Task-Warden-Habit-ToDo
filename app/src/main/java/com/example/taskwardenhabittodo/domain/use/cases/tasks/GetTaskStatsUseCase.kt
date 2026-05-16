@@ -1,24 +1,13 @@
 package com.example.taskwardenhabittodo.domain.use.cases.tasks
 
-import com.example.taskwardenhabittodo.data.repository.impl.TaskRepositoryImpl
-import com.example.taskwardenhabittodo.domain.item.ProgressStats
+import com.example.taskwardenhabittodo.domain.item.data.ProgressStatsData
+import com.example.taskwardenhabittodo.domain.repository.TaskRepository
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class GetTaskStatsUseCase @Inject constructor(
-    private val repository: TaskRepositoryImpl
+    private val repository: TaskRepository
 ) {
-    fun getTaskStats(startOfDay: Long): Flow<ProgressStats> {
-        return repository.getAllTasks().map { allTasks ->
-            val todayTask = allTasks.filter {
-              !it.classification && it.createdAt >= startOfDay
-            }
-
-            ProgressStats(
-                totalCount = todayTask.size,
-                completedCount = todayTask.count{ it.isCompleted }
-            )
-        }
-    }
+    fun getTaskStats(startOfDay: Long): Flow<ProgressStatsData> =
+        repository.getProgressStats(startOfDay)
 }

@@ -36,18 +36,18 @@ class HabitScreenViewModel @Inject constructor(
         checkAndResetHabits()
     }
 
-
-
     private val startOfDAyFlow = MutableStateFlow(HabitDateUtils.getStartOfDay())
 
     val uiState: StateFlow<HabitScreenState> = startOfDAyFlow.flatMapLatest { startDay ->
+        val endDay = startDay + 86399999L
+
         combine(
             userInteractor.getUserStats(),
             taskInteractor.getTaskStats(startDay),
             habitInteractor.getTodayHabitStats(),
             habitInteractor.getAllHabits(),
-            taskInteractor.getAllTasks()
-        ) { user, taskStats, habitStats, allHabit, allTask ->
+            taskInteractor.getTasksForDay(startDay, endDay)
+        ) { user, taskStats, habitStats, allHabit, todayTasks ->
 
             val dayProgress = DayProgress(
                 totalTasks = taskStats.totalCount,
@@ -70,7 +70,7 @@ class HabitScreenViewModel @Inject constructor(
                     .map { it.toUi() }
                     .sortedBy { it.isCompleted },
 
-                focusTask = allTask.firstOrNull() {
+                focusTask = todayTasks.firstOrNull() {
                     !it.classification && !it.isCompleted
                 }?.toUi()
             )

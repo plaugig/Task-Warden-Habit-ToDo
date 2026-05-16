@@ -1,9 +1,11 @@
 package com.example.taskwardenhabittodo.data.repository.impl
 
-import com.example.taskwardenhabittodo.data.TaskData
 import com.example.taskwardenhabittodo.data.database.source.LocalDataSource
-import com.example.taskwardenhabittodo.data.maper.toDomain
-import com.example.taskwardenhabittodo.data.maper.toEntity
+import com.example.taskwardenhabittodo.domain.item.data.DayProgressData
+import com.example.taskwardenhabittodo.domain.item.data.ProgressStatsData
+import com.example.taskwardenhabittodo.domain.item.data.TaskData
+import com.example.taskwardenhabittodo.domain.item.toDomain
+import com.example.taskwardenhabittodo.domain.item.toEntity
 import com.example.taskwardenhabittodo.domain.repository.TaskRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -15,10 +17,14 @@ import javax.inject.Inject
 class TaskRepositoryImpl @Inject constructor(
     private val local: LocalDataSource
 ) : TaskRepository {
-    override fun getAllTasks(): Flow<List<TaskData>> {
-        return local.getAllTasks().map { entities ->
-            entities.map { it.toDomain() }
-        }.flowOn(Dispatchers.IO)
+
+    override fun getTasksForDay(
+        startOfDay: Long,
+        endOfDay: Long
+    ): Flow<List<TaskData>> {
+        return local.getTasksForDay(startOfDay, endOfDay).map { list ->
+            list.map { it.toDomain() }
+        }
     }
 
     override suspend fun addTask(task: TaskData) {
@@ -28,7 +34,7 @@ class TaskRepositoryImpl @Inject constructor(
     }
 
     override suspend fun deleteTaskById(id: Int) {
-        withContext(Dispatchers.IO){
+        withContext(Dispatchers.IO) {
             local.deleteTaskById(id)
         }
     }
@@ -54,4 +60,16 @@ class TaskRepositoryImpl @Inject constructor(
             list.map { it.toDomain() }
         }.flowOn(Dispatchers.IO)
     }
+
+    override fun getProgressStats(startOfDay: Long): Flow<ProgressStatsData> {
+        return local.getProgressStats(startOfDay)
+    }
+
+    override fun getAllDaysProgress(): Flow<List<DayProgressData>> {
+        return local.getAllDaysProgress().map { list ->
+            list.map { it.toDomain() }
+        }
+    }
+
+
 }
