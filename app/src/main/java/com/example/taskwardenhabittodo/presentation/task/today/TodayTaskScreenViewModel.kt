@@ -1,4 +1,4 @@
-package com.example.taskwardenhabittodo.presentation.task
+package com.example.taskwardenhabittodo.presentation.task.today
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -7,13 +7,13 @@ import com.example.taskwardenhabittodo.domain.interactor.TaskInteractor
 import com.example.taskwardenhabittodo.domain.interactor.UserInteractor
 import com.example.taskwardenhabittodo.domain.item.DayPart
 import com.example.taskwardenhabittodo.presentation.habit.item.HabitDateUtils
-import com.example.taskwardenhabittodo.presentation.task.item.TaskDateUtils
-import com.example.taskwardenhabittodo.presentation.task.item.TaskProgress
-import com.example.taskwardenhabittodo.presentation.task.item.TaskScreenState
-import com.example.taskwardenhabittodo.presentation.task.item.TaskSection
-import com.example.taskwardenhabittodo.ui.UiTaskData
-import com.example.taskwardenhabittodo.ui.maper.toDomain
-import com.example.taskwardenhabittodo.ui.maper.toUi
+import com.example.taskwardenhabittodo.presentation.task.today.item.TodayTaskDateUtils
+import com.example.taskwardenhabittodo.presentation.task.today.item.TaskProgress
+import com.example.taskwardenhabittodo.presentation.task.today.item.TaskScreenState
+import com.example.taskwardenhabittodo.presentation.task.today.item.TaskSection
+import com.example.taskwardenhabittodo.presentation.item.UiTaskData
+import com.example.taskwardenhabittodo.presentation.item.toDomain
+import com.example.taskwardenhabittodo.presentation.item.toUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -25,15 +25,13 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-
 @HiltViewModel
-class TaskScreenViewModel @Inject constructor(
+class TodayTaskScreenViewModel @Inject constructor(
     private val taskInteractor: TaskInteractor,
     private val userInteractor: UserInteractor
 ) : ViewModel() {
 
     private val startOfDayFlow = MutableStateFlow(HabitDateUtils.getStartOfDay())
-
     private val _isBottomSheetVisible = MutableStateFlow(false)
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -44,15 +42,14 @@ class TaskScreenViewModel @Inject constructor(
             taskInteractor.getTasksForDay(startDay, endDay),
             taskInteractor.getTaskStats(startDay),
             userInteractor.getUserStats(),
-            _isBottomSheetVisible,
-
+            _isBottomSheetVisible
         ) { todayTasks, taskStats, userStats, isVisible ->
 
             val todayTasksUi = todayTasks.map { it.toUi() }
 
             TaskScreenState(
                 isLoading = false,
-                displayDate = TaskDateUtils.formatDisplayDate(startDay),
+                displayDate = TodayTaskDateUtils.formatDisplayDate(startDay),
                 fireStreak = userStats?.fireStreak ?: 0,
                 progress = TaskProgress(
                     completedCount = taskStats.completedCount,
@@ -61,8 +58,7 @@ class TaskScreenViewModel @Inject constructor(
                         taskStats.completedCount.toFloat() / taskStats.totalCount else 0f
                 ),
                 sections = prepareSections(todayTasksUi),
-                isBottomSheetVisible = isVisible,
-
+                isBottomSheetVisible = isVisible
             )
         }
     }.stateIn(
@@ -75,7 +71,7 @@ class TaskScreenViewModel @Inject constructor(
         return listOf(
             TaskSection(
                 title = R.string.task_section_morning,
-                iconRes = R.drawable.ev_sun,
+                iconRes =R.drawable.ev_sun,
                 tasks = tasks.filter { it.dayPart == DayPart.MORNING }
             ),
             TaskSection(
@@ -89,22 +85,11 @@ class TaskScreenViewModel @Inject constructor(
                 tasks = tasks.filter { it.dayPart == DayPart.EVENING }
             ),
             TaskSection(
-                title = R.string.task_section_other,
+                title =R.string.task_section_other,
                 iconRes = R.drawable.animal,
                 tasks = tasks.filter { it.dayPart == DayPart.ALL_DAY }
             )
         ).filter { it.tasks.isNotEmpty() }
-    }
-
-    private fun calculateProgress(tasks: List<UiTaskData>): TaskProgress {
-        val completed = tasks.count { it.isCompleted }
-        val total = tasks.size
-
-        return TaskProgress(
-            completedCount = completed,
-            totalCount = total,
-            percentage = if (total > 0) completed.toFloat() / total else 0f
-        )
     }
 
     fun toggleTaskCompletion(task: UiTaskData) {
@@ -115,15 +100,11 @@ class TaskScreenViewModel @Inject constructor(
 
     fun addTask(uiTask: UiTaskData) {
         viewModelScope.launch {
-
-            val rawTime = uiTask.time
-
-            val correctedTask = if (!rawTime.isNullOrBlank()) {
-                val hourInt = rawTime.split(":").firstOrNull()?.toIntOrNull() ?: 12
-
+            val correctedTask = if (!uiTask.time.isNullOrBlank()) {
+                val hourInt = uiTask.time.split(":").firstOrNull()?.toIntOrNull() ?: 12
                 uiTask.copy(
                     period = if (hourInt < 12) "AM" else "PM",
-                    dayPart = TaskDateUtils.determineDayPart(rawTime)
+                    dayPart = TodayTaskDateUtils.determineDayPart(uiTask.time)
                 )
             } else {
                 uiTask.copy(
@@ -137,7 +118,7 @@ class TaskScreenViewModel @Inject constructor(
         }
     }
 
-     fun deleteTaskById (id: Int){
+    fun deleteTaskById(id: Int) {
         viewModelScope.launch {
             taskInteractor.deleteTaskById(id)
         }

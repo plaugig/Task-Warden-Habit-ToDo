@@ -1,6 +1,6 @@
-package com.example.taskwardenhabittodo.presentation.task.item
+package com.example.taskwardenhabittodo.presentation.task.today.item
 
-import com.example.taskwardenhabittodo.ui.UiTaskData
+import com.example.taskwardenhabittodo.presentation.item.UiTaskData
 
 data class TaskScreenState(
     val isLoading: Boolean = true,

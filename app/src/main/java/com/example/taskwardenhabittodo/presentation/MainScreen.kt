@@ -1,5 +1,6 @@
 package com.example.taskwardenhabittodo.presentation
 
+import android.R.attr.type
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -11,14 +12,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.taskwardenhabittodo.presentation.archive.ArchiveDayScreen
-import com.example.taskwardenhabittodo.presentation.archive.ArchiveDayViewModel
+import com.example.taskwardenhabittodo.presentation.archive.ArchiveDaysViewModel
 import com.example.taskwardenhabittodo.presentation.habit.HabitScreen
-import com.example.taskwardenhabittodo.presentation.task.TasksScreen
+import com.example.taskwardenhabittodo.presentation.task.today.TasksScreen
+import com.example.taskwardenhabittodo.presentation.tasks.history.HistoryDayTaskScreen
+
 import com.example.taskwardenhabittodo.ui.components.TaskWardenBottomBar
 
 @Composable
@@ -63,7 +68,6 @@ fun MainScreen() {
             }
 
             composable("tasks") {
-                // Передаем лямбду клика по архиву в TasksScreen
                 TasksScreen(
                     onNavigateToArchive = {
                         navController.navigate("archive")
@@ -71,16 +75,29 @@ fun MainScreen() {
                 )
             }
 
-            // Регистрируем экран архива
             composable("archive") {
-                val archiveViewModel: ArchiveDayViewModel = hiltViewModel()
+                val archiveViewModel: ArchiveDaysViewModel = hiltViewModel()
                 ArchiveDayScreen(
                     viewModel = archiveViewModel,
                     onBackClick = {
                         navController.popBackStack()
                     },
                     onDayClick = { timestamp ->
+                        navController.navigate("history_day_tasks/$timestamp")
+                    }
+                )
+            }
 
+            composable(
+                route = "history_day_tasks/{timestamp}",
+                arguments = listOf(navArgument("timestamp") { type = NavType.LongType })
+            ) { backStackEntry ->
+                val timestamp = backStackEntry.arguments?.getLong("timestamp") ?: 0L
+
+                HistoryDayTaskScreen(
+                    timestamp = timestamp,
+                    onBackClick = {
+                        navController.popBackStack()
                     }
                 )
             }

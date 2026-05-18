@@ -1,4 +1,4 @@
-package com.example.taskwardenhabittodo.presentation.task
+package com.example.taskwardenhabittodo.presentation.task.today
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.Spring
@@ -42,7 +42,7 @@ import com.example.taskwardenhabittodo.R
 import com.example.taskwardenhabittodo.domain.item.ActionType
 import com.example.taskwardenhabittodo.domain.item.DayPart
 import com.example.taskwardenhabittodo.domain.item.Priority
-import com.example.taskwardenhabittodo.ui.UiTaskData
+import com.example.taskwardenhabittodo.presentation.item.UiTaskData
 import com.example.taskwardenhabittodo.ui.components.ActionIconButton
 import com.example.taskwardenhabittodo.ui.components.FocusTaskCard
 import com.example.taskwardenhabittodo.ui.components.HistoryArchiveCard
@@ -53,21 +53,18 @@ import com.example.taskwardenhabittodo.ui.components.task.TaskSectionHeader
 import com.example.taskwardenhabittodo.ui.theme.AmberGold
 import com.example.taskwardenhabittodo.ui.theme.SuccessGreen
 import com.example.taskwardenhabittodo.ui.theme.WarningRed
-import com.example.taskwardenhabittodo.ui.theme.extendedColors
 import com.example.taskwardenhabittodo.ui.theme.spacing
 import kotlinx.coroutines.launch
 
-
 @Composable
 fun TasksScreen(
-    viewModel: TaskScreenViewModel = hiltViewModel(),
+    viewModel: TodayTaskScreenViewModel = hiltViewModel(),
     onNavigateToArchive: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     val spacing = MaterialTheme.spacing
     val colorScheme = MaterialTheme.colorScheme
-    val extendedColors = MaterialTheme.extendedColors
 
     val maxOffset = 200f
     val snapThreshold = 60f
@@ -90,8 +87,7 @@ fun TasksScreen(
                     scope.launch { archiveAnim.snapTo(newVal) }
                     return Offset(0f, available.y)
                 }
-                if (
-                    available.y < 0 &&
+                if (available.y < 0 &&
                     offset > 0f &&
                     scrollState.firstVisibleItemIndex == 0 &&
                     scrollState.firstVisibleItemScrollOffset == 0
@@ -126,7 +122,6 @@ fun TasksScreen(
         modifier = Modifier
             .fillMaxSize()
             .nestedScroll(nestedScrollConnection),
-
         topBar = {
             Column(
                 modifier = Modifier
@@ -205,14 +200,13 @@ fun TasksScreen(
                     ) {
                         HistoryArchiveCard(
                             progress = progress,
-                            modifier = Modifier.clickable{ onNavigateToArchive() }
+                            modifier = Modifier.clickable { onNavigateToArchive() }
                         )
                     }
 
                     Spacer(modifier = Modifier.height(bottomSpacing))
                 }
 
-                // oтрисовка секций
                 uiState.sections.forEach { section ->
                     item {
                         TaskSectionHeader(
@@ -237,7 +231,6 @@ fun TasksScreen(
                                     period = task.period,
                                     title = task.title,
                                     duration = 15,
-                                    category = task.category.name,
                                     priorityColor = when (task.priority) {
                                         Priority.HIGH -> WarningRed
                                         Priority.MEDIUM -> AmberGold
@@ -263,20 +256,15 @@ fun TasksScreen(
             BottomSheetScreen(
                 type = ActionType.TASK,
                 onDismiss = { viewModel.hideBottomSheet() },
-                onCreateClick = { title, time, repeatCount, category, priority ->
+                onCreateTask = { input ->
                     val newTask = UiTaskData(
-                        title = title,
-                        priority = priority,
-                        category = category,
-                        time = time ?: "",
-                        classification = false,
-                        targetCount = repeatCount,
+                        title = input.title,
+                        priority = input.priority,
+                        time = input.time ?: "",
                         description = "",
-                        period = " ",
-                        dayPart = DayPart.MORNING,
-                        colorHex = 0,
-                        isPinned = false,
-                        iconResId = category.iconResId
+                        period = "",
+                        dayPart = DayPart.ALL_DAY,
+                        isPinned = false
                     )
                     viewModel.addTask(newTask)
                 }

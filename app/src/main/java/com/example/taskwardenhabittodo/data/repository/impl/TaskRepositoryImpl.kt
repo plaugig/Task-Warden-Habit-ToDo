@@ -64,12 +64,4 @@ class TaskRepositoryImpl @Inject constructor(
     override fun getProgressStats(startOfDay: Long): Flow<ProgressStatsData> {
         return local.getProgressStats(startOfDay)
     }
-
-    override fun getAllDaysProgress(): Flow<List<DayProgressData>> {
-        return local.getAllDaysProgress().map { list ->
-            list.map { it.toDomain() }
-        }
-    }
-
-
 }

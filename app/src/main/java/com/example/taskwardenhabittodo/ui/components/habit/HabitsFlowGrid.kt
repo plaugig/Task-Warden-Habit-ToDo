@@ -7,17 +7,17 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.example.taskwardenhabittodo.ui.UiTaskData
+import com.example.taskwardenhabittodo.presentation.item.UiHabitData
 import com.example.taskwardenhabittodo.ui.theme.spacing
 
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun HabitsFlowGrid(
-    habits: List<UiTaskData>,
+    habits: List<UiHabitData>,
     onIncrement: (Int, Int) -> Unit,
     onDelete: (Int) -> Unit
-){
+) {
     val spacing = MaterialTheme.spacing
 
     FlowRow(
@@ -29,8 +29,7 @@ fun HabitsFlowGrid(
         habits.forEach { habit ->
             HabitCard(
                 habit = habit,
-                modifier = Modifier
-                    .fillMaxWidth(0.47f),
+                modifier = Modifier.fillMaxWidth(0.47f),
                 onIncrement = {
                     onIncrement(habit.id, habit.currentCount)
                 },

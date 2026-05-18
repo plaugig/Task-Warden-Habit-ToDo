@@ -6,7 +6,7 @@ import javax.inject.Inject
 class ResetOldHabitsUseCase @Inject constructor(
     private val repository: HabitRepository
 ) {
-    suspend fun resetOldHabits(startOfDay: Long){
+    suspend fun resetOldHabits(startOfDay: Long) {
         repository.resetOldHabits(startOfDay)
     }
 }

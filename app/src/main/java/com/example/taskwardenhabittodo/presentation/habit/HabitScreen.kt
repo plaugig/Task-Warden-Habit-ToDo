@@ -29,9 +29,10 @@ import com.example.taskwardenhabittodo.domain.item.ActionType
 import com.example.taskwardenhabittodo.domain.item.CategoryType
 import com.example.taskwardenhabittodo.domain.item.DayPart
 import com.example.taskwardenhabittodo.domain.item.Priority
-import com.example.taskwardenhabittodo.ui.DayProgress
-import com.example.taskwardenhabittodo.ui.UiTaskData
-import com.example.taskwardenhabittodo.ui.UiUserData
+import com.example.taskwardenhabittodo.presentation.item.DayProgress
+import com.example.taskwardenhabittodo.presentation.item.UiHabitData
+import com.example.taskwardenhabittodo.presentation.item.UiTaskData
+import com.example.taskwardenhabittodo.presentation.item.UiUserData
 import com.example.taskwardenhabittodo.ui.components.ActionIconButton
 import com.example.taskwardenhabittodo.ui.components.bottom.sheet.BottomSheetScreen
 import com.example.taskwardenhabittodo.ui.components.DashboardStatsCard
@@ -52,7 +53,6 @@ fun HabitScreen(
     val colorScheme = MaterialTheme.colorScheme
 
     var showBottomSheet by remember { mutableStateOf(false) }
-
     var showDeleteDialog by remember { mutableStateOf(false) }
     var habitIdToDelete by remember { mutableStateOf<Int?>(null) }
 
@@ -100,16 +100,13 @@ fun HabitScreen(
                     Text(
                         text = stringResource(R.string.task_title_header),
                         color = MaterialTheme.colorScheme.onBackground,
-                        style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
+                        style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold)
                     )
-
                     ActionIconButton(
                         iconRes = R.drawable.add,
                         onClick = { showBottomSheet = true },
                         isSelected = true
                     )
-
-
                 }
             }
 
@@ -144,27 +141,20 @@ fun HabitScreen(
         if (showBottomSheet) {
             BottomSheetScreen(
                 type = ActionType.HABIT,
-                onDismiss = {
-                    showBottomSheet = false
-                },
-                onCreateClick = { title, time, count , category , priority->
-                    val newHabitUi = UiTaskData(
-                        title = title,
-                        time = time,
-                        targetCount = count,
-                        currentCount = 0,
+                onDismiss = { showBottomSheet = false },
+                onCreateHabit = { input ->
+                    val newHabit = UiHabitData(
+                        title = input.title,
                         description = "",
-                        priority = priority ,
-                        category = category,
-                        iconResId = category.iconResId,
-                        period = "Daily",
-                        dayPart = DayPart.MORNING,
+                        time = input.time,
+                        targetCount = input.repeatCount,
+                        currentCount = 0,
+                        category = input.category,
+                        iconResId = input.category.iconResId,
                         isCompleted = false,
-                        classification = true,
-                        colorHex = 0xFF2196F3,
-                        isPinned = false
+                        colorHex = 0xFF2196F3
                     )
-                    viewModel.addHabit(newHabitUi)
+                    viewModel.addHabit(newHabit)
                     showBottomSheet = false
                 }
             )
@@ -186,37 +176,29 @@ fun MainScreenPreview() {
         )
 
         val mockHabits = listOf(
-            UiTaskData(
+            UiHabitData(
                 id = 1,
                 title = "Drinking Water",
                 description = "Stay hydrated",
-                priority = Priority.MEDIUM,
                 category = CategoryType.HEALTH,
                 iconResId = R.drawable.meditate,
                 time = "09:00",
-                period = "Daily",
-                dayPart = DayPart.MORNING,
                 isCompleted = false,
                 targetCount = 8,
                 currentCount = 3,
-                colorHex = 0xFF2196F3,
-                isPinned = true
+                colorHex = 0xFF2196F3
             ),
-            UiTaskData(
+            UiHabitData(
                 id = 2,
                 title = "Workout",
                 description = "Morning gym",
-                priority = Priority.HIGH,
                 category = CategoryType.SPORT,
                 iconResId = R.drawable.workout,
                 time = "07:30",
-                period = "Daily",
-                dayPart = DayPart.MORNING,
                 isCompleted = true,
                 targetCount = 1,
                 currentCount = 1,
-                colorHex = 0xFF4CAF50,
-                isPinned = false
+                colorHex = 0xFF4CAF50
             )
         )
 
@@ -238,18 +220,11 @@ fun MainScreenPreview() {
                     .padding(horizontal = spacing.medium),
                 verticalArrangement = Arrangement.spacedBy(spacing.large)
             ) {
-                item {
-                    MainScreenDashboard()
-                }
+                item { MainScreenDashboard() }
 
                 item {
-                    DashboardStatsCard(
-                        user = mockUser,
-                        progress = mockProgress
-                    )
-
+                    DashboardStatsCard(user = mockUser, progress = mockProgress)
                     Spacer(modifier = Modifier.height(spacing.small))
-
                     FocusTaskCard(
                         title = stringResource(id = R.string.stats_todays_focus),
                         completedCount = mockProgress.completedTasks,

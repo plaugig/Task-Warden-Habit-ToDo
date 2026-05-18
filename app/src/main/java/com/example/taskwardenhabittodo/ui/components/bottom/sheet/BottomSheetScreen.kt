@@ -53,12 +53,26 @@ import com.example.taskwardenhabittodo.ui.theme.WarningRed
 import com.example.taskwardenhabittodo.ui.theme.extendedColors
 import com.example.taskwardenhabittodo.ui.theme.spacing
 
+data class NewHabitInput(
+    val title: String,
+    val time: String?,
+    val repeatCount: Int,
+    val category: CategoryType
+)
+
+data class NewTaskInput(
+    val title: String,
+    val time: String?,
+    val priority: Priority
+)
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BottomSheetScreen(
     type: ActionType,
     onDismiss: () -> Unit,
-    onCreateClick: (String, String?, Int, CategoryType, Priority) -> Unit
+    onCreateHabit: (NewHabitInput) -> Unit = {},
+    onCreateTask: (NewTaskInput) -> Unit = {}
 ) {
     val extendedColors = MaterialTheme.extendedColors
     val colorScheme = MaterialTheme.colorScheme
@@ -71,9 +85,9 @@ fun BottomSheetScreen(
         BottomSheetContent(
             type = type,
             onDismiss = onDismiss,
-            onCreateClick = onCreateClick,
-
-            )
+            onCreateHabit = onCreateHabit,
+            onCreateTask = onCreateTask
+        )
     }
 }
 
@@ -82,7 +96,8 @@ fun BottomSheetScreen(
 fun BottomSheetContent(
     type: ActionType,
     onDismiss: () -> Unit,
-    onCreateClick: (String, String?, Int, CategoryType, Priority) -> Unit
+    onCreateHabit: (NewHabitInput) -> Unit = {},
+    onCreateTask: (NewTaskInput) -> Unit = {}
 ) {
     val spacing = MaterialTheme.spacing
     val colorScheme = MaterialTheme.colorScheme
@@ -93,8 +108,7 @@ fun BottomSheetContent(
     var repeatCount by remember { mutableIntStateOf(1) }
     var selectedPriority by remember { mutableStateOf(Priority.MEDIUM) }
     var selectedCategory by remember { mutableStateOf(CategoryType.HEALTH) }
-    var showIconPicer by remember { mutableStateOf(false) }
-
+    var showIconPicker by remember { mutableStateOf(false) }
     var showTimePicker by remember { mutableStateOf(false) }
 
     val timePickerState = rememberTimePickerState(
@@ -172,7 +186,6 @@ fun BottomSheetContent(
 
         Spacer(modifier = Modifier.height(spacing.small))
 
-
         Row(modifier = Modifier.fillMaxWidth()) {
             TaskPropertyCard(
                 iconRes = R.drawable.nest_clock,
@@ -188,7 +201,7 @@ fun BottomSheetContent(
                     iconRes = selectedCategory.iconResId,
                     label = stringResource(R.string.prop_label_category),
                     value = selectedCategory.name,
-                    onClick = { showIconPicer = true },
+                    onClick = { showIconPicker = true },
                     modifier = Modifier.weight(1f)
                 )
             }
@@ -207,7 +220,6 @@ fun BottomSheetContent(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(spacing.small)
             ) {
-
                 Priority.entries.filter { it != Priority.NONE }.forEach { priority ->
                     PriorityButton(
                         label = priority.name.lowercase().replaceFirstChar { it.uppercase() },
@@ -216,7 +228,6 @@ fun BottomSheetContent(
                             Priority.MEDIUM -> AmberGold
                             Priority.LOW -> SuccessGreen
                             else -> colorScheme.outline
-
                         },
                         isSelected = selectedPriority == priority,
                         onClick = {
@@ -225,7 +236,6 @@ fun BottomSheetContent(
                         },
                         modifier = Modifier.weight(1f)
                     )
-
                 }
             }
         }
@@ -248,11 +258,7 @@ fun BottomSheetContent(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 IconButton(onClick = { if (repeatCount > 1) repeatCount-- }) {
-                    Icon(
-                        painterResource(R.drawable.remove),
-                        null,
-                        tint = colorScheme.primary
-                    )
+                    Icon(painterResource(R.drawable.remove), null, tint = colorScheme.primary)
                 }
                 Text(
                     text = "$repeatCount " + stringResource(R.string.common_times),
@@ -260,11 +266,7 @@ fun BottomSheetContent(
                     color = colorScheme.onSurface
                 )
                 IconButton(onClick = { repeatCount++ }) {
-                    Icon(
-                        painterResource(R.drawable.add),
-                        null,
-                        tint = colorScheme.primary
-                    )
+                    Icon(painterResource(R.drawable.add), null, tint = colorScheme.primary)
                 }
             }
         }
@@ -273,13 +275,24 @@ fun BottomSheetContent(
 
         Button(
             onClick = {
-                onCreateClick(
-                    title,
-                    selectedTime,
-                    repeatCount,
-                    selectedCategory,
-                    selectedPriority
-                )
+                if (type == ActionType.HABIT) {
+                    onCreateHabit(
+                        NewHabitInput(
+                            title = title,
+                            time = selectedTime,
+                            repeatCount = repeatCount,
+                            category = selectedCategory
+                        )
+                    )
+                } else {
+                    onCreateTask(
+                        NewTaskInput(
+                            title = title,
+                            time = selectedTime,
+                            priority = selectedPriority
+                        )
+                    )
+                }
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -290,8 +303,7 @@ fun BottomSheetContent(
                 contentColor = colorScheme.onPrimary
             ),
             enabled = title.isNotBlank()
-        )
-        {
+        ) {
             Icon(painterResource(R.drawable.check), null)
             Spacer(modifier = Modifier.width(spacing.small))
             Text(
@@ -302,19 +314,18 @@ fun BottomSheetContent(
                 style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
             )
         }
+
         Spacer(modifier = Modifier.height(spacing.medium))
 
-        if (showIconPicer) {
+        if (showIconPicker) {
             ModalBottomSheet(
-                onDismissRequest = {
-                    showIconPicer = false
-                },
+                onDismissRequest = { showIconPicker = false },
                 contentColor = extendedColors.containerColor
             ) {
                 IconPickerContent(
                     onCategorySelected = { category ->
                         selectedCategory = category
-                        showIconPicer = false
+                        showIconPicker = false
                     }
                 )
             }
@@ -340,10 +351,8 @@ fun BottomSheetContent(
                 )
             }
         }
-
     }
 }
-
 
 @Preview(showBackground = true, backgroundColor = 0xFF0A0A0A)
 @Composable
@@ -353,7 +362,7 @@ fun PreviewHabitBottomSheet() {
             BottomSheetContent(
                 type = ActionType.HABIT,
                 onDismiss = {},
-                onCreateClick = { _, _, _, _, _ -> }
+                onCreateHabit = {}
             )
         }
     }
@@ -367,31 +376,8 @@ fun PreviewTaskBottomSheet() {
             BottomSheetContent(
                 type = ActionType.TASK,
                 onDismiss = {},
-                onCreateClick = { _, _, _, _, _ -> }
+                onCreateTask = {}
             )
         }
     }
 }
-
-
-/*PriorityButton(
-label = "High",
-priorityColor = WarningRed,
-isSelected = selectedPriority == Priority.HIGH,
-onClick = { selectedPriority = Priority.HIGH },
-modifier = Modifier.weight(1f)
-)
-PriorityButton(
-label = "Medium",
-priorityColor = AmberGold,
-isSelected = selectedPriority == Priority.MEDIUM,
-onClick = { selectedPriority = Priority.MEDIUM },
-modifier = Modifier.weight(1f)
-)
-PriorityButton(
-label = "Low",
-priorityColor = SuccessGreen,
-isSelected = selectedPriority == Priority.LOW,
-onClick = { selectedPriority = Priority.LOW },
-modifier = Modifier.weight(1f)
-)*/

@@ -1,11 +1,15 @@
 package com.example.taskwardenhabittodo.domain.item
 
 import com.example.taskwardenhabittodo.data.database.entity.DayProgressEntity
+import com.example.taskwardenhabittodo.data.database.entity.HabitEntity
 import com.example.taskwardenhabittodo.data.database.entity.TaskEntity
 import com.example.taskwardenhabittodo.data.database.entity.UserEntity
 import com.example.taskwardenhabittodo.domain.item.data.DayProgressData
+import com.example.taskwardenhabittodo.domain.item.data.HabitData
 import com.example.taskwardenhabittodo.domain.item.data.TaskData
 import com.example.taskwardenhabittodo.domain.item.data.UserData
+
+// --- Task mappers ---
 
 fun TaskEntity.toDomain(): TaskData {
     return TaskData(
@@ -14,18 +18,11 @@ fun TaskEntity.toDomain(): TaskData {
         description = this.description,
         priority = Priority.valueOf(this.priority),
         time = this.time,
-        classification = this.classification,
-        targetCount = this.targetCount,
-        currentCount = this.currentCount,
-        category = CategoryType.valueOf(this.category),
-        colorHex = this.colorHex,
+        isCompleted = this.isCompleted,
         isPinned = this.isPinned,
         dayPart = DayPart.valueOf(this.dayPart),
-        period = period,
-        createdAt = createdAt,
-        iconResId = this.iconResId,
-        isCompleted = this.isCompleted,
-        lastUpdated = this.lastUpdated
+        period = this.period,
+        createdAt = this.createdAt
     )
 }
 
@@ -37,20 +34,50 @@ fun TaskData.toEntity(): TaskEntity {
         priority = this.priority.name,
         time = this.time,
         isCompleted = this.isCompleted,
-        classification = this.classification,
-        targetCount = this.targetCount,
-        currentCount = this.currentCount,
-        category = this.category.name,
-        colorHex = this.colorHex,
         isPinned = this.isPinned,
         dayPart = this.dayPart.name,
-        period = period,
-        createdAt = createdAt,
+        period = this.period,
+        createdAt = this.createdAt
+    )
+}
+
+// --- Habit mappers ---
+
+fun HabitEntity.toDomain(): HabitData {
+    return HabitData(
+        id = this.id,
+        title = this.title,
+        description = this.description,
+        category = CategoryType.valueOf(this.category),
+        time = this.time,
+        isCompleted = this.isCompleted,
+        targetCount = this.targetCount,
+        currentCount = this.currentCount,
+        colorHex = this.colorHex,
         iconResId = this.iconResId,
+        createdAt = this.createdAt,
         lastUpdated = this.lastUpdated
     )
 }
 
+fun HabitData.toEntity(): HabitEntity {
+    return HabitEntity(
+        id = this.id,
+        title = this.title,
+        description = this.description,
+        category = this.category.name,
+        time = this.time,
+        isCompleted = this.isCompleted,
+        targetCount = this.targetCount,
+        currentCount = this.currentCount,
+        colorHex = this.colorHex,
+        iconResId = this.iconResId,
+        createdAt = this.createdAt,
+        lastUpdated = this.lastUpdated
+    )
+}
+
+// --- User mappers ---
 
 fun UserEntity.toDomain(): UserData {
     return UserData(
@@ -58,7 +85,8 @@ fun UserEntity.toDomain(): UserData {
         petPoints = this.petPoints,
         dailyPoints = this.dailyPoints,
         fireStreak = this.fireStreak,
-        masteryStreak = this.masteryStreak
+        masteryStreak = this.masteryStreak,
+        lastStreakCheck = this.lastStreakCheck
     )
 }
 
@@ -68,14 +96,29 @@ fun UserData.toEntity(): UserEntity {
         petPoints = this.petPoints,
         dailyPoints = this.dailyPoints,
         fireStreak = this.fireStreak,
-        masteryStreak = this.masteryStreak
+        masteryStreak = this.masteryStreak,
+        lastStreakCheck = this.lastStreakCheck
     )
 }
 
-fun DayProgressEntity.toDomain(): DayProgressData{
+// --- DayProgress mappers ---
+
+fun DayProgressEntity.toDomain(): DayProgressData {
     return DayProgressData(
         dateTimestamp = this.dateTimestamp,
-        totalCount = this.totalCount,
-        completedCount = this.completedCount
+        totalTasks = this.totalTasks,
+        completedTasks = this.completedTasks,
+        totalHabits = this.totalHabits,
+        completedHabits = this.completedHabits
+    )
+}
+
+fun DayProgressData.toEntity(): DayProgressEntity {
+    return DayProgressEntity(
+        dateTimestamp = this.dateTimestamp,
+        totalTasks = this.totalTasks,
+        completedTasks = this.completedTasks,
+        totalHabits = this.totalHabits,
+        completedHabits = this.completedHabits
     )
 }

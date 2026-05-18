@@ -22,5 +22,5 @@ interface TaskRepository {
 
     fun getProgressStats(startOfDay: Long): Flow<ProgressStatsData>
 
-    fun getAllDaysProgress():Flow<List<DayProgressData>>
+
 }

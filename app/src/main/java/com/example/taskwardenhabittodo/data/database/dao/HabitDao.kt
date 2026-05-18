@@ -4,38 +4,38 @@ package com.example.taskwardenhabittodo.data.database.dao
     import androidx.room.Insert
     import androidx.room.OnConflictStrategy
     import androidx.room.Query
+    import com.example.taskwardenhabittodo.data.database.entity.HabitEntity
     import com.example.taskwardenhabittodo.data.database.entity.TaskEntity
     import kotlinx.coroutines.flow.Flow
 
-    @Dao
-    interface HabitDao {
+@Dao
+interface HabitDao {
 
-        @Query("""
-        UPDATE tasks 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertHabit(habit: HabitEntity)
+
+    @Query("SELECT * FROM habits")
+    fun getAllHabits(): Flow<List<HabitEntity>>
+
+    @Query("""
+        SELECT COUNT(*) FROM habits 
+        WHERE isCompleted = 0 
+        AND createdAt >= :startOfDay AND createdAt <= :endOfDay
+    """)
+    fun getUnfinishHabits(startOfDay: Long, endOfDay: Long): Flow<Int>
+
+    @Query("DELETE FROM habits WHERE id = :id")
+    suspend fun deleteHabitById(id: Int)
+
+    @Query("""
+        UPDATE habits 
         SET currentCount = :count, 
             isCompleted = CASE WHEN :count >= targetCount THEN 1 ELSE 0 END,
             lastUpdated = :timestamp
         WHERE id = :id
     """)
-        suspend fun updateHabitProgress(id: Int, count: Int, timestamp: Long)
+    suspend fun updateHabitProgress(id: Int, count: Int, timestamp: Long)
 
-        @Query("SELECT * FROM tasks WHERE classification = 1")
-        fun getAllHabits(): Flow<List<TaskEntity>>
-
-        @Query("""
-            SELECT COUNT(*) FROM tasks 
-            WHERE classification = 1 AND isCompleted = 0 
-            AND createdAt >= :startOfDay AND createdAt <= :endOfDay
-        """)
-        fun getUnfinishHabits(startOfDay: Long, endOfDay: Long): Flow<Int>
-
-        @Insert(onConflict = OnConflictStrategy.REPLACE)
-        suspend fun insertHabit(habit: TaskEntity)
-
-        @Query("DELETE FROM tasks WHERE id = :id AND classification = 1")
-        suspend fun deleteHabitById(id: Int)
-
-        @Query("UPDATE tasks SET currentCount = 0, isCompleted = 0 WHERE classification = 1 AND lastUpdated < :startOfDay")
-        suspend fun resetOldHabits(startOfDay: Long)
-
-    }
+    @Query("UPDATE habits SET currentCount = 0, isCompleted = 0 WHERE lastUpdated < :startOfDay")
+    suspend fun resetOldHabits(startOfDay: Long)
+}

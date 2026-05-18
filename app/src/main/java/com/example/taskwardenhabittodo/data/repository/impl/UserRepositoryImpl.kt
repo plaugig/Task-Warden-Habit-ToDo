@@ -5,6 +5,7 @@ import com.example.taskwardenhabittodo.domain.item.data.UserData
 import com.example.taskwardenhabittodo.domain.item.toDomain
 import com.example.taskwardenhabittodo.domain.item.toEntity
 import com.example.taskwardenhabittodo.data.database.source.LocalDataSource
+import com.example.taskwardenhabittodo.domain.item.data.DayProgressData
 import com.example.taskwardenhabittodo.domain.repository.UserRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -17,13 +18,7 @@ class UserRepositoryImpl @Inject constructor(
 ): UserRepository {
     override fun getUserStats(): Flow<UserData?> {
         return local.getStats().map { entity ->
-            entity?.toDomain() ?: UserData(
-                id = 0,
-                dailyPoints = 0,
-                masteryStreak = 0,
-                fireStreak = 0,
-                petPoints = 0
-            )
+            entity?.toDomain()
         }.flowOn(Dispatchers.IO)
     }
 
@@ -33,6 +28,24 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun resetDailyPoints() {
         local.resetDailyPoints()
+    }
+
+    override suspend fun updateStreaks(
+        fire: Int,
+        mastery: Int,
+        timestamp: Long
+    ) {
+        local.updateStreaks(fire, mastery, timestamp)
+    }
+
+    override fun getAllDaysProgress(): Flow<List<DayProgressData>> {
+        return local.getAllDaysProgress().map { list ->
+            list.map { it.toDomain() }
+        }
+    }
+
+    override suspend fun insertDailyProgress(progress: DayProgressData) {
+       return local.insertDailyProgress(progress.toEntity())
     }
 
 

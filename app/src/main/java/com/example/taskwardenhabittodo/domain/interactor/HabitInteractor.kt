@@ -1,5 +1,6 @@
 package com.example.taskwardenhabittodo.domain.interactor
 
+import com.example.taskwardenhabittodo.domain.item.data.HabitData
 import com.example.taskwardenhabittodo.domain.item.data.TaskData
 import com.example.taskwardenhabittodo.domain.item.data.ProgressStatsData
 import com.example.taskwardenhabittodo.domain.use.cases.habits.AddHabitUseCase
@@ -21,7 +22,7 @@ class HabitInteractor @Inject constructor(
     private val updateHabitProgressUseCase: UpdateHabitProgressUseCase,
     private val resetOldHabitsUseCase: ResetOldHabitsUseCase
 ){
-    suspend fun addHabit(habit: TaskData) {
+    suspend fun addHabit(habit: HabitData) {
         addHabitUseCase.addHabit(habit)
     }
 
@@ -29,7 +30,7 @@ class HabitInteractor @Inject constructor(
         deleteHabitByIdUseCase.deleteHabitById(id)
     }
 
-    fun getAllHabits(): Flow<List<TaskData>> {
+    fun getAllHabits(): Flow<List<HabitData>> {
         return getAllHabitsUseCase.getAllHabits()
     }
 

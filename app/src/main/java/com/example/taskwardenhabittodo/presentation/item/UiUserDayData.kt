@@ -1,4 +1,4 @@
-package com.example.taskwardenhabittodo.ui
+package com.example.taskwardenhabittodo.presentation.item
 
 data class UiUserData(
     val petPoints: Int,

@@ -1,4 +1,4 @@
-package com.example.taskwardenhabittodo.presentation.task.item
+package com.example.taskwardenhabittodo.presentation.task.today.item
 
 import com.example.taskwardenhabittodo.domain.item.DayPart
 import java.time.Instant
@@ -7,7 +7,7 @@ import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.Locale
 
-object TaskDateUtils {
+object TodayTaskDateUtils {
     fun determineDayPart(time: String): DayPart {
         val hour = time.split(":").firstOrNull()?.toIntOrNull() ?: 12
 

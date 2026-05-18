@@ -6,11 +6,8 @@ import javax.inject.Inject
 
 class GetUnfinishHabitsUseCase @Inject constructor(
     private val repository: HabitRepository
-){
-    fun getUnfinishHabits(
-        startOfDay: Long,
-        endOfDay: Long
-    ): Flow<Int> {
+) {
+    fun getUnfinishHabits(startOfDay: Long, endOfDay: Long): Flow<Int> {
         return repository.getUnfinishHabits(startOfDay, endOfDay)
     }
 }

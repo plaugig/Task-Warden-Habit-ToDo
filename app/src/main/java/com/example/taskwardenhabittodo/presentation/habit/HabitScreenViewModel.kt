@@ -8,11 +8,11 @@ import com.example.taskwardenhabittodo.domain.interactor.TaskInteractor
 import com.example.taskwardenhabittodo.domain.interactor.UserInteractor
 import com.example.taskwardenhabittodo.presentation.habit.item.HabitDateUtils
 import com.example.taskwardenhabittodo.presentation.habit.item.HabitScreenState
-import com.example.taskwardenhabittodo.ui.DayProgress
-import com.example.taskwardenhabittodo.ui.UiTaskData
-import com.example.taskwardenhabittodo.ui.UiUserData
-import com.example.taskwardenhabittodo.ui.maper.toDomain
-import com.example.taskwardenhabittodo.ui.maper.toUi
+import com.example.taskwardenhabittodo.presentation.item.DayProgress
+import com.example.taskwardenhabittodo.presentation.item.UiHabitData
+import com.example.taskwardenhabittodo.presentation.item.UiUserData
+import com.example.taskwardenhabittodo.presentation.item.toDomain
+import com.example.taskwardenhabittodo.presentation.item.toUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -36,9 +36,9 @@ class HabitScreenViewModel @Inject constructor(
         checkAndResetHabits()
     }
 
-    private val startOfDAyFlow = MutableStateFlow(HabitDateUtils.getStartOfDay())
+    private val startOfDayFlow = MutableStateFlow(HabitDateUtils.getStartOfDay())
 
-    val uiState: StateFlow<HabitScreenState> = startOfDAyFlow.flatMapLatest { startDay ->
+    val uiState: StateFlow<HabitScreenState> = startOfDayFlow.flatMapLatest { startDay ->
         val endDay = startDay + 86399999L
 
         combine(
@@ -47,7 +47,7 @@ class HabitScreenViewModel @Inject constructor(
             habitInteractor.getTodayHabitStats(),
             habitInteractor.getAllHabits(),
             taskInteractor.getTasksForDay(startDay, endDay)
-        ) { user, taskStats, habitStats, allHabit, todayTasks ->
+        ) { user, taskStats, habitStats, allHabits, todayTasks ->
 
             val dayProgress = DayProgress(
                 totalTasks = taskStats.totalCount,
@@ -65,38 +65,32 @@ class HabitScreenViewModel @Inject constructor(
                     masteryStreak = 0
                 ),
                 progress = dayProgress,
-                todayHabits = allHabit
-                    .filter { it.classification }
+                todayHabits = allHabits
                     .map { it.toUi() }
                     .sortedBy { it.isCompleted },
-
-                focusTask = todayTasks.firstOrNull() {
-                    !it.classification && !it.isCompleted
-                }?.toUi()
+                focusTask = todayTasks
+                    .firstOrNull { !it.isCompleted }
+                    ?.toUi()
             )
         }
-    }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = HabitScreenState()
-        )
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = HabitScreenState()
+    )
 
-    fun addHabit(uiHabit: UiTaskData) {
-        viewModelScope.launch (Dispatchers.IO) {
+    fun addHabit(uiHabit: UiHabitData) {
+        viewModelScope.launch(Dispatchers.IO) {
             habitInteractor.addHabit(uiHabit.toDomain())
         }
     }
 
     fun updateHabitProgress(habitId: Int, currentCount: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            val habit = uiState.value.todayHabits.find {
-                it.id == habitId
-            }
+            val habit = uiState.value.todayHabits.find { it.id == habitId }
             habit?.let {
                 if (currentCount >= it.targetCount) return@launch
             }
-
             val newCount = currentCount + 1
             habitInteractor.updateHabitProgress(habitId, newCount)
         }
@@ -108,10 +102,10 @@ class HabitScreenViewModel @Inject constructor(
         }
     }
 
-    private fun checkAndResetHabits(){
-        viewModelScope.launch(Dispatchers.IO){
+    private fun checkAndResetHabits() {
+        viewModelScope.launch(Dispatchers.IO) {
             val startOfDay = HabitDateUtils.getStartOfDay()
-            habitInteractor.resetOldHabits(startOfDay)
+            userInteractor.resetDailyStreaks(startOfDay)
         }
     }
 }

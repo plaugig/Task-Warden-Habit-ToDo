@@ -4,10 +4,23 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
+import androidx.compose.material3.Icon
+import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -25,16 +38,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.taskwardenhabittodo.R
 import com.example.taskwardenhabittodo.domain.item.CategoryType
-import com.example.taskwardenhabittodo.domain.item.DayPart
-import com.example.taskwardenhabittodo.domain.item.Priority
-import com.example.taskwardenhabittodo.ui.UiTaskData
+import com.example.taskwardenhabittodo.presentation.item.UiHabitData
 import com.example.taskwardenhabittodo.ui.theme.TaskWardenHabitToDoTheme
 import com.example.taskwardenhabittodo.ui.theme.spacing
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun HabitCard(
-    habit: UiTaskData,
+    habit: UiHabitData,
     onIncrement: () -> Unit,
     onLongClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -194,48 +205,38 @@ fun HabitsStatusPreview() {
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             HabitCard(
-                habit = UiTaskData(
+                habit = UiHabitData(
                     id = 1,
                     title = "Drink Water",
+                    description = "",
                     targetCount = 5,
                     currentCount = 2,
                     isCompleted = true,
                     colorHex = 0xFF2196F3,
                     iconResId = R.drawable.workout,
-                    priority = Priority.MEDIUM,
                     category = CategoryType.HEALTH,
-                    time = "10:00",
-                    period = "Daily",
-                    dayPart = DayPart.MORNING,
-                    classification = true,
-                    description = "",
-                    isPinned = false
+                    time = "10:00"
                 ),
-                onIncrement = { },
-                onLongClick = { },
+                onIncrement = {},
+                onLongClick = {},
                 modifier = Modifier.weight(1f)
             )
 
             HabitCard(
-                habit = UiTaskData(
+                habit = UiHabitData(
                     id = 2,
                     title = "Read a Book",
+                    description = "",
                     targetCount = 1,
-                    currentCount = 1,
+                    currentCount = 0,
                     isCompleted = false,
                     colorHex = 0xFFB39DDB,
                     iconResId = R.drawable.read,
-                    priority = Priority.LOW,
                     category = CategoryType.WORK,
-                    time = "21:00",
-                    period = "Daily",
-                    dayPart = DayPart.EVENING,
-                    classification = true,
-                    description = "",
-                    isPinned = false
+                    time = "21:00"
                 ),
-                onIncrement = { },
-                onLongClick = { },
+                onIncrement = {},
+                onLongClick = {},
                 modifier = Modifier.weight(1f)
             )
         }

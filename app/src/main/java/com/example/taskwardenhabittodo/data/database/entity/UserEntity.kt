@@ -14,5 +14,7 @@ data class UserEntity (
     @ColumnInfo(name = "fireStreak")
     val fireStreak: Int = 0,
     @ColumnInfo(name = "masteryStreak")
-    val masteryStreak: Int = 0
+    val masteryStreak: Int = 0,
+    @ColumnInfo(name = "lastStreakCheck")
+    val lastStreakCheck: Long = 0L
 )

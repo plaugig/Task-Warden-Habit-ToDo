@@ -37,7 +37,7 @@ import com.example.taskwardenhabittodo.ui.theme.spacing
 fun ArchiveDayScreen(
     onBackClick: () -> Unit,
     onDayClick: (Long) -> Unit,
-    viewModel: ArchiveDayViewModel,
+    viewModel: ArchiveDaysViewModel,
     modifier: Modifier = Modifier
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -114,7 +114,8 @@ private fun ArchiveList(
                 totalCount = day.totalCount,
                 progress = day.progress,
                 isFullMode = true,
-                modifier = Modifier.clickable { onDayClick(day.dateTimestamp) }
+                iconResId = R.drawable.history,
+                modifier = Modifier.clickable { onDayClick(day.dateTimestamp) },
             )
         }
     }

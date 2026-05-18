@@ -32,8 +32,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.taskwardenhabittodo.R
-import com.example.taskwardenhabittodo.ui.DayProgress
-import com.example.taskwardenhabittodo.ui.UiUserData
+import com.example.taskwardenhabittodo.presentation.item.DayProgress
+import com.example.taskwardenhabittodo.presentation.item.UiUserData
 import com.example.taskwardenhabittodo.ui.theme.TaskWardenHabitToDoTheme
 import com.example.taskwardenhabittodo.ui.theme.extendedColors
 import com.example.taskwardenhabittodo.ui.theme.spacing

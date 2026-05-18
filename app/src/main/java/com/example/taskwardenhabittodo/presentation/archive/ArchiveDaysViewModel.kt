@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
-class ArchiveDayViewModel @Inject constructor(
+class ArchiveDaysViewModel @Inject constructor(
     private val taskInteractor: TaskInteractor
 ) : ViewModel() {
     val uiState: StateFlow<ArchiveUiState> = taskInteractor.getAllDaysProgress()

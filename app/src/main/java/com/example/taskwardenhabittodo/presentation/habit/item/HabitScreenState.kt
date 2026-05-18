@@ -1,12 +1,12 @@
 package com.example.taskwardenhabittodo.presentation.habit.item
 
-import com.example.taskwardenhabittodo.ui.DayProgress
-import com.example.taskwardenhabittodo.ui.UiTaskData
-import com.example.taskwardenhabittodo.ui.UiUserData
+import com.example.taskwardenhabittodo.presentation.item.DayProgress
+import com.example.taskwardenhabittodo.presentation.item.UiHabitData
+import com.example.taskwardenhabittodo.presentation.item.UiTaskData
+import com.example.taskwardenhabittodo.presentation.item.UiUserData
 
-data class HabitScreenState (
+data class HabitScreenState(
     val isLoading: Boolean = true,
-
     val user: UiUserData = UiUserData(
         petPoints = 0,
         dailyPoints = 0,
@@ -19,8 +19,6 @@ data class HabitScreenState (
         totalHabits = 0,
         completedHabits = 0
     ),
-    val todayHabits: List<UiTaskData> = emptyList(),
-
+    val todayHabits: List<UiHabitData> = emptyList(),
     val focusTask: UiTaskData? = null
-
 )

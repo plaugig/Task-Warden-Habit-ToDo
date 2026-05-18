@@ -26,6 +26,7 @@ object DatabaseModule {
             AppDatabase::class.java,
             "task_warden_db"
         ).addMigrations(AppDatabase.MIGRATION_1_2)
+            .addMigrations(AppDatabase.MIGRATION_2_3)
             .build()
     }
 

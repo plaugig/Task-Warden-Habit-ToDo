@@ -9,14 +9,11 @@ import javax.inject.Inject
 class GetHabitStatsUseCase @Inject constructor(
     private val repository: HabitRepository
 ) {
-
     fun getHabitStats(): Flow<ProgressStatsData> {
-        return repository.getAllHabits().map { allHabit ->
-            val activeHabits = allHabit.filter { it.classification }
-
+        return repository.getAllHabits().map { habits ->
             ProgressStatsData(
-                totalCount = activeHabits.size,
-                completedCount = activeHabits.count{it.isCompleted}
+                totalCount = habits.size,
+                completedCount = habits.count { it.isCompleted }
             )
         }
     }

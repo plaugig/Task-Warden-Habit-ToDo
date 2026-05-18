@@ -33,6 +33,7 @@ fun FocusTaskCard(
     progress: Float,
     isFullMode: Boolean = true,
     streak: Int = 0,
+    iconResId: Int = R.drawable.focus,
     modifier: Modifier = Modifier
 ) {
     val spacing = MaterialTheme.spacing
@@ -66,7 +67,7 @@ fun FocusTaskCard(
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
-                            painter = painterResource(id = R.drawable.focus),
+                            painter = painterResource(id = iconResId),
                             contentDescription = null,
                             tint = colorScheme.primary,
                             modifier = Modifier.size(22.dp)

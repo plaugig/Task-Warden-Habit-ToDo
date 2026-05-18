@@ -27,13 +27,11 @@ fun TaskCard(
     period: String,
     title: String,
     duration: Int,
-    category: String,
     priorityColor: Color? = null,
     isCompleted: Boolean = false,
     onCheckedChange: (Boolean) -> Unit = {},
     modifier: Modifier = Modifier,
     onClick: () -> Unit
-
 ) {
     val spacing = MaterialTheme.spacing
     val colorScheme = MaterialTheme.colorScheme
@@ -48,7 +46,7 @@ fun TaskCard(
         modifier = modifier
             .fillMaxWidth()
             .height(80.dp)
-            .clickable{onClick()},
+            .clickable { onClick() },
         shape = RoundedCornerShape(32.dp),
         color = containerColor,
         border = if (isCompleted) null else BorderStroke(
@@ -73,8 +71,7 @@ fun TaskCard(
                         fontSize = 14.sp
                     ),
                     color = if (isCompleted) colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
-                    else
-                        colorScheme.onSurface
+                    else colorScheme.onSurface
                 )
                 Text(
                     text = period,
@@ -82,8 +79,7 @@ fun TaskCard(
                         fontWeight = FontWeight.Bold
                     ),
                     color = if (isCompleted) colorScheme.onSurfaceVariant.copy(alpha = 0.4f)
-                    else
-                        colorScheme.onSurfaceVariant
+                    else colorScheme.onSurfaceVariant
                 )
             }
 
@@ -107,13 +103,12 @@ fun TaskCard(
                             fontWeight = FontWeight.Bold
                         ),
                         color = if (isCompleted) colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
-                        else
-                            colorScheme.onSurface,
+                        else colorScheme.onSurface,
                         maxLines = 1
                     )
                     Spacer(modifier = Modifier.width(spacing.small))
 
-                    if (priorityColor != null){
+                    if (priorityColor != null) {
                         Box(
                             modifier = Modifier
                                 .size(8.dp)
@@ -121,11 +116,6 @@ fun TaskCard(
                         )
                     }
                 }
-                Text(
-                    text = "",
-                    style = MaterialTheme.typography.labelMedium,
-                    color = colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
-                )
             }
 
             IconButton(
@@ -170,25 +160,21 @@ fun TaskCardPreview() {
             modifier = Modifier.padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            // не вып
             TaskCard(
                 time = "09:00",
                 period = "AM",
                 title = "Team Standup",
                 duration = 15,
-                category = "Work",
                 priorityColor = Color.Red,
                 isCompleted = true,
                 onClick = {}
             )
 
-            //вып
             TaskCard(
                 time = "07:15",
                 period = "AM",
                 title = "Journaling",
                 duration = 10,
-                category = "Reflection",
                 priorityColor = Color.Green,
                 isCompleted = false,
                 onClick = {}
@@ -196,7 +182,6 @@ fun TaskCardPreview() {
         }
     }
 }
-
 
 
 

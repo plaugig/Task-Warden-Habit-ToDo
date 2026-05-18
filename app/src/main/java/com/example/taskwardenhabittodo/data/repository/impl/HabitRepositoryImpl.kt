@@ -2,6 +2,7 @@ package com.example.taskwardenhabittodo.data.repository.impl
 
 import com.example.taskwardenhabittodo.domain.item.data.TaskData
 import com.example.taskwardenhabittodo.data.database.source.LocalDataSource
+import com.example.taskwardenhabittodo.domain.item.data.HabitData
 import com.example.taskwardenhabittodo.domain.item.toDomain
 import com.example.taskwardenhabittodo.domain.item.toEntity
 import com.example.taskwardenhabittodo.domain.repository.HabitRepository
@@ -15,25 +16,31 @@ import javax.inject.Inject
 class HabitRepositoryImpl @Inject constructor(
     private val local: LocalDataSource
 ) : HabitRepository {
-    override fun getAllHabits(): Flow<List<TaskData>> {
+    override fun getAllHabits(): Flow<List<HabitData>> {
         return local.getAllHabits()
             .map { entities -> entities.map { it.toDomain() } }
             .flowOn(Dispatchers.IO)
     }
 
-    override suspend fun addHabit(habit: TaskData) = withContext(Dispatchers.IO) {
-        local.insertHabit(habit.toEntity())
+    override suspend fun addHabit(habit: HabitData) {
+        withContext(Dispatchers.IO) {
+            local.insertHabit(habit.toEntity())
+        }
     }
 
     override suspend fun deleteHabitById(id: Int) {
-        withContext(Dispatchers.IO){
+        withContext(Dispatchers.IO) {
             local.deleteHabitById(id)
         }
     }
 
     override suspend fun updateHabitProgress(id: Int, count: Int) {
-        withContext(Dispatchers.IO){
-            local.updateHabitProgress(id, count, System.currentTimeMillis())
+        withContext(Dispatchers.IO) {
+            local.updateHabitProgress(
+                id,
+                count,
+                System.currentTimeMillis()
+            )
         }
     }
 
@@ -45,8 +52,9 @@ class HabitRepositoryImpl @Inject constructor(
     }
 
     override suspend fun resetOldHabits(startOfDay: Long) {
-        local.resetOldHabits(startOfDay)
+        withContext(Dispatchers.IO) {
+            local.resetOldHabits(startOfDay)
+        }
     }
-
 
 }
