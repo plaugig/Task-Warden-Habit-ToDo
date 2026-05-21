@@ -27,11 +27,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.taskwardenhabittodo.R
 import com.example.taskwardenhabittodo.domain.item.ActionType
 import com.example.taskwardenhabittodo.domain.item.CategoryType
-import com.example.taskwardenhabittodo.domain.item.DayPart
-import com.example.taskwardenhabittodo.domain.item.Priority
 import com.example.taskwardenhabittodo.presentation.item.DayProgress
 import com.example.taskwardenhabittodo.presentation.item.UiHabitData
-import com.example.taskwardenhabittodo.presentation.item.UiTaskData
 import com.example.taskwardenhabittodo.presentation.item.UiUserData
 import com.example.taskwardenhabittodo.ui.components.ActionIconButton
 import com.example.taskwardenhabittodo.ui.components.bottom.sheet.BottomSheetScreen
@@ -171,8 +168,8 @@ fun MainScreenPreview() {
         val mockUser = UiUserData(
             petPoints = 150,
             dailyPoints = 45,
-            fireStreak = 7,
-            masteryStreak = 3
+            taskStreak = 7,
+            habitStreak = 3
         )
 
         val mockHabits = listOf(

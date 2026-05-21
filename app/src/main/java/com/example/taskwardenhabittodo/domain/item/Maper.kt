@@ -84,8 +84,8 @@ fun UserEntity.toDomain(): UserData {
         id = this.id,
         petPoints = this.petPoints,
         dailyPoints = this.dailyPoints,
-        fireStreak = this.fireStreak,
-        masteryStreak = this.masteryStreak,
+        taskStreak = this.taskStreak,
+        habitStreak = this.habitStreak,
         lastStreakCheck = this.lastStreakCheck
     )
 }
@@ -95,8 +95,8 @@ fun UserData.toEntity(): UserEntity {
         id = this.id,
         petPoints = this.petPoints,
         dailyPoints = this.dailyPoints,
-        fireStreak = this.fireStreak,
-        masteryStreak = this.masteryStreak,
+        taskStreak = this.taskStreak,
+        habitStreak = this.habitStreak,
         lastStreakCheck = this.lastStreakCheck
     )
 }

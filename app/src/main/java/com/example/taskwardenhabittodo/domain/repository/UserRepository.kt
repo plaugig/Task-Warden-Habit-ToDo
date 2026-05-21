@@ -1,6 +1,5 @@
 package com.example.taskwardenhabittodo.domain.repository
 
-import com.example.taskwardenhabittodo.data.database.entity.DayProgressEntity
 import com.example.taskwardenhabittodo.domain.item.data.DayProgressData
 import com.example.taskwardenhabittodo.domain.item.data.UserData
 import kotlinx.coroutines.flow.Flow
@@ -12,9 +11,7 @@ interface UserRepository {
 
     suspend fun resetDailyPoints()
 
-    suspend fun updateStreaks(fire: Int, mastery: Int, timestamp: Long)
-
-    fun getAllDaysProgress():Flow<List<DayProgressData>>
+    suspend fun updateStreaks(task: Int, habit: Int, timestamp: Long)
 
     suspend fun insertDailyProgress(progress: DayProgressData)
 }

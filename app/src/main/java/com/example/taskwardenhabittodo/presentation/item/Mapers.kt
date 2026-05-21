@@ -74,8 +74,8 @@ fun UserData.toUi(): UiUserData {
     return UiUserData(
         petPoints = this.petPoints,
         dailyPoints = this.dailyPoints,
-        fireStreak = this.fireStreak,
-        masteryStreak = this.masteryStreak
+        taskStreak = this.taskStreak,
+        habitStreak = this.habitStreak
     )
 }
 

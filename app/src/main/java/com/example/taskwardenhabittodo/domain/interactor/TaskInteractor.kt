@@ -3,6 +3,7 @@ package com.example.taskwardenhabittodo.domain.interactor
 import com.example.taskwardenhabittodo.domain.item.data.TaskData
 import com.example.taskwardenhabittodo.domain.item.data.ProgressStatsData
 import com.example.taskwardenhabittodo.domain.use.cases.tasks.AddTaskUseCase
+import com.example.taskwardenhabittodo.domain.use.cases.tasks.CalculateTaskStreakUseCase
 import com.example.taskwardenhabittodo.domain.use.cases.tasks.DeleteTaskByIdUseCase
 import com.example.taskwardenhabittodo.domain.use.cases.tasks.GetAllDaysProgressUseCase
 import com.example.taskwardenhabittodo.domain.use.cases.tasks.GetTasksForDayUseCase
@@ -22,7 +23,8 @@ class TaskInteractor @Inject constructor(
     private val updateCompletionUseCase: UpdateCompletionUseCase,
     private val getUnfinishedTasksUseCase: GetUnfinishedTasksUseCase,
     private val getTasksByDayPartUseCase: GetTasksByDayPartUseCase,
-    private val getAllDaysProgressUseCase: GetAllDaysProgressUseCase
+    private val getAllDaysProgressUseCase: GetAllDaysProgressUseCase,
+    private val calculateTaskStreakUseCase: CalculateTaskStreakUseCase
 ) {
 
     suspend fun addTask(task: TaskData) {
@@ -61,6 +63,10 @@ class TaskInteractor @Inject constructor(
 
     fun getAllDaysProgress(): Flow<List<DayProgressUiData>>{
         return getAllDaysProgressUseCase.getAllDaysProgress()
+    }
+
+    suspend fun calculateTaskStreak(){
+        calculateTaskStreak()
     }
 
 }

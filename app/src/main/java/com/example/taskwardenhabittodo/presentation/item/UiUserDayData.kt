@@ -3,8 +3,8 @@ package com.example.taskwardenhabittodo.presentation.item
 data class UiUserData(
     val petPoints: Int,
     val dailyPoints: Int,
-    val fireStreak: Int,
-    val masteryStreak: Int
+    val taskStreak: Int,
+    val habitStreak: Int
 )
 
 data class DayProgress(

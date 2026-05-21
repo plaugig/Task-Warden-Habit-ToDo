@@ -81,7 +81,7 @@ fun DashboardStatsCard(
                 StatRing(
                     label = stringResource(R.string.stats_mastery),
                     subLabel = stringResource(R.string.stats_days),
-                    value = "${user.masteryStreak}",
+                    value = "${user.habitStreak}",
                     target = "",
                     color = colorScheme.tertiary,
                     progress = 1f
@@ -91,7 +91,7 @@ fun DashboardStatsCard(
                 StatRing(
                     label = stringResource(R.string.stats_fire_streak),
                     subLabel = stringResource(R.string.stats_days),
-                    value = "${user.fireStreak}",
+                    value = "${user.taskStreak}",
                     target = "",
                     color = MaterialTheme.extendedColors.fireStreak,
                     progress = 1f,
@@ -249,8 +249,8 @@ fun DashboardPreview() {
                 user = UiUserData(
                     petPoints = 12500,
                     dailyPoints = 150,
-                    fireStreak = 12,
-                    masteryStreak = 5
+                    taskStreak = 12,
+                    habitStreak = 5
                 ),
                 progress = DayProgress(
                     totalTasks = 10,

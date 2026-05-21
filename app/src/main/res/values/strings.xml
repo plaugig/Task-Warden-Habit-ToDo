@@ -14,8 +14,8 @@
 
     <string name="dashboard_title">Dashboard</string>
     <string name="stats_tasks_done">Tasks Done</string>
-    <string name="stats_fire_streak">Fire Streak</string>
-    <string name="stats_mastery">Mastery</string>
+    <string name="stats_fire_streak">Tasks Streak</string>
+    <string name="stats_mastery">Habit Streak</string>
     <string name="stats_pet_points">Pet Points</string>
     <string name="stats_days">Days</string>
     <string name="stats_daily_progress">Daily Progress</string>

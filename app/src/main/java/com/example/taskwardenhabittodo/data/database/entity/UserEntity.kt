@@ -11,10 +11,12 @@ data class UserEntity (
     val petPoints: Int = 0,
     @ColumnInfo(name = "dailyPoints")
     val dailyPoints: Int = 0,
-    @ColumnInfo(name = "fireStreak")
-    val fireStreak: Int = 0,
-    @ColumnInfo(name = "masteryStreak")
-    val masteryStreak: Int = 0,
-    @ColumnInfo(name = "lastStreakCheck")
-    val lastStreakCheck: Long = 0L
+    @ColumnInfo(name = "taskStreak")
+    val taskStreak: Int = 0,
+    @ColumnInfo(name = "habitStreak")
+    val habitStreak: Int = 0,
+    @ColumnInfo(name = "lastTaskStreakCheck")
+    val lastTaskStreakCheck: Long = 0L,
+    @ColumnInfo(name = "lastHabitStreakCheck")
+    val lastHabitStreakCheck: Long = 0L
 )

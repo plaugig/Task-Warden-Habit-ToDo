@@ -61,8 +61,8 @@ class HabitScreenViewModel @Inject constructor(
                 user = user?.toUi() ?: UiUserData(
                     petPoints = 0,
                     dailyPoints = 0,
-                    fireStreak = 0,
-                    masteryStreak = 0
+                    taskStreak = 0,
+                    habitStreak = 0
                 ),
                 progress = dayProgress,
                 todayHabits = allHabits
@@ -108,5 +108,6 @@ class HabitScreenViewModel @Inject constructor(
             userInteractor.resetDailyStreaks(startOfDay)
         }
     }
+
 }
 

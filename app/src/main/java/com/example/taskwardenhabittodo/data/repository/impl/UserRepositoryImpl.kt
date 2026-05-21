@@ -31,17 +31,11 @@ class UserRepositoryImpl @Inject constructor(
     }
 
     override suspend fun updateStreaks(
-        fire: Int,
-        mastery: Int,
+        task: Int,
+        habit: Int,
         timestamp: Long
     ) {
-        local.updateStreaks(fire, mastery, timestamp)
-    }
-
-    override fun getAllDaysProgress(): Flow<List<DayProgressData>> {
-        return local.getAllDaysProgress().map { list ->
-            list.map { it.toDomain() }
-        }
+        local.updateStreaks(task, habit, timestamp)
     }
 
     override suspend fun insertDailyProgress(progress: DayProgressData) {

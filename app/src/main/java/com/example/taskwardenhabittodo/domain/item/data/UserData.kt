@@ -4,18 +4,10 @@ data class UserData(
     val id: Int,
     val petPoints: Int,
     val dailyPoints: Int,
-    val fireStreak: Int,
-    val masteryStreak: Int,
-    val lastStreakCheck: Long
+    val taskStreak: Int,
+    val habitStreak: Int,
+    val lastTaskStreakCheck: Long,
+    val lastHabitStreakCheck: Long
 ) {
-    companion object {
-        fun empty() = UserData(
-            0,
-            0,
-            0,
-            0,
-            0,
-            0L
-        )
-    }
+
 }

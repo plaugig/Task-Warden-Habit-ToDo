@@ -15,6 +15,7 @@ import com.example.taskwardenhabittodo.presentation.item.UiTaskData
 import com.example.taskwardenhabittodo.presentation.item.toDomain
 import com.example.taskwardenhabittodo.presentation.item.toUi
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -30,6 +31,10 @@ class TodayTaskScreenViewModel @Inject constructor(
     private val taskInteractor: TaskInteractor,
     private val userInteractor: UserInteractor
 ) : ViewModel() {
+
+    init {
+        calculateStreak()
+    }
 
     private val startOfDayFlow = MutableStateFlow(HabitDateUtils.getStartOfDay())
     private val _isBottomSheetVisible = MutableStateFlow(false)
@@ -50,7 +55,7 @@ class TodayTaskScreenViewModel @Inject constructor(
             TaskScreenState(
                 isLoading = false,
                 displayDate = TodayTaskDateUtils.formatDisplayDate(startDay),
-                fireStreak = userStats?.fireStreak ?: 0,
+                taskStreak = userStats?.taskStreak ?: 0,
                 progress = TaskProgress(
                     completedCount = taskStats.completedCount,
                     totalCount = taskStats.totalCount,
@@ -90,6 +95,12 @@ class TodayTaskScreenViewModel @Inject constructor(
                 tasks = tasks.filter { it.dayPart == DayPart.ALL_DAY }
             )
         ).filter { it.tasks.isNotEmpty() }
+    }
+
+    private fun calculateStreak(){
+        viewModelScope.launch(Dispatchers.IO) {
+            taskInteractor.calculateTaskStreak()
+        }
     }
 
     fun toggleTaskCompletion(task: UiTaskData) {

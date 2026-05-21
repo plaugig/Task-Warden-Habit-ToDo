@@ -64,4 +64,13 @@ class TaskRepositoryImpl @Inject constructor(
     override fun getProgressStats(startOfDay: Long): Flow<ProgressStatsData> {
         return local.getProgressStats(startOfDay)
     }
+
+    override suspend fun getTasksProgressByDay(
+        startOfDay: Long,
+        endOfDay: Long
+    ): ProgressStatsData {
+        return withContext(Dispatchers.IO){
+            local.getTasksProgressByDay(startOfDay, endOfDay)
+        }
+    }
 }

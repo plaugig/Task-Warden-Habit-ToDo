@@ -10,8 +10,8 @@ data class HabitScreenState(
     val user: UiUserData = UiUserData(
         petPoints = 0,
         dailyPoints = 0,
-        fireStreak = 0,
-        masteryStreak = 0
+        taskStreak = 0,
+        habitStreak = 0
     ),
     val progress: DayProgress = DayProgress(
         totalTasks = 0,

@@ -177,7 +177,7 @@ fun TasksScreen(
                         totalCount = uiState.progress.totalCount,
                         progress = uiState.progress.percentage,
                         isFullMode = false,
-                        streak = uiState.fireStreak
+                        streak = uiState.taskStreak
                     )
                     Spacer(modifier = Modifier.height(spacing.medium))
                 }

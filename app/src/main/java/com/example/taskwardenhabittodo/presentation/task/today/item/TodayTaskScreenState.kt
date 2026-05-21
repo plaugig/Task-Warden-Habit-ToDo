@@ -6,7 +6,7 @@ data class TaskScreenState(
     val isLoading: Boolean = true,
     val displayDate: String ="",
     val progress : TaskProgress = TaskProgress(),
-    val fireStreak: Int = 0,
+    val taskStreak: Int = 0,
     val sections : List<TaskSection> = emptyList(),
     val isBottomSheetVisible: Boolean = false,
 )

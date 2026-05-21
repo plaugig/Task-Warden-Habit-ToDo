@@ -6,6 +6,7 @@ package com.example.taskwardenhabittodo.data.database.dao
     import androidx.room.Query
     import com.example.taskwardenhabittodo.data.database.entity.HabitEntity
     import com.example.taskwardenhabittodo.data.database.entity.TaskEntity
+    import com.example.taskwardenhabittodo.domain.item.data.ProgressStatsData
     import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -38,4 +39,14 @@ interface HabitDao {
 
     @Query("UPDATE habits SET currentCount = 0, isCompleted = 0 WHERE lastUpdated < :startOfDay")
     suspend fun resetOldHabits(startOfDay: Long)
+
+    @Query("""
+        SELECT 
+            COUNT(*) as totalCount,
+            COUNT(CASE WHEN lastUpdated >= :startOfDay 
+                       AND lastUpdated <= :endOfDay 
+                       AND isCompleted = 1 THEN 1 END) as completedCount
+        FROM habits
+    """)
+    suspend fun getHabitsProgressByDay(startOfDay: Long, endOfDay: Long): ProgressStatsData
 }

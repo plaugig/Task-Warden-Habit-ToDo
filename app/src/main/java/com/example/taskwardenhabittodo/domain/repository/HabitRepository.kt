@@ -1,6 +1,7 @@
 package com.example.taskwardenhabittodo.domain.repository
 
 import com.example.taskwardenhabittodo.domain.item.data.HabitData
+import com.example.taskwardenhabittodo.domain.item.data.ProgressStatsData
 import com.example.taskwardenhabittodo.domain.item.data.TaskData
 import kotlinx.coroutines.flow.Flow
 
@@ -17,4 +18,6 @@ interface HabitRepository {
     fun getUnfinishHabits(startOfDay: Long, endOfDay: Long): Flow<Int>
 
     suspend fun resetOldHabits(startOfDay: Long)
+
+    suspend fun getHabitsProgressByDay(startOfDay: Long, endOfDay: Long): ProgressStatsData
 }

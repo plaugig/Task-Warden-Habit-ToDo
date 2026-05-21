@@ -3,6 +3,7 @@ package com.example.taskwardenhabittodo.data.repository.impl
 import com.example.taskwardenhabittodo.domain.item.data.TaskData
 import com.example.taskwardenhabittodo.data.database.source.LocalDataSource
 import com.example.taskwardenhabittodo.domain.item.data.HabitData
+import com.example.taskwardenhabittodo.domain.item.data.ProgressStatsData
 import com.example.taskwardenhabittodo.domain.item.toDomain
 import com.example.taskwardenhabittodo.domain.item.toEntity
 import com.example.taskwardenhabittodo.domain.repository.HabitRepository
@@ -54,6 +55,15 @@ class HabitRepositoryImpl @Inject constructor(
     override suspend fun resetOldHabits(startOfDay: Long) {
         withContext(Dispatchers.IO) {
             local.resetOldHabits(startOfDay)
+        }
+    }
+
+    override suspend fun getHabitsProgressByDay(
+        startOfDay: Long,
+        endOfDay: Long
+    ): ProgressStatsData {
+        return withContext(Dispatchers.IO) {
+            local.getHabitsProgressByDay(startOfDay, endOfDay)
         }
     }
 
