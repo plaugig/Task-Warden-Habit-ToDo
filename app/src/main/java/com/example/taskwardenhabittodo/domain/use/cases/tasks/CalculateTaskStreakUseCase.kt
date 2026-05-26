@@ -17,26 +17,25 @@ class CalculateTaskStreakUseCase @Inject constructor(
 
         val startOfToday = HabitDateUtils.getStartOfDay()
 
-        if (userStats.lastStreakCheck >= startOfToday) return
+        if (userStats.lastTaskStreakCheck  >= startOfToday) return
 
         val startOfYesterday = startOfToday - 86_400_000L
         val endOfYesterday = startOfToday - 1L
 
         val stats = taskRepository.getTasksProgressByDay(startOfYesterday, endOfYesterday)
 
-        val newStreak = if (stats.totalCount == 0) {
+        val newTaskStreak = if (stats.totalCount == 0) {
             0
         } else {
 
             val completionRatio = stats.completedCount.toFloat() /
                     stats.totalCount.toFloat()
 
-            if (completionRatio >= 0 / 8f) userStats.taskStreak + 1 else 0
+            if (completionRatio >= 0.8f) userStats.taskStreak + 1 else 0
         }
 
-        userRepository.updateStreaks(
-            task = newStreak,
-            habit = userStats.habitStreak,
+        userRepository.updateTaskStreak(
+            task = newTaskStreak ,
             timestamp = startOfToday
         )
     }

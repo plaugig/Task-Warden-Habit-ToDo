@@ -16,7 +16,7 @@ class CalculateHabitStreakUseCase @Inject constructor(
 
         val startOfToday  = HabitDateUtils.getStartOfDay()
 
-        if (userStats.lastStreakCheck >= startOfToday ) return
+        if (userStats.lastHabitStreakCheck >= startOfToday ) return
 
         val startOfYesterday = startOfToday  - 86_400_000L
         val endOfYesterday = startOfToday - 1L
@@ -31,8 +31,7 @@ class CalculateHabitStreakUseCase @Inject constructor(
             0
         }
 
-        userRepository.updateStreaks(
-            task = userStats.taskStreak,
+        userRepository.updateHabitStreak(
             habit = newHabitStreak,
             timestamp = startOfToday
         )

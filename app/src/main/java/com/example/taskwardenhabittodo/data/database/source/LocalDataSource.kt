@@ -39,7 +39,7 @@ class LocalDataSource @Inject constructor(
     }
 
     suspend fun getHabitsProgressByDay(startOfDay: Long, endOfDay: Long): ProgressStatsData {
-       return appDatabase.habitDao().getHabitsProgressByDay(startOfDay, endOfDay)
+        return appDatabase.habitDao().getHabitsProgressByDay(startOfDay, endOfDay)
     }
 
     // таски
@@ -91,11 +91,19 @@ class LocalDataSource @Inject constructor(
         appDatabase.userDao().resetDailyPoints()
     }
 
-    suspend fun updateStreaks(task: Int, habit: Int, timestamp: Long) {
-        appDatabase.userDao().updateStreaks(task, habit, timestamp)
+    suspend fun updateHabitStreak(habit: Int, timestamp: Long) {
+        appDatabase.userDao().updateHabitStreak(habit, timestamp)
+    }
+
+    suspend fun updateTaskStreak(task: Int, timestamp: Long) {
+        appDatabase.userDao().updateTaskStreak(task, timestamp)
     }
 
     suspend fun insertDailyProgress(progress: DayProgressEntity) {
         appDatabase.userDao().insertDailyProgress(progress)
+    }
+
+    fun getAllDaysProgress(): Flow<List<DayProgressEntity>>{
+       return appDatabase.userDao().getAllDaysProgress()
     }
 }

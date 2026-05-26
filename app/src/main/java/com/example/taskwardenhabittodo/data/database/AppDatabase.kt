@@ -12,7 +12,7 @@ import com.example.taskwardenhabittodo.data.database.entity.UserEntity
 
 @Database(
     entities = [TaskEntity::class, HabitEntity::class, UserEntity::class, DayProgressEntity::class],
-    version = 4
+    version = 1
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun taskDao(): TaskDao

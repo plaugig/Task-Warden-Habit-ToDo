@@ -230,7 +230,6 @@ fun TasksScreen(
                                     time = task.time,
                                     period = task.period,
                                     title = task.title,
-                                    duration = 15,
                                     priorityColor = when (task.priority) {
                                         Priority.HIGH -> WarningRed
                                         Priority.MEDIUM -> AmberGold
@@ -238,6 +237,7 @@ fun TasksScreen(
                                         Priority.NONE -> null
                                     },
                                     isCompleted = task.isCompleted,
+                                    colorHex = task.colorHex,
                                     onClick = { viewModel.toggleTaskCompletion(task) }
                                 )
                             }
@@ -264,7 +264,8 @@ fun TasksScreen(
                         description = "",
                         period = "",
                         dayPart = DayPart.ALL_DAY,
-                        isPinned = false
+                        isPinned = false,
+                        colorHex = input.colorHex
                     )
                     viewModel.addTask(newTask)
                 }

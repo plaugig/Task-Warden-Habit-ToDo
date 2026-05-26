@@ -1,7 +1,10 @@
 package com.example.taskwardenhabittodo.ui.components.bottom.sheet
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -9,7 +12,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.Button
@@ -44,9 +49,12 @@ import com.example.taskwardenhabittodo.R
 import com.example.taskwardenhabittodo.domain.item.ActionType
 import com.example.taskwardenhabittodo.domain.item.CategoryType
 import com.example.taskwardenhabittodo.domain.item.Priority
+import com.example.taskwardenhabittodo.ui.components.ColorPickerRow
 import com.example.taskwardenhabittodo.ui.components.PriorityButton
 import com.example.taskwardenhabittodo.ui.components.TaskPropertyCard
 import com.example.taskwardenhabittodo.ui.theme.AmberGold
+import com.example.taskwardenhabittodo.ui.theme.HabitColorPalette
+import com.example.taskwardenhabittodo.ui.theme.HabitColorPurple
 import com.example.taskwardenhabittodo.ui.theme.SuccessGreen
 import com.example.taskwardenhabittodo.ui.theme.TaskWardenHabitToDoTheme
 import com.example.taskwardenhabittodo.ui.theme.WarningRed
@@ -57,13 +65,15 @@ data class NewHabitInput(
     val title: String,
     val time: String?,
     val repeatCount: Int,
-    val category: CategoryType
+    val category: CategoryType,
+    val colorHex: Long
 )
 
 data class NewTaskInput(
     val title: String,
     val time: String?,
-    val priority: Priority
+    val priority: Priority,
+    val colorHex: Long
 )
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -77,8 +87,13 @@ fun BottomSheetScreen(
     val extendedColors = MaterialTheme.extendedColors
     val colorScheme = MaterialTheme.colorScheme
 
+    val sheetState = androidx.compose.material3.rememberModalBottomSheetState(
+        skipPartiallyExpanded = true
+    )
+
     ModalBottomSheet(
         onDismissRequest = onDismiss,
+        sheetState = sheetState,
         containerColor = extendedColors.containerColor,
         dragHandle = { BottomSheetDefaults.DragHandle(color = colorScheme.outline) }
     ) {
@@ -108,6 +123,7 @@ fun BottomSheetContent(
     var repeatCount by remember { mutableIntStateOf(1) }
     var selectedPriority by remember { mutableStateOf(Priority.MEDIUM) }
     var selectedCategory by remember { mutableStateOf(CategoryType.HEALTH) }
+    var selectedColor by remember { mutableStateOf(HabitColorPurple) }
     var showIconPicker by remember { mutableStateOf(false) }
     var showTimePicker by remember { mutableStateOf(false) }
 
@@ -238,6 +254,13 @@ fun BottomSheetContent(
                     )
                 }
             }
+
+            Spacer(modifier = Modifier.height(spacing.medium))
+
+            ColorPickerRow(
+                selectedColor = selectedColor,
+                onColorSelected = { selectedColor = it }
+            )
         }
 
         if (type == ActionType.HABIT) {
@@ -269,6 +292,24 @@ fun BottomSheetContent(
                     Icon(painterResource(R.drawable.add), null, tint = colorScheme.primary)
                 }
             }
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(1.dp)
+                    .background(colorScheme.outline.copy(alpha = 0.3f))
+            )
+
+            Spacer(modifier = Modifier.height(spacing.medium))
+
+            Spacer(modifier = Modifier.height(spacing.medium))
+
+            ColorPickerRow(
+                selectedColor = selectedColor,
+                onColorSelected = { selectedColor = it }
+            )
+
+            Spacer(modifier = Modifier.height(spacing.medium))
         }
 
         Spacer(modifier = Modifier.height(spacing.large))
@@ -281,7 +322,8 @@ fun BottomSheetContent(
                             title = title,
                             time = selectedTime,
                             repeatCount = repeatCount,
-                            category = selectedCategory
+                            category = selectedCategory,
+                            colorHex = selectedColor.value.toLong()
                         )
                     )
                 } else {
@@ -289,7 +331,8 @@ fun BottomSheetContent(
                         NewTaskInput(
                             title = title,
                             time = selectedTime,
-                            priority = selectedPriority
+                            priority = selectedPriority,
+                            colorHex = selectedColor.value.toLong()
                         )
                     )
                 }

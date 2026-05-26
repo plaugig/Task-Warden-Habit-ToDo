@@ -4,6 +4,7 @@ import com.example.taskwardenhabittodo.domain.item.data.HabitData
 import com.example.taskwardenhabittodo.domain.item.data.TaskData
 import com.example.taskwardenhabittodo.domain.item.data.ProgressStatsData
 import com.example.taskwardenhabittodo.domain.use.cases.habits.AddHabitUseCase
+import com.example.taskwardenhabittodo.domain.use.cases.habits.CalculateHabitStreakUseCase
 import com.example.taskwardenhabittodo.domain.use.cases.habits.DeleteHabitByIdUseCase
 import com.example.taskwardenhabittodo.domain.use.cases.habits.GetAllHabitsUseCase
 import com.example.taskwardenhabittodo.domain.use.cases.habits.GetHabitStatsUseCase
@@ -20,7 +21,8 @@ class HabitInteractor @Inject constructor(
     private val getHabitStatsUseCase: GetHabitStatsUseCase,
     private val getUnfinishHabitsUseCase: GetUnfinishHabitsUseCase,
     private val updateHabitProgressUseCase: UpdateHabitProgressUseCase,
-    private val resetOldHabitsUseCase: ResetOldHabitsUseCase
+    private val resetOldHabitsUseCase: ResetOldHabitsUseCase,
+    private val calculateHabitStreakUseCase: CalculateHabitStreakUseCase
 ){
     suspend fun addHabit(habit: HabitData) {
         addHabitUseCase.addHabit(habit)
@@ -51,5 +53,9 @@ class HabitInteractor @Inject constructor(
 
     suspend fun resetOldHabits(startOfDay: Long){
         resetOldHabitsUseCase.resetOldHabits(startOfDay)
+    }
+
+    suspend fun calculateHabitStreak(){
+        calculateHabitStreakUseCase()
     }
 }

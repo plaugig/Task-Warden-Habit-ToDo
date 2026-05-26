@@ -17,7 +17,8 @@ fun TaskData.toUi(): UiTaskData {
         period = this.period,
         dayPart = this.dayPart,
         isCompleted = this.isCompleted,
-        isPinned = this.isPinned
+        isPinned = this.isPinned,
+        colorHex = this.colorHex
     )
 }
 
@@ -32,7 +33,8 @@ fun UiTaskData.toDomain(): TaskData {
         dayPart = this.dayPart,
         isCompleted = this.isCompleted,
         isPinned = this.isPinned,
-        createdAt = System.currentTimeMillis()
+        createdAt = System.currentTimeMillis(),
+        colorHex = this.colorHex
     )
 }
 

@@ -206,26 +206,45 @@ private fun StatRing(
                 )
             }
 
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
                 if (isFire) {
                     Icon(
                         painter = painterResource(id = R.drawable.local_fire),
                         contentDescription = null,
                         tint = color,
-                        modifier = Modifier.size(16.dp)
+                        modifier = Modifier
+                            .size(24.dp)
+                            .padding(bottom = 2.dp)
                     )
-                }
-                Text(
-                    text = target,
-                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold),
-                    color = colorScheme.onSurface
-                )
-                if (value.isNotEmpty()) {
                     Text(
                         text = value,
-                        style = MaterialTheme.typography.titleSmall,
-                        color = colorScheme.onSurfaceVariant
+                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold),
+                        color = colorScheme.onSurface
                     )
+                }
+                else if (target.isEmpty()) {
+                    Text(
+                        text = value,
+                        style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold),
+                        color = colorScheme.onSurface
+                    )
+                }
+                else {
+                    Text(
+                        text = target,
+                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold),
+                        color = colorScheme.onSurface
+                    )
+                    if (value.isNotEmpty()) {
+                        Text(
+                            text = value,
+                            style = MaterialTheme.typography.titleSmall,
+                            color = colorScheme.onSurfaceVariant
+                        )
+                    }
                 }
 
             }

@@ -131,7 +131,6 @@ fun HistoryDayTaskScreen(
                             time = task.time,
                             period = task.period,
                             title = task.title,
-                            duration = 15,
                             priorityColor = when (task.priority) {
                                 Priority.HIGH -> WarningRed
                                 Priority.MEDIUM -> AmberGold

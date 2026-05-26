@@ -20,9 +20,25 @@ interface UserDao {
     @Query("UPDATE user SET dailyPoints = 0 WHERE id = 0")
     suspend fun resetDailyPoints()
 
-    @Query("UPDATE user SET taskStreak = :task, habitStreak = :habit, lastStreakCheck = :timestamp WHERE id = 0")
-    suspend fun updateStreaks(task: Int, habit: Int, timestamp: Long)
+    @Query("""
+        UPDATE user 
+        SET taskStreak = :task, 
+            lastTaskStreakCheck = :timestamp 
+        WHERE id = 0
+    """)
+    suspend fun updateTaskStreak(task: Int, timestamp: Long)
+
+    @Query("""
+        UPDATE user 
+        SET habitStreak = :habit, 
+            lastHabitStreakCheck = :timestamp 
+        WHERE id = 0
+    """)
+    suspend fun updateHabitStreak(habit: Int, timestamp: Long)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertDailyProgress(progress: DayProgressEntity)
+
+    @Query("SELECT * FROM day_progress ORDER BY dateTimestamp DESC")
+    fun getAllDaysProgress(): Flow<List<DayProgressEntity>>
 }

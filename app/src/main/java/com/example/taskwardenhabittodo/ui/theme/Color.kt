@@ -27,3 +27,19 @@ val TextOnAccent = Color(0xFFFFFFFF)
         // боттом щит
 
 val ContainerColor = Color(0xFF1A1A1A)
+
+val HabitColorPurple = Color(0xFF6C5DD3)
+val HabitColorTeal   = Color(0xFF34EAB9)
+val HabitColorAmber  = Color(0xFFFFB74D)
+val HabitColorRed    = Color(0xFFFF5A5A)
+val HabitColorGreen  = Color(0xFF45B39D)
+val HabitColorPink   = Color(0xFFBB86FC)
+
+val HabitColorPalette = listOf(
+    HabitColorPurple,
+    HabitColorTeal,
+    HabitColorAmber,
+    HabitColorRed,
+    HabitColorGreen,
+    HabitColorPink
+)

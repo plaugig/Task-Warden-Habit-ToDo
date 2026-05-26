@@ -57,7 +57,7 @@ fun HabitCard(
 
     val accentColor = remember(habit.colorHex) {
         try {
-            Color(habit.colorHex)
+            Color(habit.colorHex.toULong())
         } catch (e: Exception) {
             colorScheme.primary
         }
@@ -76,10 +76,11 @@ fun HabitCard(
             .width(170.dp)
             .height(170.dp),
         shape = RoundedCornerShape(24.dp),
-        color = if (isDone) accentColor.copy(alpha = 0.12f) else colorScheme.surface,
+        color = if (isDone) accentColor.copy(alpha = 0.09f) else colorScheme.surface,
         border = BorderStroke(
             width = if (isDone) 2.dp else 1.5.dp,
-            color = if (isDone) accentColor else colorScheme.outline.copy(alpha = 0.5f)
+            color = if (isDone) accentColor.copy(alpha = 0.5f)
+            else colorScheme.outline.copy(alpha = 0.3f)
         )
     ) {
         Column(
@@ -96,19 +97,22 @@ fun HabitCard(
                 Box(
                     modifier = Modifier
                         .size(40.dp)
-                        .background(accentColor.copy(alpha = 0.1f), CircleShape),
+                        .background(
+                            accentColor.copy(alpha = if (isDone) 0.07f else 0.12f),
+                            CircleShape
+                        ),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
                         painter = painterResource(id = habit.iconResId),
                         contentDescription = null,
-                        tint = accentColor,
+                        tint = if (isDone) accentColor.copy(alpha = 0.6f) else accentColor,
                         modifier = Modifier.size(20.dp)
                     )
                 }
 
                 Surface(
-                    color = accentColor.copy(alpha = 0.15f),
+                    color = accentColor.copy(alpha = if (isDone) 0.08f else 0.15f),
                     shape = RoundedCornerShape(10.dp)
                 ) {
                     Row(
@@ -118,7 +122,7 @@ fun HabitCard(
                         Icon(
                             painter = painterResource(id = R.drawable.local_fire),
                             contentDescription = null,
-                            tint = accentColor,
+                            tint = if (isDone) accentColor.copy(alpha = 0.5f) else accentColor,
                             modifier = Modifier.size(12.dp)
                         )
                         Spacer(modifier = Modifier.width(2.dp))
@@ -130,7 +134,7 @@ fun HabitCard(
                             style = MaterialTheme.typography.labelSmall.copy(
                                 fontWeight = FontWeight.Bold
                             ),
-                            color = accentColor
+                            color = if (isDone) accentColor.copy(alpha = 0.5f) else accentColor
                         )
                     }
                 }
@@ -155,7 +159,7 @@ fun HabitCard(
                     .fillMaxWidth()
                     .height(8.dp)
                     .clip(CircleShape),
-                color = accentColor,
+                color = if (isDone) accentColor.copy(alpha = 0.5f) else accentColor,
                 trackColor = colorScheme.outline.copy(alpha = 0.2f),
                 strokeCap = StrokeCap.Round
             )
@@ -168,14 +172,14 @@ fun HabitCard(
                         style = MaterialTheme.typography.labelSmall.copy(
                             fontWeight = FontWeight.Bold
                         ),
-                        color = accentColor
+                        color = accentColor.copy(alpha = 0.6f)
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     Icon(
                         painter = painterResource(id = R.drawable.check),
                         contentDescription = null,
-                        tint = accentColor,
-                        modifier = Modifier.size(12.dp)
+                        tint = accentColor.copy(alpha = 0.85f),
+                        modifier = Modifier.size(20.dp)
                     )
                 }
             } else {

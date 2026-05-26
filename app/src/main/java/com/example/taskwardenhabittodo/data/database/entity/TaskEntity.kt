@@ -26,5 +26,7 @@ data class TaskEntity(
     @ColumnInfo(name = "period")
     val period: String,
     @ColumnInfo(name = "createdAt")
-    val createdAt: Long = System.currentTimeMillis()
+    val createdAt: Long = System.currentTimeMillis(),
+    @ColumnInfo(name = "colorHex")
+    val colorHex: Long
 )

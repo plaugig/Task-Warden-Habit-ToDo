@@ -32,10 +32,6 @@ class TodayTaskScreenViewModel @Inject constructor(
     private val userInteractor: UserInteractor
 ) : ViewModel() {
 
-    init {
-        calculateStreak()
-    }
-
     private val startOfDayFlow = MutableStateFlow(HabitDateUtils.getStartOfDay())
     private val _isBottomSheetVisible = MutableStateFlow(false)
 
@@ -95,12 +91,6 @@ class TodayTaskScreenViewModel @Inject constructor(
                 tasks = tasks.filter { it.dayPart == DayPart.ALL_DAY }
             )
         ).filter { it.tasks.isNotEmpty() }
-    }
-
-    private fun calculateStreak(){
-        viewModelScope.launch(Dispatchers.IO) {
-            taskInteractor.calculateTaskStreak()
-        }
     }
 
     fun toggleTaskCompletion(task: UiTaskData) {

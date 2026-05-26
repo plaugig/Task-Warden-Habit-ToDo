@@ -33,7 +33,8 @@ class HabitScreenViewModel @Inject constructor(
 ) : ViewModel() {
 
     init {
-        checkAndResetHabits()
+        calculateTaskStreak()
+        calculateHabitStreak()
     }
 
     private val startOfDayFlow = MutableStateFlow(HabitDateUtils.getStartOfDay())
@@ -102,10 +103,15 @@ class HabitScreenViewModel @Inject constructor(
         }
     }
 
-    private fun checkAndResetHabits() {
+    private fun calculateTaskStreak() {
         viewModelScope.launch(Dispatchers.IO) {
-            val startOfDay = HabitDateUtils.getStartOfDay()
-            userInteractor.resetDailyStreaks(startOfDay)
+            taskInteractor.calculateTaskStreak()
+        }
+    }
+
+    private fun calculateHabitStreak(){
+        viewModelScope.launch(Dispatchers.IO){
+            habitInteractor.calculateHabitStreak()
         }
     }
 

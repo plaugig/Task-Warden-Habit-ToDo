@@ -66,7 +66,7 @@ class TaskInteractor @Inject constructor(
     }
 
     suspend fun calculateTaskStreak(){
-        calculateTaskStreak()
+        calculateTaskStreakUseCase()
     }
 
 }

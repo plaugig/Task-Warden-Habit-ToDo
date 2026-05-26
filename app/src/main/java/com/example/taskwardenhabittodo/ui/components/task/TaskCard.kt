@@ -9,15 +9,18 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.taskwardenhabittodo.R
+import com.example.taskwardenhabittodo.ui.theme.HabitColorPurple
 import com.example.taskwardenhabittodo.ui.theme.TaskWardenHabitToDoTheme
 import com.example.taskwardenhabittodo.ui.theme.spacing
 
@@ -26,9 +29,9 @@ fun TaskCard(
     time: String?,
     period: String,
     title: String,
-    duration: Int,
     priorityColor: Color? = null,
     isCompleted: Boolean = false,
+    colorHex: Long = HabitColorPurple.value.toLong(),
     onCheckedChange: (Boolean) -> Unit = {},
     modifier: Modifier = Modifier,
     onClick: () -> Unit
@@ -36,10 +39,12 @@ fun TaskCard(
     val spacing = MaterialTheme.spacing
     val colorScheme = MaterialTheme.colorScheme
 
-    val containerColor = if (isCompleted) {
-        colorScheme.secondary.copy(alpha = 0.1f)
-    } else {
-        colorScheme.surface
+    val accentColor = remember(colorHex) {
+        try {
+            Color(colorHex.toULong())
+        } catch (e: Exception) {
+            colorScheme.primary
+        }
     }
 
     Surface(
@@ -48,10 +53,16 @@ fun TaskCard(
             .height(80.dp)
             .clickable { onClick() },
         shape = RoundedCornerShape(32.dp),
-        color = containerColor,
-        border = if (isCompleted) null else BorderStroke(
-            1.dp,
-            colorScheme.outline.copy(alpha = 0.1f)
+        color = if (isCompleted)
+            accentColor.copy(alpha = 0.04f)
+        else
+            accentColor.copy(alpha = 0.08f),
+        border = BorderStroke(
+            width = 1.5.dp,
+            color = if (isCompleted)
+                accentColor.copy(alpha = 0.2f)
+            else
+                accentColor.copy(alpha = 0.5f)
         )
     ) {
         Row(
@@ -70,16 +81,20 @@ fun TaskCard(
                         fontWeight = FontWeight.Bold,
                         fontSize = 14.sp
                     ),
-                    color = if (isCompleted) colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
-                    else colorScheme.onSurface
+                    color = if (isCompleted)
+                        accentColor.copy(alpha = 0.4f)
+                    else
+                        accentColor
                 )
                 Text(
                     text = period,
                     style = MaterialTheme.typography.labelSmall.copy(
                         fontWeight = FontWeight.Bold
                     ),
-                    color = if (isCompleted) colorScheme.onSurfaceVariant.copy(alpha = 0.4f)
-                    else colorScheme.onSurfaceVariant
+                    color = if (isCompleted)
+                        accentColor.copy(alpha = 0.3f)
+                    else
+                        accentColor.copy(alpha = 0.7f)
                 )
             }
 
@@ -88,7 +103,7 @@ fun TaskCard(
                     .padding(horizontal = spacing.small)
                     .width(1.dp)
                     .height(30.dp)
-                    .background(colorScheme.outline.copy(alpha = 0.2f))
+                    .background(colorScheme.outline.copy(alpha = 0.3f))
             )
 
             Column(
@@ -102,8 +117,12 @@ fun TaskCard(
                         style = MaterialTheme.typography.titleMedium.copy(
                             fontWeight = FontWeight.Bold
                         ),
+                        textDecoration = if (isCompleted) TextDecoration.LineThrough
+                        else
+                            TextDecoration.None,
                         color = if (isCompleted) colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
-                        else colorScheme.onSurface,
+                        else
+                            colorScheme.onSurface,
                         maxLines = 1
                     )
                     Spacer(modifier = Modifier.width(spacing.small))
@@ -111,8 +130,17 @@ fun TaskCard(
                     if (priorityColor != null) {
                         Box(
                             modifier = Modifier
-                                .size(8.dp)
-                                .background(priorityColor, CircleShape)
+                                .size(13.dp)
+                                .border(
+                                    width = 2.dp,
+                                    color = Color.White.copy(alpha = if (isCompleted) 0.3f else 0.8f),
+                                    shape = CircleShape
+                                )
+                                .padding(2.dp)
+                                .background(
+                                    if (isCompleted) priorityColor.copy(alpha = 0.3f) else priorityColor,
+                                    CircleShape
+                                )
                         )
                     }
                 }
@@ -125,8 +153,8 @@ fun TaskCard(
                 if (isCompleted) {
                     Box(
                         modifier = Modifier
-                            .size(32.dp)
-                            .background(Color(0xFF00C853), CircleShape),
+                            .size(28.dp)
+                            .background(color = accentColor.copy(alpha = 0.5f), CircleShape),
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
@@ -137,12 +165,13 @@ fun TaskCard(
                         )
                     }
                 } else {
+
                     Box(
                         modifier = Modifier
                             .size(32.dp)
                             .border(
                                 2.dp,
-                                colorScheme.outline.copy(alpha = 0.5f),
+                                colorScheme.outline.copy(alpha = 0.75f),
                                 CircleShape
                             )
                     )
@@ -164,7 +193,6 @@ fun TaskCardPreview() {
                 time = "09:00",
                 period = "AM",
                 title = "Team Standup",
-                duration = 15,
                 priorityColor = Color.Red,
                 isCompleted = true,
                 onClick = {}
@@ -174,7 +202,6 @@ fun TaskCardPreview() {
                 time = "07:15",
                 period = "AM",
                 title = "Journaling",
-                duration = 10,
                 priorityColor = Color.Green,
                 isCompleted = false,
                 onClick = {}

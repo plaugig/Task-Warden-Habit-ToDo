@@ -22,7 +22,8 @@ fun TaskEntity.toDomain(): TaskData {
         isPinned = this.isPinned,
         dayPart = DayPart.valueOf(this.dayPart),
         period = this.period,
-        createdAt = this.createdAt
+        createdAt = this.createdAt,
+        colorHex = this.colorHex
     )
 }
 
@@ -37,11 +38,10 @@ fun TaskData.toEntity(): TaskEntity {
         isPinned = this.isPinned,
         dayPart = this.dayPart.name,
         period = this.period,
-        createdAt = this.createdAt
+        createdAt = this.createdAt,
+        colorHex = this.colorHex
     )
 }
-
-// --- Habit mappers ---
 
 fun HabitEntity.toDomain(): HabitData {
     return HabitData(
@@ -77,7 +77,6 @@ fun HabitData.toEntity(): HabitEntity {
     )
 }
 
-// --- User mappers ---
 
 fun UserEntity.toDomain(): UserData {
     return UserData(
@@ -86,7 +85,8 @@ fun UserEntity.toDomain(): UserData {
         dailyPoints = this.dailyPoints,
         taskStreak = this.taskStreak,
         habitStreak = this.habitStreak,
-        lastStreakCheck = this.lastStreakCheck
+        lastHabitStreakCheck = this.lastHabitStreakCheck,
+        lastTaskStreakCheck = this.lastTaskStreakCheck
     )
 }
 
@@ -97,11 +97,10 @@ fun UserData.toEntity(): UserEntity {
         dailyPoints = this.dailyPoints,
         taskStreak = this.taskStreak,
         habitStreak = this.habitStreak,
-        lastStreakCheck = this.lastStreakCheck
+        lastHabitStreakCheck = this.lastHabitStreakCheck,
+        lastTaskStreakCheck = this.lastTaskStreakCheck
     )
 }
-
-// --- DayProgress mappers ---
 
 fun DayProgressEntity.toDomain(): DayProgressData {
     return DayProgressData(

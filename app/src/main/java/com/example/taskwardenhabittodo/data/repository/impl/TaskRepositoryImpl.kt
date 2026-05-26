@@ -73,4 +73,10 @@ class TaskRepositoryImpl @Inject constructor(
             local.getTasksProgressByDay(startOfDay, endOfDay)
         }
     }
+
+    override suspend fun updateTask(task: TaskData) {
+        withContext(Dispatchers.IO){
+            local.insertTask(task.toEntity())
+        }
+    }
 }

@@ -29,7 +29,14 @@ data class ExtendedColors(
     val fireStreak: Color,
     val masterStar: Color,
     val containerColor: Color,
-    val green: Color
+    val green: Color,
+    val habitColorPurple: Color,
+    val habitColorTeal: Color,
+    val habitColorAmber: Color,
+    val habitColorRed: Color,
+    val habitColorGreen: Color,
+    val habitColorPink: Color,
+
 )
 
 val LocalExtendedColors = staticCompositionLocalOf {
@@ -37,7 +44,14 @@ val LocalExtendedColors = staticCompositionLocalOf {
         fireStreak = Color.Unspecified,
         masterStar = Color.Unspecified,
         containerColor = Color.Unspecified,
-        green = Color.Unspecified
+        green = Color.Unspecified,
+        habitColorPurple = Color.Unspecified,
+        habitColorTeal = Color.Unspecified,
+        habitColorAmber = Color.Unspecified,
+        habitColorRed = Color.Unspecified,
+        habitColorGreen = Color.Unspecified,
+        habitColorPink = Color.Unspecified,
+
     )
 }
 
@@ -55,7 +69,14 @@ fun TaskWardenHabitToDoTheme(
         fireStreak = AmberGold,
         masterStar = SoftPurple,
         containerColor = ContainerColor,
-        green = Green
+        green = Green,
+        habitColorPurple = HabitColorPurple,
+        habitColorAmber = HabitColorAmber,
+        habitColorRed = HabitColorRed,
+        habitColorGreen = HabitColorGreen,
+        habitColorPink = HabitColorPink,
+        habitColorTeal = HabitColorTeal
+
     )
 
     CompositionLocalProvider(

@@ -149,7 +149,7 @@ fun HabitScreen(
                         category = input.category,
                         iconResId = input.category.iconResId,
                         isCompleted = false,
-                        colorHex = 0xFF2196F3
+                        colorHex = input.colorHex
                     )
                     viewModel.addHabit(newHabit)
                     showBottomSheet = false

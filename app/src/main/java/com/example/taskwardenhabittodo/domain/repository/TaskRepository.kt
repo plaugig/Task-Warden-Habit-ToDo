@@ -24,5 +24,7 @@ interface TaskRepository {
 
     suspend fun getTasksProgressByDay(startOfDay: Long, endOfDay: Long): ProgressStatsData
 
+    suspend fun updateTask(task: TaskData)
+
 
 }
