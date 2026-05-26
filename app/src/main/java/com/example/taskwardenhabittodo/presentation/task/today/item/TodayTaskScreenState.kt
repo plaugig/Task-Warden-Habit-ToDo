@@ -9,6 +9,7 @@ data class TaskScreenState(
     val taskStreak: Int = 0,
     val sections : List<TaskSection> = emptyList(),
     val isBottomSheetVisible: Boolean = false,
+    val selectedTaskForEdit: UiTaskData? = null
 )
 
 data class TaskProgress(

@@ -3,6 +3,7 @@ package com.example.taskwardenhabittodo.presentation.task.today
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -55,7 +56,7 @@ import com.example.taskwardenhabittodo.ui.theme.SuccessGreen
 import com.example.taskwardenhabittodo.ui.theme.WarningRed
 import com.example.taskwardenhabittodo.ui.theme.spacing
 import kotlinx.coroutines.launch
-
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TasksScreen(
     viewModel: TodayTaskScreenViewModel = hiltViewModel(),
@@ -238,7 +239,8 @@ fun TasksScreen(
                                     },
                                     isCompleted = task.isCompleted,
                                     colorHex = task.colorHex,
-                                    onClick = { viewModel.toggleTaskCompletion(task) }
+                                    onClick = { viewModel.toggleTaskCompletion(task) },
+                                    onLongClick = { viewModel.showEditBottomSheet(task) }
                                 )
                             }
                         }
@@ -256,6 +258,7 @@ fun TasksScreen(
             BottomSheetScreen(
                 type = ActionType.TASK,
                 onDismiss = { viewModel.hideBottomSheet() },
+                taskToEdit = uiState.selectedTaskForEdit,
                 onCreateTask = { input ->
                     val newTask = UiTaskData(
                         title = input.title,
@@ -268,6 +271,9 @@ fun TasksScreen(
                         colorHex = input.colorHex
                     )
                     viewModel.addTask(newTask)
+                },
+                onUpdateTask = { updateTask ->
+                    viewModel.updateTask(updateTask)
                 }
             )
         }

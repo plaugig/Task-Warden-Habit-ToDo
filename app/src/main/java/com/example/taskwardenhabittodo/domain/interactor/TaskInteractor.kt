@@ -11,6 +11,7 @@ import com.example.taskwardenhabittodo.domain.use.cases.tasks.GetTasksByDayPartU
 import com.example.taskwardenhabittodo.domain.use.cases.tasks.GetTaskStatsUseCase
 import com.example.taskwardenhabittodo.domain.use.cases.tasks.GetUnfinishedTasksUseCase
 import com.example.taskwardenhabittodo.domain.use.cases.tasks.UpdateCompletionUseCase
+import com.example.taskwardenhabittodo.domain.use.cases.tasks.UpdateTaskUseCase
 import com.example.taskwardenhabittodo.presentation.archive.item.DayProgressUiData
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -24,7 +25,8 @@ class TaskInteractor @Inject constructor(
     private val getUnfinishedTasksUseCase: GetUnfinishedTasksUseCase,
     private val getTasksByDayPartUseCase: GetTasksByDayPartUseCase,
     private val getAllDaysProgressUseCase: GetAllDaysProgressUseCase,
-    private val calculateTaskStreakUseCase: CalculateTaskStreakUseCase
+    private val calculateTaskStreakUseCase: CalculateTaskStreakUseCase,
+    private val updateTaskUseCase: UpdateTaskUseCase
 ) {
 
     suspend fun addTask(task: TaskData) {
@@ -67,6 +69,10 @@ class TaskInteractor @Inject constructor(
 
     suspend fun calculateTaskStreak(){
         calculateTaskStreakUseCase()
+    }
+
+    suspend fun updateTask(task: TaskData){
+        updateTaskUseCase.updateTask(task)
     }
 
 }

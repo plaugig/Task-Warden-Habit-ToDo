@@ -3,11 +3,25 @@ package com.example.taskwardenhabittodo.ui.components.task
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -24,6 +38,7 @@ import com.example.taskwardenhabittodo.ui.theme.HabitColorPurple
 import com.example.taskwardenhabittodo.ui.theme.TaskWardenHabitToDoTheme
 import com.example.taskwardenhabittodo.ui.theme.spacing
 
+@OptIn(ExperimentalStdlibApi::class)
 @Composable
 fun TaskCard(
     time: String?,
@@ -34,7 +49,8 @@ fun TaskCard(
     colorHex: Long = HabitColorPurple.value.toLong(),
     onCheckedChange: (Boolean) -> Unit = {},
     modifier: Modifier = Modifier,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    onLongClick: () -> Unit = {}
 ) {
     val spacing = MaterialTheme.spacing
     val colorScheme = MaterialTheme.colorScheme
@@ -51,7 +67,10 @@ fun TaskCard(
         modifier = modifier
             .fillMaxWidth()
             .height(80.dp)
-            .clickable { onClick() },
+            .combinedClickable(
+                onClick = onClick,
+                onLongClick = onLongClick
+            ),
         shape = RoundedCornerShape(32.dp),
         color = if (isCompleted)
             accentColor.copy(alpha = 0.04f)
@@ -130,16 +149,21 @@ fun TaskCard(
                     if (priorityColor != null) {
                         Box(
                             modifier = Modifier
-                                .size(13.dp)
-                                .border(
-                                    width = 2.dp,
-                                    color = Color.White.copy(alpha = if (isCompleted) 0.3f else 0.8f),
+                                .size(10.dp)
+                                .background(
+                                    color = if (isCompleted)
+                                        priorityColor.copy(alpha = 0.25f)
+                                    else
+                                        priorityColor,
                                     shape = CircleShape
                                 )
-                                .padding(2.dp)
-                                .background(
-                                    if (isCompleted) priorityColor.copy(alpha = 0.3f) else priorityColor,
-                                    CircleShape
+                                .border(
+                                    width = 1.5.dp,
+                                    color = if (isCompleted)
+                                        priorityColor.copy(alpha = 0.15f)
+                                    else
+                                        priorityColor.copy(alpha = 0.4f),
+                                    shape = CircleShape
                                 )
                         )
                     }

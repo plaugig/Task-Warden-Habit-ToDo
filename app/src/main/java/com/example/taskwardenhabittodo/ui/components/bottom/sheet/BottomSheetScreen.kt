@@ -1,8 +1,6 @@
 package com.example.taskwardenhabittodo.ui.components.bottom.sheet
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,9 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.Button
@@ -40,6 +36,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -49,11 +46,11 @@ import com.example.taskwardenhabittodo.R
 import com.example.taskwardenhabittodo.domain.item.ActionType
 import com.example.taskwardenhabittodo.domain.item.CategoryType
 import com.example.taskwardenhabittodo.domain.item.Priority
+import com.example.taskwardenhabittodo.presentation.item.UiTaskData
 import com.example.taskwardenhabittodo.ui.components.ColorPickerRow
 import com.example.taskwardenhabittodo.ui.components.PriorityButton
 import com.example.taskwardenhabittodo.ui.components.TaskPropertyCard
 import com.example.taskwardenhabittodo.ui.theme.AmberGold
-import com.example.taskwardenhabittodo.ui.theme.HabitColorPalette
 import com.example.taskwardenhabittodo.ui.theme.HabitColorPurple
 import com.example.taskwardenhabittodo.ui.theme.SuccessGreen
 import com.example.taskwardenhabittodo.ui.theme.TaskWardenHabitToDoTheme
@@ -82,7 +79,9 @@ fun BottomSheetScreen(
     type: ActionType,
     onDismiss: () -> Unit,
     onCreateHabit: (NewHabitInput) -> Unit = {},
-    onCreateTask: (NewTaskInput) -> Unit = {}
+    onCreateTask: (NewTaskInput) -> Unit = {},
+    taskToEdit: UiTaskData? = null,
+    onUpdateTask: (UiTaskData) -> Unit = {}
 ) {
     val extendedColors = MaterialTheme.extendedColors
     val colorScheme = MaterialTheme.colorScheme
@@ -101,7 +100,9 @@ fun BottomSheetScreen(
             type = type,
             onDismiss = onDismiss,
             onCreateHabit = onCreateHabit,
-            onCreateTask = onCreateTask
+            onCreateTask = onCreateTask,
+            taskToEdit = taskToEdit,
+            onUpdateTask = onUpdateTask
         )
     }
 }
@@ -112,24 +113,44 @@ fun BottomSheetContent(
     type: ActionType,
     onDismiss: () -> Unit,
     onCreateHabit: (NewHabitInput) -> Unit = {},
-    onCreateTask: (NewTaskInput) -> Unit = {}
+    onCreateTask: (NewTaskInput) -> Unit = {},
+    taskToEdit: UiTaskData? = null,
+    onUpdateTask: (UiTaskData) -> Unit = {}
 ) {
     val spacing = MaterialTheme.spacing
     val colorScheme = MaterialTheme.colorScheme
     val extendedColors = MaterialTheme.extendedColors
 
-    var title by remember { mutableStateOf("") }
-    var selectedTime by remember { mutableStateOf<String?>(null) }
+    val isEditMode = taskToEdit != null
+
+    var title by remember { mutableStateOf(taskToEdit?.title ?: "") }
+    var selectedTime by remember {
+        mutableStateOf(taskToEdit?.time?.takeIf { it.isNotBlank() })
+    }
     var repeatCount by remember { mutableIntStateOf(1) }
-    var selectedPriority by remember { mutableStateOf(Priority.MEDIUM) }
+    var selectedPriority by remember { mutableStateOf(taskToEdit?.priority ?: Priority.MEDIUM) }
     var selectedCategory by remember { mutableStateOf(CategoryType.HEALTH) }
-    var selectedColor by remember { mutableStateOf(HabitColorPurple) }
+    var selectedColor by remember {
+        mutableStateOf(
+            if (taskToEdit != null)
+                Color(taskToEdit.colorHex.toULong())
+            else
+                HabitColorPurple
+        )
+    }
     var showIconPicker by remember { mutableStateOf(false) }
     var showTimePicker by remember { mutableStateOf(false) }
 
+    val initialHour = remember {
+        taskToEdit?.time?.split(":")?.firstOrNull()?.toIntOrNull() ?: 12
+    }
+    val initialMinute = remember {
+        taskToEdit?.time?.split(":")?.getOrNull(1)?.toIntOrNull() ?: 0
+    }
+
     val timePickerState = rememberTimePickerState(
-        initialHour = 12,
-        initialMinute = 0,
+        initialHour = initialHour,
+        initialMinute = initialMinute,
         is24Hour = true
     )
 
@@ -146,10 +167,11 @@ fun BottomSheetContent(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = if (type == ActionType.HABIT)
-                    stringResource(R.string.habit_new_title)
-                else
-                    stringResource(R.string.task_new_title),
+                text = when {
+                    isEditMode -> stringResource(R.string.task_edit_title)
+                    type == ActionType.HABIT -> stringResource(R.string.habit_new_title)
+                    else -> stringResource(R.string.task_new_title)
+                },
                 style = MaterialTheme.typography.headlineSmall.copy(
                     fontWeight = FontWeight.Bold
                 ),
@@ -316,7 +338,16 @@ fun BottomSheetContent(
 
         Button(
             onClick = {
-                if (type == ActionType.HABIT) {
+                if (isEditMode && taskToEdit != null) {
+                    onUpdateTask(
+                        taskToEdit.copy(
+                            title = title,
+                            time = selectedTime,
+                            priority = selectedPriority,
+                            colorHex = selectedColor.value.toLong()
+                        )
+                    )
+                } else if (type == ActionType.HABIT) {
                     onCreateHabit(
                         NewHabitInput(
                             title = title,
@@ -336,6 +367,8 @@ fun BottomSheetContent(
                         )
                     )
                 }
+
+
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -350,10 +383,11 @@ fun BottomSheetContent(
             Icon(painterResource(R.drawable.check), null)
             Spacer(modifier = Modifier.width(spacing.small))
             Text(
-                text = if (type == ActionType.HABIT)
-                    stringResource(R.string.habit_btn_create)
-                else
-                    stringResource(R.string.task_btn_create),
+                text =  when {
+                    isEditMode -> stringResource(R.string.task_btn_save)
+                    type == ActionType.HABIT -> stringResource(R.string.habit_btn_create)
+                    else -> stringResource(R.string.task_btn_create)
+                },
                 style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
             )
         }

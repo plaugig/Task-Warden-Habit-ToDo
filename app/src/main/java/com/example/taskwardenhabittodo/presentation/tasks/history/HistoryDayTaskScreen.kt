@@ -138,6 +138,7 @@ fun HistoryDayTaskScreen(
                                 Priority.NONE -> null
                             },
                             isCompleted = task.isCompleted,
+                            colorHex = task.colorHex,
                             onClick = {}
                         )
                         Spacer(modifier = Modifier.height(spacing.small))

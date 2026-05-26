@@ -7,13 +7,13 @@ import com.example.taskwardenhabittodo.domain.interactor.TaskInteractor
 import com.example.taskwardenhabittodo.domain.interactor.UserInteractor
 import com.example.taskwardenhabittodo.domain.item.DayPart
 import com.example.taskwardenhabittodo.presentation.habit.item.HabitDateUtils
-import com.example.taskwardenhabittodo.presentation.task.today.item.TodayTaskDateUtils
-import com.example.taskwardenhabittodo.presentation.task.today.item.TaskProgress
-import com.example.taskwardenhabittodo.presentation.task.today.item.TaskScreenState
-import com.example.taskwardenhabittodo.presentation.task.today.item.TaskSection
 import com.example.taskwardenhabittodo.presentation.item.UiTaskData
 import com.example.taskwardenhabittodo.presentation.item.toDomain
 import com.example.taskwardenhabittodo.presentation.item.toUi
+import com.example.taskwardenhabittodo.presentation.task.today.item.TaskProgress
+import com.example.taskwardenhabittodo.presentation.task.today.item.TaskScreenState
+import com.example.taskwardenhabittodo.presentation.task.today.item.TaskSection
+import com.example.taskwardenhabittodo.presentation.task.today.item.TodayTaskDateUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -35,6 +35,8 @@ class TodayTaskScreenViewModel @Inject constructor(
     private val startOfDayFlow = MutableStateFlow(HabitDateUtils.getStartOfDay())
     private val _isBottomSheetVisible = MutableStateFlow(false)
 
+    private val _isSelectedTaskEdit = MutableStateFlow<UiTaskData?>(null)
+
     @OptIn(ExperimentalCoroutinesApi::class)
     val uiState: StateFlow<TaskScreenState> = startOfDayFlow.flatMapLatest { startDay ->
         val endDay = startDay + 86399999L
@@ -43,8 +45,9 @@ class TodayTaskScreenViewModel @Inject constructor(
             taskInteractor.getTasksForDay(startDay, endDay),
             taskInteractor.getTaskStats(startDay),
             userInteractor.getUserStats(),
-            _isBottomSheetVisible
-        ) { todayTasks, taskStats, userStats, isVisible ->
+            _isBottomSheetVisible,
+            _isSelectedTaskEdit
+        ) { todayTasks, taskStats, userStats, isVisible, selectedTask ->
 
             val todayTasksUi = todayTasks.map { it.toUi() }
 
@@ -59,7 +62,8 @@ class TodayTaskScreenViewModel @Inject constructor(
                         taskStats.completedCount.toFloat() / taskStats.totalCount else 0f
                 ),
                 sections = prepareSections(todayTasksUi),
-                isBottomSheetVisible = isVisible
+                isBottomSheetVisible = isVisible,
+                selectedTaskForEdit = selectedTask
             )
         }
     }.stateIn(
@@ -72,7 +76,7 @@ class TodayTaskScreenViewModel @Inject constructor(
         return listOf(
             TaskSection(
                 title = R.string.task_section_morning,
-                iconRes =R.drawable.ev_sun,
+                iconRes = R.drawable.ev_sun,
                 tasks = tasks.filter { it.dayPart == DayPart.MORNING }
             ),
             TaskSection(
@@ -86,7 +90,7 @@ class TodayTaskScreenViewModel @Inject constructor(
                 tasks = tasks.filter { it.dayPart == DayPart.EVENING }
             ),
             TaskSection(
-                title =R.string.task_section_other,
+                title = R.string.task_section_other,
                 iconRes = R.drawable.animal,
                 tasks = tasks.filter { it.dayPart == DayPart.ALL_DAY }
             )
@@ -127,9 +131,33 @@ class TodayTaskScreenViewModel @Inject constructor(
 
     fun showBottomSheet() {
         _isBottomSheetVisible.value = true
+        _isSelectedTaskEdit.value = null
+    }
+
+    fun showEditBottomSheet(task: UiTaskData) {
+        _isSelectedTaskEdit.value = task
+        _isBottomSheetVisible.value = true
     }
 
     fun hideBottomSheet() {
         _isBottomSheetVisible.value = false
+        _isSelectedTaskEdit.value = null
+    }
+
+    fun updateTask(task: UiTaskData) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val correctedTask = if (!task.time.isNullOrBlank()) {
+                val hourInt = task.time.split(":").firstOrNull()?.toIntOrNull() ?: 12
+                task.copy(
+                    period = if (hourInt < 12) "AM" else "PM",
+                    dayPart = TodayTaskDateUtils.determineDayPart(task.time)
+                )
+            } else {
+                task.copy(time = "", period = "", dayPart = DayPart.ALL_DAY)
+            }
+
+            taskInteractor.updateTask(correctedTask.toDomain())
+            hideBottomSheet()
+        }
     }
 }

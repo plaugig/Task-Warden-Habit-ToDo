@@ -59,4 +59,6 @@
     <string name="archive_title">Archive</string>
     <string name="common_back">Common back</string>
     <string name="bottom_sheet_color">COLOR</string>
+    <string name="task_edit_title">Edit Task</string>
+    <string name="task_btn_save">Save Changes</string>
 </resources>
