@@ -19,4 +19,5 @@ interface UserRepository {
     suspend fun updateTaskStreak(task: Int, timestamp: Long)
 
     fun getAllDaysProgress(): Flow<List<DayProgressData>>
+
 }

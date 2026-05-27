@@ -41,4 +41,5 @@ interface UserDao {
 
     @Query("SELECT * FROM day_progress ORDER BY dateTimestamp DESC")
     fun getAllDaysProgress(): Flow<List<DayProgressEntity>>
+
 }

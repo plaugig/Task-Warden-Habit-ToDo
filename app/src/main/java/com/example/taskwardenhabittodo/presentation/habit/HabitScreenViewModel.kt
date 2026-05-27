@@ -15,6 +15,7 @@ import com.example.taskwardenhabittodo.presentation.item.toDomain
 import com.example.taskwardenhabittodo.presentation.item.toUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -33,8 +34,15 @@ class HabitScreenViewModel @Inject constructor(
 ) : ViewModel() {
 
     init {
-        calculateTaskStreak()
-        calculateHabitStreak()
+       viewModelScope.launch(Dispatchers.IO) {
+           coroutineScope {
+               launch { userInteractor.saveDayProgress() }
+               launch { habitInteractor.calculateHabitStreak() }
+               launch { taskInteractor.calculateTaskStreak() }
+           }
+
+           habitInteractor.resetOldHabits(HabitDateUtils.getStartOfDay())
+       }
     }
 
     private val startOfDayFlow = MutableStateFlow(HabitDateUtils.getStartOfDay())
@@ -100,18 +108,6 @@ class HabitScreenViewModel @Inject constructor(
     fun deleteHabitById(id: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             habitInteractor.deleteHabitById(id)
-        }
-    }
-
-    private fun calculateTaskStreak() {
-        viewModelScope.launch(Dispatchers.IO) {
-            taskInteractor.calculateTaskStreak()
-        }
-    }
-
-    private fun calculateHabitStreak(){
-        viewModelScope.launch(Dispatchers.IO){
-            habitInteractor.calculateHabitStreak()
         }
     }
 

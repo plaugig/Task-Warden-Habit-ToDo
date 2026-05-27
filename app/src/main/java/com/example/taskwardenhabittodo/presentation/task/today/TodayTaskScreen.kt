@@ -140,7 +140,7 @@ fun TasksScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = stringResource(R.string.task_title_header),
+                        text = stringResource(R.string.nav_tasks),
                         style = MaterialTheme.typography.headlineLarge.copy(
                             fontWeight = FontWeight.Bold
                         )

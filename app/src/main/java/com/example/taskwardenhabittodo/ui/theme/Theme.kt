@@ -73,7 +73,7 @@ fun TaskWardenHabitToDoTheme(
         habitColorPurple = HabitColorPurple,
         habitColorAmber = HabitColorAmber,
         habitColorRed = HabitColorRed,
-        habitColorGreen = HabitColorGreen,
+        habitColorGreen = HabitColorBlue,
         habitColorPink = HabitColorPink,
         habitColorTeal = HabitColorTeal
 

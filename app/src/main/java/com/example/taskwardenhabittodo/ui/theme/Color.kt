@@ -32,7 +32,7 @@ val HabitColorPurple = Color(0xFF6C5DD3)
 val HabitColorTeal   = Color(0xFF34EAB9)
 val HabitColorAmber  = Color(0xFFFFB74D)
 val HabitColorRed    = Color(0xFFFF5A5A)
-val HabitColorGreen  = Color(0xFF45B39D)
+val HabitColorBlue  = Color(0xFF4A90E2)
 val HabitColorPink   = Color(0xFFBB86FC)
 
 val HabitColorPalette = listOf(
@@ -40,6 +40,6 @@ val HabitColorPalette = listOf(
     HabitColorTeal,
     HabitColorAmber,
     HabitColorRed,
-    HabitColorGreen,
+    HabitColorBlue,
     HabitColorPink
 )

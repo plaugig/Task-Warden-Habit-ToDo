@@ -35,7 +35,5 @@ class CalculateHabitStreakUseCase @Inject constructor(
             habit = newHabitStreak,
             timestamp = startOfToday
         )
-
-        habitRepository.resetOldHabits(startOfToday)
     }
 }

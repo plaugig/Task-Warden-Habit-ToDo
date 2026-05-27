@@ -106,4 +106,5 @@ class LocalDataSource @Inject constructor(
     fun getAllDaysProgress(): Flow<List<DayProgressEntity>>{
        return appDatabase.userDao().getAllDaysProgress()
     }
+
 }
