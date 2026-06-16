@@ -14,9 +14,10 @@ class AwardPointsForHabitUseCase @Inject constructor(
                 if (justCompleted) GameConfig.POINTS_HABIT_COMPLETE_BONUS else 0
         userRepository.addPoints(gain)
 
-        val newDiscipline = (robotRepository.getRobot().disciplineScore + GameConfig.DISCIPLINE_GAIN_PER_HABIT)
+        val robot = robotRepository.getRobot()
+        val newDiscipline = (robot.disciplineScore + GameConfig.DISCIPLINE_GAIN_PER_HABIT)
             .coerceIn(GameConfig.STAT_MIN, GameConfig.STAT_MAX)
-        robotRepository.saveRobot(robotRepository.getRobot().copy(disciplineScore = newDiscipline))
+        robotRepository.saveRobot(robot.copy(disciplineScore = newDiscipline))
     }
 
 }

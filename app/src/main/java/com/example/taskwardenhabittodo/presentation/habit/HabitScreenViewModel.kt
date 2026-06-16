@@ -107,7 +107,7 @@ class HabitScreenViewModel @Inject constructor(
             habitInteractor.updateHabitProgress(habitId, newCount)
 
             val justCompleted = habit != null && newCount >= habit.targetCount
-            gameInteractor.awardForTask(justCompleted)
+            gameInteractor.awardForHabit(justCompleted)
         }
     }
 

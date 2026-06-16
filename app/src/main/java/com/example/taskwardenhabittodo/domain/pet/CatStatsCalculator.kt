@@ -71,7 +71,7 @@ object CatStatsCalculator {
 
         return stats.copy(
             stress = (stats.stress + GameConfig.FAILURE_STRESS_PER_MISS * misses).clampStat(),
-            happiness = (stats.happiness + GameConfig.FAILURE_HAPPINESS_PER_MISS * misses).clampStat(),
+            happiness = (stats.happiness - GameConfig.FAILURE_HAPPINESS_PER_MISS * misses).clampStat(),
             lastUpdated = new
         )
 

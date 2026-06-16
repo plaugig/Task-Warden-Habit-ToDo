@@ -24,7 +24,7 @@ object RobotDialogue {
         val clean = cleanBank(mood, context)
         if (!profane || !mood.isHostile) return  clean
         val spicy = spicyBank(mood, context)
-        return if (spicy.isEmpty()) spicy else clean
+        return if (spicy.isNotEmpty()) spicy else clean
     }
 
     private fun cleanBank(mood: RobotMood, context: RobotContext): List<String> = when (context) {
