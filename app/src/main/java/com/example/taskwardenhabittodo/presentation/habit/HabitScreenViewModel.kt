@@ -3,9 +3,11 @@ package com.example.taskwardenhabittodo.presentation.habit
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.taskwardenhabittodo.domain.interactor.GameInteractor
 import com.example.taskwardenhabittodo.domain.interactor.HabitInteractor
 import com.example.taskwardenhabittodo.domain.interactor.TaskInteractor
 import com.example.taskwardenhabittodo.domain.interactor.UserInteractor
+import com.example.taskwardenhabittodo.domain.repository.HabitRepository
 import com.example.taskwardenhabittodo.presentation.habit.item.HabitDateUtils
 import com.example.taskwardenhabittodo.presentation.habit.item.HabitScreenState
 import com.example.taskwardenhabittodo.presentation.item.DayProgress
@@ -30,7 +32,8 @@ import javax.inject.Inject
 class HabitScreenViewModel @Inject constructor(
     private val taskInteractor: TaskInteractor,
     private val habitInteractor: HabitInteractor,
-    private val userInteractor: UserInteractor
+    private val userInteractor: UserInteractor,
+    private val gameInteractor: GameInteractor
 ) : ViewModel() {
 
     init {
@@ -102,6 +105,9 @@ class HabitScreenViewModel @Inject constructor(
             }
             val newCount = currentCount + 1
             habitInteractor.updateHabitProgress(habitId, newCount)
+
+            val justCompleted = habit != null && newCount >= habit.targetCount
+            gameInteractor.awardForTask(justCompleted)
         }
     }
 

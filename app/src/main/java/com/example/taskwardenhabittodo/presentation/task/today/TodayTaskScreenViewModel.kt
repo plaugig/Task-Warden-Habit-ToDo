@@ -3,6 +3,7 @@ package com.example.taskwardenhabittodo.presentation.task.today
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.taskwardenhabittodo.R
+import com.example.taskwardenhabittodo.domain.interactor.GameInteractor
 import com.example.taskwardenhabittodo.domain.interactor.TaskInteractor
 import com.example.taskwardenhabittodo.domain.interactor.UserInteractor
 import com.example.taskwardenhabittodo.domain.item.DayPart
@@ -29,7 +30,8 @@ import javax.inject.Inject
 @HiltViewModel
 class TodayTaskScreenViewModel @Inject constructor(
     private val taskInteractor: TaskInteractor,
-    private val userInteractor: UserInteractor
+    private val userInteractor: UserInteractor,
+    private val gameInteractor: GameInteractor
 ) : ViewModel() {
 
     private val startOfDayFlow = MutableStateFlow(HabitDateUtils.getStartOfDay())
@@ -99,7 +101,9 @@ class TodayTaskScreenViewModel @Inject constructor(
 
     fun toggleTaskCompletion(task: UiTaskData) {
         viewModelScope.launch {
+            val newCompleted = !task.isCompleted
             taskInteractor.updateCompletion(task.id, !task.isCompleted)
+            gameInteractor.awardForTask(newCompleted)
         }
     }
 

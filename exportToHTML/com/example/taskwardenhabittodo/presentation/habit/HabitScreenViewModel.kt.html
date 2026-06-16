@@ -1,0 +1,141 @@
+<html>
+<head>
+<title>HabitScreenViewModel.kt</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #2aacb8;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+HabitScreenViewModel.kt</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">com</span><span class="s2">.</span><span class="s1">example</span><span class="s2">.</span><span class="s1">taskwardenhabittodo</span><span class="s2">.</span><span class="s1">presentation</span><span class="s2">.</span><span class="s1">habit</span>
+
+
+<span class="s1">import androidx</span><span class="s2">.</span><span class="s1">lifecycle</span><span class="s2">.</span><span class="s1">ViewModel</span>
+<span class="s1">import androidx</span><span class="s2">.</span><span class="s1">lifecycle</span><span class="s2">.</span><span class="s1">viewModelScope</span>
+<span class="s1">import com</span><span class="s2">.</span><span class="s1">example</span><span class="s2">.</span><span class="s1">taskwardenhabittodo</span><span class="s2">.</span><span class="s1">domain</span><span class="s2">.</span><span class="s1">interactor</span><span class="s2">.</span><span class="s1">GameInteractor</span>
+<span class="s1">import com</span><span class="s2">.</span><span class="s1">example</span><span class="s2">.</span><span class="s1">taskwardenhabittodo</span><span class="s2">.</span><span class="s1">domain</span><span class="s2">.</span><span class="s1">interactor</span><span class="s2">.</span><span class="s1">HabitInteractor</span>
+<span class="s1">import com</span><span class="s2">.</span><span class="s1">example</span><span class="s2">.</span><span class="s1">taskwardenhabittodo</span><span class="s2">.</span><span class="s1">domain</span><span class="s2">.</span><span class="s1">interactor</span><span class="s2">.</span><span class="s1">TaskInteractor</span>
+<span class="s1">import com</span><span class="s2">.</span><span class="s1">example</span><span class="s2">.</span><span class="s1">taskwardenhabittodo</span><span class="s2">.</span><span class="s1">domain</span><span class="s2">.</span><span class="s1">interactor</span><span class="s2">.</span><span class="s1">UserInteractor</span>
+<span class="s1">import com</span><span class="s2">.</span><span class="s1">example</span><span class="s2">.</span><span class="s1">taskwardenhabittodo</span><span class="s2">.</span><span class="s1">domain</span><span class="s2">.</span><span class="s1">repository</span><span class="s2">.</span><span class="s1">HabitRepository</span>
+<span class="s1">import com</span><span class="s2">.</span><span class="s1">example</span><span class="s2">.</span><span class="s1">taskwardenhabittodo</span><span class="s2">.</span><span class="s1">presentation</span><span class="s2">.</span><span class="s1">habit</span><span class="s2">.</span><span class="s1">item</span><span class="s2">.</span><span class="s1">HabitDateUtils</span>
+<span class="s1">import com</span><span class="s2">.</span><span class="s1">example</span><span class="s2">.</span><span class="s1">taskwardenhabittodo</span><span class="s2">.</span><span class="s1">presentation</span><span class="s2">.</span><span class="s1">habit</span><span class="s2">.</span><span class="s1">item</span><span class="s2">.</span><span class="s1">HabitScreenState</span>
+<span class="s1">import com</span><span class="s2">.</span><span class="s1">example</span><span class="s2">.</span><span class="s1">taskwardenhabittodo</span><span class="s2">.</span><span class="s1">presentation</span><span class="s2">.</span><span class="s1">item</span><span class="s2">.</span><span class="s1">DayProgress</span>
+<span class="s1">import com</span><span class="s2">.</span><span class="s1">example</span><span class="s2">.</span><span class="s1">taskwardenhabittodo</span><span class="s2">.</span><span class="s1">presentation</span><span class="s2">.</span><span class="s1">item</span><span class="s2">.</span><span class="s1">UiHabitData</span>
+<span class="s1">import com</span><span class="s2">.</span><span class="s1">example</span><span class="s2">.</span><span class="s1">taskwardenhabittodo</span><span class="s2">.</span><span class="s1">presentation</span><span class="s2">.</span><span class="s1">item</span><span class="s2">.</span><span class="s1">UiUserData</span>
+<span class="s1">import com</span><span class="s2">.</span><span class="s1">example</span><span class="s2">.</span><span class="s1">taskwardenhabittodo</span><span class="s2">.</span><span class="s1">presentation</span><span class="s2">.</span><span class="s1">item</span><span class="s2">.</span><span class="s1">toDomain</span>
+<span class="s1">import com</span><span class="s2">.</span><span class="s1">example</span><span class="s2">.</span><span class="s1">taskwardenhabittodo</span><span class="s2">.</span><span class="s1">presentation</span><span class="s2">.</span><span class="s1">item</span><span class="s2">.</span><span class="s1">toUi</span>
+<span class="s1">import dagger</span><span class="s2">.</span><span class="s1">hilt</span><span class="s2">.</span><span class="s1">android</span><span class="s2">.</span><span class="s1">lifecycle</span><span class="s2">.</span><span class="s1">HiltViewModel</span>
+<span class="s1">import kotlinx</span><span class="s2">.</span><span class="s1">coroutines</span><span class="s2">.</span><span class="s1">Dispatchers</span>
+<span class="s1">import kotlinx</span><span class="s2">.</span><span class="s1">coroutines</span><span class="s2">.</span><span class="s1">coroutineScope</span>
+<span class="s1">import kotlinx</span><span class="s2">.</span><span class="s1">coroutines</span><span class="s2">.</span><span class="s1">flow</span><span class="s2">.</span><span class="s1">MutableStateFlow</span>
+<span class="s1">import kotlinx</span><span class="s2">.</span><span class="s1">coroutines</span><span class="s2">.</span><span class="s1">flow</span><span class="s2">.</span><span class="s1">SharingStarted</span>
+<span class="s1">import kotlinx</span><span class="s2">.</span><span class="s1">coroutines</span><span class="s2">.</span><span class="s1">flow</span><span class="s2">.</span><span class="s1">StateFlow</span>
+<span class="s1">import kotlinx</span><span class="s2">.</span><span class="s1">coroutines</span><span class="s2">.</span><span class="s1">flow</span><span class="s2">.</span><span class="s1">combine</span>
+<span class="s1">import kotlinx</span><span class="s2">.</span><span class="s1">coroutines</span><span class="s2">.</span><span class="s1">flow</span><span class="s2">.</span><span class="s1">flatMapLatest</span>
+<span class="s1">import kotlinx</span><span class="s2">.</span><span class="s1">coroutines</span><span class="s2">.</span><span class="s1">flow</span><span class="s2">.</span><span class="s1">stateIn</span>
+<span class="s1">import kotlinx</span><span class="s2">.</span><span class="s1">coroutines</span><span class="s2">.</span><span class="s1">launch</span>
+<span class="s1">import javax</span><span class="s2">.</span><span class="s1">inject</span><span class="s2">.</span><span class="s1">Inject</span>
+
+
+<span class="s1">@HiltViewModel</span>
+<span class="s0">class </span><span class="s1">HabitScreenViewModel @Inject constructor</span><span class="s2">(</span>
+    <span class="s1">private </span><span class="s0">val </span><span class="s1">taskInteractor: TaskInteractor</span><span class="s2">,</span>
+    <span class="s1">private </span><span class="s0">val </span><span class="s1">habitInteractor: HabitInteractor</span><span class="s2">,</span>
+    <span class="s1">private </span><span class="s0">val </span><span class="s1">userInteractor: UserInteractor</span><span class="s2">,</span>
+    <span class="s1">private </span><span class="s0">val </span><span class="s1">gameInteractor: GameInteractor</span>
+<span class="s2">) </span><span class="s1">: ViewModel</span><span class="s2">() {</span>
+
+    <span class="s1">init </span><span class="s2">{</span>
+       <span class="s1">viewModelScope</span><span class="s2">.</span><span class="s1">launch</span><span class="s2">(</span><span class="s1">Dispatchers</span><span class="s2">.</span><span class="s1">IO</span><span class="s2">) {</span>
+           <span class="s1">coroutineScope </span><span class="s2">{</span>
+               <span class="s1">launch </span><span class="s2">{ </span><span class="s1">userInteractor</span><span class="s2">.</span><span class="s1">saveDayProgress</span><span class="s2">() }</span>
+               <span class="s1">launch </span><span class="s2">{ </span><span class="s1">habitInteractor</span><span class="s2">.</span><span class="s1">calculateHabitStreak</span><span class="s2">() }</span>
+               <span class="s1">launch </span><span class="s2">{ </span><span class="s1">taskInteractor</span><span class="s2">.</span><span class="s1">calculateTaskStreak</span><span class="s2">() }</span>
+           <span class="s2">}</span>
+
+           <span class="s1">habitInteractor</span><span class="s2">.</span><span class="s1">resetOldHabits</span><span class="s2">(</span><span class="s1">HabitDateUtils</span><span class="s2">.</span><span class="s1">getStartOfDay</span><span class="s2">())</span>
+       <span class="s2">}</span>
+    <span class="s2">}</span>
+
+    <span class="s1">private </span><span class="s0">val </span><span class="s1">startOfDayFlow </span><span class="s2">= </span><span class="s1">MutableStateFlow</span><span class="s2">(</span><span class="s1">HabitDateUtils</span><span class="s2">.</span><span class="s1">getStartOfDay</span><span class="s2">())</span>
+
+    <span class="s0">val </span><span class="s1">uiState: StateFlow</span><span class="s2">&lt;</span><span class="s1">HabitScreenState</span><span class="s2">&gt; = </span><span class="s1">startOfDayFlow</span><span class="s2">.</span><span class="s1">flatMapLatest </span><span class="s2">{ </span><span class="s1">startDay </span><span class="s2">-&gt;</span>
+        <span class="s0">val </span><span class="s1">endDay </span><span class="s2">= </span><span class="s1">startDay </span><span class="s2">+ </span><span class="s3">86399999L</span>
+
+        <span class="s1">combine</span><span class="s2">(</span>
+            <span class="s1">userInteractor</span><span class="s2">.</span><span class="s1">getUserStats</span><span class="s2">(),</span>
+            <span class="s1">taskInteractor</span><span class="s2">.</span><span class="s1">getTaskStats</span><span class="s2">(</span><span class="s1">startDay</span><span class="s2">),</span>
+            <span class="s1">habitInteractor</span><span class="s2">.</span><span class="s1">getTodayHabitStats</span><span class="s2">(),</span>
+            <span class="s1">habitInteractor</span><span class="s2">.</span><span class="s1">getAllHabits</span><span class="s2">(),</span>
+            <span class="s1">taskInteractor</span><span class="s2">.</span><span class="s1">getTasksForDay</span><span class="s2">(</span><span class="s1">startDay</span><span class="s2">, </span><span class="s1">endDay</span><span class="s2">)</span>
+        <span class="s2">) { </span><span class="s1">user</span><span class="s2">, </span><span class="s1">taskStats</span><span class="s2">, </span><span class="s1">habitStats</span><span class="s2">, </span><span class="s1">allHabits</span><span class="s2">, </span><span class="s1">todayTasks </span><span class="s2">-&gt;</span>
+
+            <span class="s0">val </span><span class="s1">dayProgress </span><span class="s2">= </span><span class="s1">DayProgress</span><span class="s2">(</span>
+                <span class="s1">totalTasks </span><span class="s2">= </span><span class="s1">taskStats</span><span class="s2">.</span><span class="s1">totalCount</span><span class="s2">,</span>
+                <span class="s1">completedTasks </span><span class="s2">= </span><span class="s1">taskStats</span><span class="s2">.</span><span class="s1">completedCount</span><span class="s2">,</span>
+                <span class="s1">totalHabits </span><span class="s2">= </span><span class="s1">habitStats</span><span class="s2">.</span><span class="s1">totalCount</span><span class="s2">,</span>
+                <span class="s1">completedHabits </span><span class="s2">= </span><span class="s1">habitStats</span><span class="s2">.</span><span class="s1">completedCount</span>
+            <span class="s2">)</span>
+
+            <span class="s1">HabitScreenState</span><span class="s2">(</span>
+                <span class="s1">isLoading </span><span class="s2">= </span><span class="s0">false</span><span class="s2">,</span>
+                <span class="s1">user </span><span class="s2">= </span><span class="s1">user?</span><span class="s2">.</span><span class="s1">toUi</span><span class="s2">() </span><span class="s1">?: UiUserData</span><span class="s2">(</span>
+                    <span class="s1">petPoints </span><span class="s2">= </span><span class="s3">0</span><span class="s2">,</span>
+                    <span class="s1">dailyPoints </span><span class="s2">= </span><span class="s3">0</span><span class="s2">,</span>
+                    <span class="s1">taskStreak </span><span class="s2">= </span><span class="s3">0</span><span class="s2">,</span>
+                    <span class="s1">habitStreak </span><span class="s2">= </span><span class="s3">0</span>
+                <span class="s2">),</span>
+                <span class="s1">progress </span><span class="s2">= </span><span class="s1">dayProgress</span><span class="s2">,</span>
+                <span class="s1">todayHabits </span><span class="s2">= </span><span class="s1">allHabits</span>
+                    <span class="s2">.</span><span class="s1">map </span><span class="s2">{ </span><span class="s1">it</span><span class="s2">.</span><span class="s1">toUi</span><span class="s2">() }</span>
+                    <span class="s2">.</span><span class="s1">sortedBy </span><span class="s2">{ </span><span class="s1">it</span><span class="s2">.</span><span class="s1">isCompleted </span><span class="s2">},</span>
+                <span class="s1">focusTask </span><span class="s2">= </span><span class="s1">todayTasks</span>
+                    <span class="s2">.</span><span class="s1">firstOrNull </span><span class="s2">{ !</span><span class="s1">it</span><span class="s2">.</span><span class="s1">isCompleted </span><span class="s2">}</span>
+                    <span class="s1">?</span><span class="s2">.</span><span class="s1">toUi</span><span class="s2">()</span>
+            <span class="s2">)</span>
+        <span class="s2">}</span>
+    <span class="s2">}.</span><span class="s1">stateIn</span><span class="s2">(</span>
+        <span class="s1">scope </span><span class="s2">= </span><span class="s1">viewModelScope</span><span class="s2">,</span>
+        <span class="s1">started </span><span class="s2">= </span><span class="s1">SharingStarted</span><span class="s2">.</span><span class="s1">WhileSubscribed</span><span class="s2">(</span><span class="s3">5000</span><span class="s2">),</span>
+        <span class="s1">initialValue </span><span class="s2">= </span><span class="s1">HabitScreenState</span><span class="s2">()</span>
+    <span class="s2">)</span>
+
+    <span class="s0">fun </span><span class="s1">addHabit</span><span class="s2">(</span><span class="s1">uiHabit: UiHabitData</span><span class="s2">) {</span>
+        <span class="s1">viewModelScope</span><span class="s2">.</span><span class="s1">launch</span><span class="s2">(</span><span class="s1">Dispatchers</span><span class="s2">.</span><span class="s1">IO</span><span class="s2">) {</span>
+            <span class="s1">habitInteractor</span><span class="s2">.</span><span class="s1">addHabit</span><span class="s2">(</span><span class="s1">uiHabit</span><span class="s2">.</span><span class="s1">toDomain</span><span class="s2">())</span>
+        <span class="s2">}</span>
+    <span class="s2">}</span>
+
+    <span class="s0">fun </span><span class="s1">updateHabitProgress</span><span class="s2">(</span><span class="s1">habitId: Int</span><span class="s2">, </span><span class="s1">currentCount: Int</span><span class="s2">) {</span>
+        <span class="s1">viewModelScope</span><span class="s2">.</span><span class="s1">launch</span><span class="s2">(</span><span class="s1">Dispatchers</span><span class="s2">.</span><span class="s1">IO</span><span class="s2">) {</span>
+            <span class="s0">val </span><span class="s1">habit </span><span class="s2">= </span><span class="s1">uiState</span><span class="s2">.</span><span class="s1">value</span><span class="s2">.</span><span class="s1">todayHabits</span><span class="s2">.</span><span class="s1">find </span><span class="s2">{ </span><span class="s1">it</span><span class="s2">.</span><span class="s1">id </span><span class="s2">== </span><span class="s1">habitId </span><span class="s2">}</span>
+            <span class="s1">habit?</span><span class="s2">.</span><span class="s1">let </span><span class="s2">{</span>
+                <span class="s0">if </span><span class="s2">(</span><span class="s1">currentCount </span><span class="s2">&gt;= </span><span class="s1">it</span><span class="s2">.</span><span class="s1">targetCount</span><span class="s2">) </span><span class="s0">return</span><span class="s1">@launch</span>
+            <span class="s2">}</span>
+            <span class="s0">val </span><span class="s1">newCount </span><span class="s2">= </span><span class="s1">currentCount </span><span class="s2">+ </span><span class="s3">1</span>
+            <span class="s1">habitInteractor</span><span class="s2">.</span><span class="s1">updateHabitProgress</span><span class="s2">(</span><span class="s1">habitId</span><span class="s2">, </span><span class="s1">newCount</span><span class="s2">)</span>
+
+            <span class="s0">val </span><span class="s1">justCompleted </span><span class="s2">= </span><span class="s1">habit </span><span class="s2">!= </span><span class="s0">null </span><span class="s2">&amp;&amp; </span><span class="s1">newCount </span><span class="s2">&gt;= </span><span class="s1">habit</span><span class="s2">.</span><span class="s1">targetCount</span>
+            <span class="s1">gameInteractor</span><span class="s2">.</span><span class="s1">awardForTask</span><span class="s2">(</span><span class="s1">justCompleted</span><span class="s2">)</span>
+        <span class="s2">}</span>
+    <span class="s2">}</span>
+
+    <span class="s0">fun </span><span class="s1">deleteHabitById</span><span class="s2">(</span><span class="s1">id: Int</span><span class="s2">) {</span>
+        <span class="s1">viewModelScope</span><span class="s2">.</span><span class="s1">launch</span><span class="s2">(</span><span class="s1">Dispatchers</span><span class="s2">.</span><span class="s1">IO</span><span class="s2">) {</span>
+            <span class="s1">habitInteractor</span><span class="s2">.</span><span class="s1">deleteHabitById</span><span class="s2">(</span><span class="s1">id</span><span class="s2">)</span>
+        <span class="s2">}</span>
+    <span class="s2">}</span>
+
+<span class="s2">}</span>
+
+</pre>
+</body>
+</html>
