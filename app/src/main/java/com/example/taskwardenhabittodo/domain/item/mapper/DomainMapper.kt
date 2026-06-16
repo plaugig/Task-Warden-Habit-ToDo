@@ -1,9 +1,12 @@
-package com.example.taskwardenhabittodo.domain.item
+package com.example.taskwardenhabittodo.domain.item.mapper
 
 import com.example.taskwardenhabittodo.data.database.entity.DayProgressEntity
 import com.example.taskwardenhabittodo.data.database.entity.HabitEntity
 import com.example.taskwardenhabittodo.data.database.entity.TaskEntity
 import com.example.taskwardenhabittodo.data.database.entity.UserEntity
+import com.example.taskwardenhabittodo.domain.item.CategoryType
+import com.example.taskwardenhabittodo.domain.item.DayPart
+import com.example.taskwardenhabittodo.domain.item.Priority
 import com.example.taskwardenhabittodo.domain.item.data.DayProgressData
 import com.example.taskwardenhabittodo.domain.item.data.HabitData
 import com.example.taskwardenhabittodo.domain.item.data.TaskData

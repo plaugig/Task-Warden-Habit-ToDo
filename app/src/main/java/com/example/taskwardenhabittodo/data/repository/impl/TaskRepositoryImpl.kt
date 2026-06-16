@@ -1,11 +1,10 @@
 package com.example.taskwardenhabittodo.data.repository.impl
 
 import com.example.taskwardenhabittodo.data.database.source.LocalDataSource
-import com.example.taskwardenhabittodo.domain.item.data.DayProgressData
 import com.example.taskwardenhabittodo.domain.item.data.ProgressStatsData
 import com.example.taskwardenhabittodo.domain.item.data.TaskData
-import com.example.taskwardenhabittodo.domain.item.toDomain
-import com.example.taskwardenhabittodo.domain.item.toEntity
+import com.example.taskwardenhabittodo.domain.item.mapper.toDomain
+import com.example.taskwardenhabittodo.domain.item.mapper.toEntity
 import com.example.taskwardenhabittodo.domain.repository.TaskRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow

@@ -1,8 +1,11 @@
 package com.example.taskwardenhabittodo.data.database.source
 
 import com.example.taskwardenhabittodo.data.database.AppDatabase
+import com.example.taskwardenhabittodo.data.database.dao.GameDao
+import com.example.taskwardenhabittodo.data.database.entity.CatEntity
 import com.example.taskwardenhabittodo.data.database.entity.DayProgressEntity
 import com.example.taskwardenhabittodo.data.database.entity.HabitEntity
+import com.example.taskwardenhabittodo.data.database.entity.RobotEntity
 import com.example.taskwardenhabittodo.data.database.entity.TaskEntity
 import com.example.taskwardenhabittodo.data.database.entity.UserEntity
 import com.example.taskwardenhabittodo.domain.item.data.ProgressStatsData
@@ -10,7 +13,8 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class LocalDataSource @Inject constructor(
-    private val appDatabase: AppDatabase
+    private val appDatabase: AppDatabase,
+    private val gameDao: GameDao
 ) {
     // хабиты
 
@@ -103,8 +107,41 @@ class LocalDataSource @Inject constructor(
         appDatabase.userDao().insertDailyProgress(progress)
     }
 
-    fun getAllDaysProgress(): Flow<List<DayProgressEntity>>{
-       return appDatabase.userDao().getAllDaysProgress()
+    fun getAllDaysProgress(): Flow<List<DayProgressEntity>> {
+        return appDatabase.userDao().getAllDaysProgress()
     }
+
+    suspend fun addPoints(delta: Int) {
+        appDatabase.userDao().addPoints(delta)
+    }
+
+    suspend fun spendPoints(cost: Int) {
+        appDatabase.userDao().spendPoints(cost)
+    }
+
+    suspend fun getPetPoints(): Int {
+        return appDatabase.userDao().getPetPoints()
+    }
+
+    // cat
+
+    fun observeCat(): Flow<CatEntity?> = appDatabase.catDao().observeCat()
+
+    suspend fun getCat(): CatEntity? = appDatabase.catDao().getCat()
+
+    suspend fun upsertCat(cat: CatEntity) = appDatabase.catDao().upsert(cat)
+
+    // robot
+
+    fun observeRobot(): Flow<RobotEntity?> = appDatabase.robotDao().observeRobot()
+
+    suspend fun getRobot(): RobotEntity? = appDatabase.robotDao().getRobot()
+
+    suspend fun upsertRobot(robot: RobotEntity) = appDatabase.robotDao().upsert(robot)
+
+    // game
+
+    suspend fun saveCatAndRobot(cat: CatEntity, robot: RobotEntity) =
+        appDatabase.gameDao().saveCatAndRobot(cat, robot)
 
 }

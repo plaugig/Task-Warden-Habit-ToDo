@@ -5,7 +5,10 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.taskwardenhabittodo.data.database.AppDatabase
+import com.example.taskwardenhabittodo.data.database.dao.CatDao
+import com.example.taskwardenhabittodo.data.database.dao.GameDao
 import com.example.taskwardenhabittodo.data.database.dao.HabitDao
+import com.example.taskwardenhabittodo.data.database.dao.RobotDao
 import com.example.taskwardenhabittodo.data.database.dao.TaskDao
 import com.example.taskwardenhabittodo.data.database.dao.UserDao
 import dagger.Module
@@ -45,12 +48,22 @@ object DatabaseModule {
     }
 
     @Provides
-    fun provideTaskDao(db : AppDatabase): TaskDao = db.taskDao()
+    fun provideTaskDao(db: AppDatabase): TaskDao = db.taskDao()
 
     @Provides
     fun provideUserDao(db: AppDatabase): UserDao = db.userDao()
 
     @Provides
-    fun  provideHabitDao(db: AppDatabase): HabitDao = db.habitDao()
+    fun provideHabitDao(db: AppDatabase): HabitDao = db.habitDao()
+
+    @Provides
+    fun provideCatDao(db: AppDatabase): CatDao = db.catDao()
+
+    @Provides
+    fun provideRobotDao(db: AppDatabase): RobotDao = db.robotDao()
+
+    @Provides
+    fun provideGameDao(db: AppDatabase): GameDao = db.gameDao()
+
 
 }

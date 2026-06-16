@@ -20,4 +20,10 @@ interface UserRepository {
 
     fun getAllDaysProgress(): Flow<List<DayProgressData>>
 
+    suspend fun addPoints(delta: Int)
+
+    suspend fun spendPoints(cost: Int)
+
+    suspend fun getPetPoints(): Int
+
 }

@@ -2,22 +2,38 @@ package com.example.taskwardenhabittodo.data.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import com.example.taskwardenhabittodo.data.database.dao.CatDao
+import com.example.taskwardenhabittodo.data.database.dao.GameDao
 import com.example.taskwardenhabittodo.data.database.dao.HabitDao
+import com.example.taskwardenhabittodo.data.database.dao.RobotDao
 import com.example.taskwardenhabittodo.data.database.dao.TaskDao
 import com.example.taskwardenhabittodo.data.database.dao.UserDao
+import com.example.taskwardenhabittodo.data.database.entity.CatEntity
 import com.example.taskwardenhabittodo.data.database.entity.DayProgressEntity
 import com.example.taskwardenhabittodo.data.database.entity.HabitEntity
+import com.example.taskwardenhabittodo.data.database.entity.RobotEntity
 import com.example.taskwardenhabittodo.data.database.entity.TaskEntity
 import com.example.taskwardenhabittodo.data.database.entity.UserEntity
 
 @Database(
-    entities = [TaskEntity::class, HabitEntity::class, UserEntity::class, DayProgressEntity::class],
+    entities = [
+        TaskEntity::class,
+        HabitEntity::class,
+        UserEntity::class,
+        DayProgressEntity::class,
+        CatEntity::class,
+        RobotEntity::class
+    ],
     version = 1
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun taskDao(): TaskDao
     abstract fun habitDao(): HabitDao
     abstract fun userDao(): UserDao
+
+    abstract fun catDao(): CatDao
+    abstract fun robotDao(): RobotDao
+    abstract fun gameDao(): GameDao
 
 
 }

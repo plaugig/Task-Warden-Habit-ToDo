@@ -42,4 +42,20 @@ interface UserDao {
     @Query("SELECT * FROM day_progress ORDER BY dateTimestamp DESC")
     fun getAllDaysProgress(): Flow<List<DayProgressEntity>>
 
+
+    @Query(
+        """
+        UPDATE user 
+        SET petPoints = MAX(0, petPoints + :delta), 
+            dailyPoints = MAX(0, dailyPoints + :delta) 
+        WHERE id = 0
+        """
+    )
+    suspend fun addPoints(delta: Int)
+
+    @Query("UPDATE user SET petPoints = MAX(0, petPoints - :cost) WHERE id = 0")
+    suspend fun spendPoints(cost: Int)
+
+    @Query("SELECT COALESCE(petPoints, 0) FROM user WHERE id = 0")
+    suspend fun getPetPoints(): Int
 }

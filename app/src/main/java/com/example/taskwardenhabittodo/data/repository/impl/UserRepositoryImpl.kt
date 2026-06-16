@@ -1,12 +1,11 @@
 package com.example.taskwardenhabittodo.data.repository.impl
 
 
-import com.example.taskwardenhabittodo.data.database.entity.DayProgressEntity
 import com.example.taskwardenhabittodo.data.database.source.LocalDataSource
 import com.example.taskwardenhabittodo.domain.item.data.DayProgressData
 import com.example.taskwardenhabittodo.domain.item.data.UserData
-import com.example.taskwardenhabittodo.domain.item.toDomain
-import com.example.taskwardenhabittodo.domain.item.toEntity
+import com.example.taskwardenhabittodo.domain.item.mapper.toDomain
+import com.example.taskwardenhabittodo.domain.item.mapper.toEntity
 import com.example.taskwardenhabittodo.domain.repository.UserRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -37,13 +36,13 @@ class UserRepositoryImpl @Inject constructor(
     }
 
     override suspend fun updateHabitStreak(habit: Int, timestamp: Long) {
-        withContext(Dispatchers.IO){
+        withContext(Dispatchers.IO) {
             local.updateHabitStreak(habit, timestamp)
         }
     }
 
     override suspend fun updateTaskStreak(task: Int, timestamp: Long) {
-        withContext(Dispatchers.IO){
+        withContext(Dispatchers.IO) {
             local.updateTaskStreak(task, timestamp)
         }
     }
@@ -54,6 +53,20 @@ class UserRepositoryImpl @Inject constructor(
                 list.map { it.toDomain() }
             }
             .flowOn(Dispatchers.IO)
+    }
+
+    override suspend fun addPoints(delta: Int) {
+        withContext(Dispatchers.IO) {
+            local.addPoints(delta)
+        }
+    }
+
+    override suspend fun spendPoints(cost: Int) {
+        local.spendPoints(cost)
+    }
+
+    override suspend fun getPetPoints(): Int {
+        return local.getPetPoints()
     }
 
 
