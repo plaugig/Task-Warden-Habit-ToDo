@@ -61,4 +61,14 @@
     <string name="bottom_sheet_color">COLOR</string>
     <string name="task_edit_title">Edit Task</string>
     <string name="task_btn_save">Save Changes</string>
+
+    <string name="cat_content_description">Кот робота</string>
+    <string name="action_feed">Feed</string>
+    <string name="action_feed_sub">+25 Fullness</string>
+    <string name="action_play">Play</string>
+    <string name="action_play_sub">+30 Mood</string>
+    <string name="action_pet">Pet</string>
+    <string name="action_pet_sub">+5 Mood</string>
+    <string name="action_talk">Talk</string>
+    <string name="action_talk_sub">+2 Bond</string>
 </resources>

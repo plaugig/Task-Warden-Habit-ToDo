@@ -28,7 +28,7 @@ fun CatStatsCard(
             .fillMaxWidth()
             .background(
 
-                color = MaterialTheme.colorScheme.surfaceVariant,
+                color = MaterialTheme.colorScheme.surface,
                 shape = RoundedCornerShape(24.dp)
             )
             .padding(20.dp),
