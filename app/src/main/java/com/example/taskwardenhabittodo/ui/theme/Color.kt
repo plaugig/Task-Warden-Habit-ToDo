@@ -35,6 +35,13 @@ val HabitColorRed    = Color(0xFFFF5A5A)
 val HabitColorBlue  = Color(0xFF4A90E2)
 val HabitColorPink   = Color(0xFFBB86FC)
 
+// цвета статов кота
+val StatMood    = HabitColorPink
+val StatFull    = HabitColorTeal
+val StatThirst  = HabitColorBlue
+val StatLitter  = HabitColorAmber    
+val StatCalm    = Color(0xFF34D399)
+
 val HabitColorPalette = listOf(
     HabitColorPurple,
     HabitColorTeal,

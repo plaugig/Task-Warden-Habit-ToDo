@@ -11,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -27,16 +28,18 @@ fun CatActionButton(
     accentColor: Color,
     iconBgColor: Color,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true
 ) {
     Column(
         modifier = modifier
+            .alpha(if (enabled) 1f else 0.4f)
             .background(
                 color = MaterialTheme.colorScheme.surface,
                 shape = RoundedCornerShape(24.dp)
             )
             .clip(RoundedCornerShape(24.dp))
-            .clickable { onClick() }
+            .clickable (enabled = enabled) { onClick() }
             .padding(16.dp),
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.Start

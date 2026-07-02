@@ -1,6 +1,7 @@
 package com.example.taskwardenhabittodo.ui.components.bottom.sheet
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -8,6 +9,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -37,6 +39,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -154,9 +158,15 @@ fun BottomSheetContent(
         is24Hour = true
     )
 
+    val focusManager = LocalFocusManager.current
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
+            .imePadding()
+            .pointerInput(Unit) {
+                detectTapGestures(onTap = { focusManager.clearFocus() })
+            }
             .background(extendedColors.containerColor)
             .padding(spacing.medium)
             .navigationBarsPadding()

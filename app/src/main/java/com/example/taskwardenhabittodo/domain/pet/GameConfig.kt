@@ -49,6 +49,8 @@ object GameConfig {
     const val DISCIPLINE_GAIN_PER_TASK = 3
     const val DISCIPLINE_GAIN_PER_HABIT = 2
 
+    const val LOW_POINTS_THRESHOLD = 10
+
     //форумула настроения робота
     const val MOOD_DISCIPLINE_WEIGHT = 0.6f
     const val MOOD_WELLBEING_WEIGHT = 0.4f
